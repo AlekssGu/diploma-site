@@ -57,7 +57,7 @@
           <h3 class="text-center lead">Uzzini par mums!</h3>
           
           <!-- galvenās lapas 3 bloki -->
-          <div class="col-sm-6 col-md-4">
+          <div class="col-sm-6 col-md-3">
             <div class="thumbnail">
               <div class="caption">
                     <h3>Kas mēs esam?</h3>
@@ -67,17 +67,27 @@
             </div>
           </div>
           
-          <div class="col-sm-6 col-md-4">
+          <div class="col-sm-6 col-md-3">
             <div class="thumbnail">
               <div class="caption">
                     <h3>Kā uzsākt darbu?</h3>
                     <p>Īsumā, dažos soļos, kā uzsākt darbu sistēmā</p>
-                    <p><a id="start-more" href="#" class="btn-lg btn btn-block btn-success" role="button">Sākt tagad!</a></p>
+                    <a id="start-more" href="#" class="btn btn-block btn-success" role="button">Sākt tagad</a>
               </div>
             </div>
           </div>
           
-          <div class="col-sm-6 col-md-4">
+          <div class="col-sm-6 col-md-3">
+            <div class="thumbnail">
+              <div class="caption">
+                    <h3>Mūsu klienti</h3>
+                    <p>Īsumā par to, kas pieejams klientiem un kāpēc ir vērts būt klientam</p>
+                    <a id="login-more" href="#" class="btn btn-block btn-warning" role="button">Ieiet sistēmā</a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-sm-6 col-md-3">
             <div class="thumbnail">
               <div class="caption">
                     <h3>Ko mēs piedāvājam?</h3>
@@ -86,37 +96,78 @@
               </div>
             </div>
           </div>
-          <!-- /galvenās lapas 3 bloki -->
+          <!-- /galvenās lapas 4 bloki -->
         </div>
         <!-- pirmā rinda -->
        
-        <div class="row">
-            <div class="page-header text-center">
-                <h1>Ievadi savus datus <small>un lieto sistēmu jau 5 minūšu laikā!</small></h1>
+        <div class="row landing-row">
+            <div id="start-now" class="col-md-6">
+                <div class="page-header text-center">
+                    <h1>Ievadi savus datus <small><br/>un lieto sistēmu jau 5 minūšu laikā!</small></h1>
+                </div>
+
+                <!-- galvenās lapas forma -->
+                <form action="/user/register" method="POST" role="form">
+                <div class="form-group">
+                    <label for="client_number">Klienta numurs</label>
+                    <input type="text" class="form-control" id="client_number" autofocus="true" placeholder="Ieraksti savu klienta numuru">
+                </div>
+                <div class="form-group">
+                    <label for="email">E-pasts</label>
+                    <input type="email" class="form-control" id="email" placeholder="Ieraksti savu e-pastu">
+                </div>
+                <div class="form-group">
+                    <label for="password">Parole</label>
+                    <input type="password" class="form-control" id="password" placeholder="Ieraksti savu paroli">
+                </div>
+                <div class="form-group">
+                    <label for="password">Atkārtota parole</label>
+                    <input type="password" class="form-control" id="secpassword" placeholder="Atkārtoti ieraksti savu paroli">
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input checked="true" type="checkbox"> Vēlos saņemt paziņojumus no sistēmas administrācijas
+                  </label>
+                </div>
+                <div class="form-group">
+                    <input type="hidden" name="<?php echo \Config::get('security.csrf_token_key');?>" value="<?php echo \Security::fetch_token();?>" />
+                    <button type="submit" class="btn btn-block btn-primary">Reģistrēties</button>
+                </div>
+                </form>
             </div>
             
-            <!-- galvenās lapas forma -->
-            <form id="start-now" class="form-horizontal" role="form">
-            <div class="form-group">
-              <label for="username" class="col-sm-3 control-label">Lietotājvārds (vai e-pasts)</label>
-              <div class="col-sm-9">
-                  <input type="text" class="form-control" id="username" autofocus="true" placeholder="Ierakstu savu lietotājvārdu">
-              </div>
+            <div class="visible-lg visible-md col-md-6">
+                <div class="page-header text-center">
+                    <h1>Īsa pamācība <small><br/>parādīs tev svarīgākās sistēmas funkcijas</small></h1>
+                </div>
+                <iframe style="margin-top:40px" width="560" height="315" src="//www.youtube.com/embed/-Wn3fgh-sNs" frameborder="0" allowfullscreen></iframe>
             </div>
-            <div class="form-group">
-              <label for="password" class="col-sm-3 control-label">Parole</label>
-              <div class="col-sm-9">
-                <input type="password" class="form-control" id="password" placeholder="Ieraksti savu paroli">
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="col-sm-offset-3 col-sm-9">
-                <a href="#" class="btn btn-primary">Reģistrēties</a>
-                <button type="submit" class="btn btn-default">Ieiet</button>
-                <a href="#" class="btn btn-link">Aizmirsu paroli</a>
-              </div>
-            </div>
-          </form>
+          <!-- /galvenās lapas forma -->
+        </div>
+        
+        <div class="row landing-row">
+
+                <div id="login-start" class="page-header text-center">
+                    <h1>Ieiet sistēmā</h1>
+                </div>
+                <div class="col-md-offset-3 col-md-6">
+                <!-- galvenās lapas forma -->
+                <form id="login-form" role="form">
+                <div class="form-group">
+                    <label for="login">E-pasts vai klienta numurs</label>
+                    <input type="text" class="form-control" id="login" placeholder="Ieraksti savu e-pastu vai klienta numuru">
+                </div>
+                <div class="form-group">
+                    <label for="password">Parole</label>
+                    <input type="password" class="form-control" id="password" placeholder="Ieraksti savu paroli">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-block btn-default">Ieiet</button>
+                    <a href="#" class="btn btn-link">Aizmirsu paroli</a> 
+                </div>
+                <input type="hidden" name="<?php echo \Config::get('security.csrf_token_key');?>" value="<?php echo \Security::fetch_token();?>" />
+              </form>
+                </div>
           <!-- /galvenās lapas forma -->
         </div>
         
@@ -127,6 +178,13 @@
 $('#start-more').click(function(){
     $(document.body).animate({
         "scrollTop": $("#start-now").offset().top
+    }, 800, "swing"); // animācijas laiks un beigu kustība
+    return false; // prevent default
+});
+
+$('#login-more').click(function(){
+    $(document.body).animate({
+        "scrollTop": $("#login-start").offset().top
     }, 800, "swing"); // animācijas laiks un beigu kustība
     return false; // prevent default
 });
