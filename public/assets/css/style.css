@@ -1,0 +1,40 @@
+/**
+*
+* Galvenais CSS fails
+*
+*/
+html, body {
+    height:100%;
+}
+
+#nav-links a {
+    padding: 20px;
+}
+
+.navbar {
+    margin-bottom: 0;
+}
+
+/* Slīdrādis */
+.carousel {
+	height:50%;
+        margin-bottom:20px;
+}
+
+.item,
+.active,
+.carousel-inner {
+	height:100%;
+}
+
+.slider-image {
+	width:100%;
+	height:100%;
+	background-position: center;
+	background-size: cover;
+}
+
+.main-block {
+	margin: 50px 0;
+}
+/* Slīdrādis beidzas */
