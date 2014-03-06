@@ -52,7 +52,7 @@
         <li>Ziņot par problēmām un avārijām</li> 
         -->
         
-        <div class="row">
+        <div id="first-row" class="row">
             
           <h3 class="text-center lead">Uzzini par mums!</h3>
           
@@ -72,7 +72,7 @@
               <div class="caption">
                     <h3>Kā uzsākt darbu?</h3>
                     <p>Īsumā, dažos soļos, kā uzsākt darbu sistēmā</p>
-                    <p><a href="#" class="btn-lg btn btn-block btn-success" role="button">Sākt tagad!</a></p>
+                    <p><a id="start-more" href="#" class="btn-lg btn btn-block btn-success" role="button">Sākt tagad!</a></p>
               </div>
             </div>
           </div>
@@ -94,6 +94,41 @@
             <div class="page-header text-center">
                 <h1>Ievadi savus datus <small>un lieto sistēmu jau 5 minūšu laikā!</small></h1>
             </div>
+            
+            <!-- galvenās lapas forma -->
+            <form id="start-now" class="form-horizontal" role="form">
+            <div class="form-group">
+              <label for="username" class="col-sm-3 control-label">Lietotājvārds (vai e-pasts)</label>
+              <div class="col-sm-9">
+                  <input type="text" class="form-control" id="username" autofocus="true" placeholder="Ierakstu savu lietotājvārdu">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="password" class="col-sm-3 control-label">Parole</label>
+              <div class="col-sm-9">
+                <input type="password" class="form-control" id="password" placeholder="Ieraksti savu paroli">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-3 col-sm-9">
+                <a href="#" class="btn btn-primary">Reģistrēties</a>
+                <button type="submit" class="btn btn-default">Ieiet</button>
+                <a href="#" class="btn btn-link">Aizmirsu paroli</a>
+              </div>
+            </div>
+          </form>
+          <!-- /galvenās lapas forma -->
         </div>
         
     </div>
+        
+<!-- galvenās lapas skripts -->
+<script>
+$('#start-more').click(function(){
+    $(document.body).animate({
+        "scrollTop": $("#start-now").offset().top
+    }, 800, "swing"); // animācijas laiks un beigu kustība
+    return false; // prevent default
+});
+</script>
+<!-- /Galvenās lapas skripts -->
