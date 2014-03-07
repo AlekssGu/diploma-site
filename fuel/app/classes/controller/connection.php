@@ -66,6 +66,22 @@ class Controller_Connection extends Controller_Template
                 $error_message.='<li>Parolēm ir jāsakrīt</li>';
             }    
             
+            // Pārbauda, vai sistēmā ir lietotājs ar šādu klienta numuru
+            $get_client_number = Model_User::find_by_username(Input::post('client_number'));
+            if($get_client_number)
+            {
+                $error_count++;
+                $error_message.='<li>Lietotājs ar šādu klienta numuru jau ir reģistrēts sistēmā</li>';
+            }
+            
+            // Pārbauda, vai sistēmā ir lietotājs ar šādu e-pasta adresi
+            $getemail = Model_User::find_by_email(Input::post('email'));
+            if($getemail)
+            {
+                $error_count++;
+                $error_message.='<li>Lietotājs ar šādu e-pasta adresi jau ir reģistrēts sistēmā</li>';
+            }
+            
             // Ja ir kļūdas, tad uzstāda kļūdas statusu un sagatavo paziņojumu lietotājam
             if ($error_count != 0){
                 $result_status = 'error';
@@ -77,10 +93,49 @@ class Controller_Connection extends Controller_Template
                         }
                  $data['result_message'] = $result_message;
                  $this -> template -> content = View::forge('connection/register', $data);
-            } else $this -> template -> content = View::forge('connection/register');
+            } 
+            else
+            {
+            // Ja ir kļūdu ievadē nav
+            $data['client_number'] = Input::post('client_number');
+            $data['email'] = Input::post('email');
+            $data['password'] = Input::post('password');
+            $data['messages'] = Input::post('messages');
+ 
+            // Try-catch bloks reģistrācijas procesam
+            try {
+                
+                // Reģistrē lietotāju un rezultātu saglabā mainīgajā
+                $create_process = Auth::create_user
+                    (
+                        Input::post('client_number'), 
+                        Input::post('email'), 
+                        Input::post('password'),
+                        Input::post('messages'), // vai lietotājs vēlas saņemt vēstules
+                        1 // lietotāja grupa
+                    );
+                if ($create_process) {
+ 
+                    Session::set_flash('success', 'Reģistrācija veiksmīga! Uz jūsu e-pastu tika nosūtīta vēstule ar reģistrācijas apstiprināšanas kodu un pamācību!');
+                    Response::redirect('/user/register');
+                    
+                } else {
+                    Session::set_flash('error', 'Reģistrācija neveiksmīga! Šobrīd nav iespējams izveidot lietotāju, lūdzu, mēģini vēlāk vai sazinies ar administrāciju');
+                    Response::redirect('/user/register');
+                }
+            } catch (Exception $exc) {
+                Session::set_flash('error', "Notikusi nezināma kļūda! Lūdzu, ziņojiet par šo kļūdu administrācijai.");
+            }
             
+            $this->template->content = View::forge('users/register', $data);
+            }
             
-            } else $this -> template -> content = View::forge('connection/register');
+                $this -> template -> content = View::forge('connection/register');
+            }
+                
+                
+                
+                
             
                 $this -> template -> title = "Reģistrācija - Pilsētas ūdens";
                 
