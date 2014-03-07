@@ -22,13 +22,6 @@
 
 </script>
 
-<!-- Aktivizē slīdrādi -->
-<script>
-$('.slider').carousel({
-    interval: 5000 //changes the speed
-})
-</script>
-
 <body>
     <!-- navigācijas panelis -->
     <div class="navbar navbar-default">

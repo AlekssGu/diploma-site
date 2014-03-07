@@ -72,7 +72,8 @@
               <div class="caption">
                     <h3>Kā uzsākt darbu?</h3>
                     <p>Īsumā, dažos soļos, kā uzsākt darbu sistēmā</p>
-                    <a id="start-more" href="#" class="btn btn-block btn-success" role="button">Sākt tagad</a>
+                    <a href="#" class="start-more hidden-xs hidden-sm btn btn-block btn-success" role="button">Sākt tagad</a>
+                    <a href="#" class="start-more hidden-lg hidden-md btn btn-success" role="button">Sākt tagad</a>
               </div>
             </div>
           </div>
@@ -82,7 +83,8 @@
               <div class="caption">
                     <h3>Mūsu klienti</h3>
                     <p>Īsumā par to, kas pieejams klientiem un kāpēc ir vērts būt klientam</p>
-                    <a id="login-more" href="#" class="btn btn-block btn-warning" role="button">Ieiet sistēmā</a>
+                    <a href="#" class="login-more hidden-xs hidden-sm btn btn-block btn-warning" role="button">Ieiet sistēmā</a>
+                    <a href="#" class="login-more hidden-lg hidden-md btn btn-warning" role="button">Ieiet sistēmā</a>
               </div>
             </div>
           </div>
@@ -126,7 +128,7 @@
                 </div>
                 <div class="checkbox">
                   <label>
-                    <input checked="true" type="checkbox"> Vēlos saņemt paziņojumus no sistēmas administrācijas
+                    <input name="messages" checked="true" type="checkbox"> Vēlos saņemt paziņojumus no sistēmas administrācijas
                   </label>
                 </div>
                 <div class="form-group">
@@ -175,18 +177,23 @@
         
 <!-- galvenās lapas skripts -->
 <script>
-$('#start-more').click(function(){
+$('.start-more').click(function(){
     $(document.body).animate({
         "scrollTop": $("#start-now").offset().top
     }, 800, "swing"); // animācijas laiks un beigu kustība
     return false; // prevent default
 });
 
-$('#login-more').click(function(){
+$('.login-more').click(function(){
     $(document.body).animate({
         "scrollTop": $("#login-start").offset().top
     }, 800, "swing"); // animācijas laiks un beigu kustība
     return false; // prevent default
 });
+
+// Aktivizē slīdrādi 
+$('.slider').carousel({
+    interval: 5000 // ātrums
+})
 </script>
 <!-- /Galvenās lapas skripts -->
