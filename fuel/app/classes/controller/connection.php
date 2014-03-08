@@ -131,17 +131,14 @@ class Controller_Connection extends Controller_Template
                             $new -> password = Input::post('password');
                             $new -> messages = Input::post('messages'); // vai lietotājs vēlas saņemt vēstules
 
-                            // Ja process veiksmīgs, tad paziņojam par to lietotājam
-                            if($new -> save())
-                            {
                                 // Create an instance
                                 $email = Email::forge();
 
                                 // Set the from address
-                                $email->from('registracija@udens.agusevs.com', 'Reģistrācija');
+                                $email->from('gusevs.aleksandrs@gmail.com', 'REG');
 
                                 // Set the to address
-                                $email->to('alex282@inbox.lv', 'Aleksandrs Gusevs');
+                                $email->to('alex282@inbox.lv', 'AG');
 
                                 // Set a subject
                                 $email->subject('This is the subject');
@@ -149,20 +146,9 @@ class Controller_Connection extends Controller_Template
                                 // And set the body.
                                 $email->body('This is my message');
                                 
-                                try{
-                                    $email->send();
-                                }
-                                catch(\EmailSendingFailedException $e)
-                                {
-                                    Session::set_flash('error',$e);
-                                    Response::redirect('/user/register');
-                                }
-                                catch(\EmailValidationFailedException $e)
-                                {
-                                    Session::set_flash('error',$e);
-                                    Response::redirect('/user/register');
-                                }
-                                
+                            // Ja process veiksmīgs, tad paziņojam par to lietotājam
+                            if($new -> save() && $email->send())
+                            {
                                 Session::set_flash('success','Reģistrācija veiksmīga! Uz jūsu norādīto e-pastu tika nosūtīta reģistrācijas apstiprināšanas vēstule.');
                                 Response::redirect('/user/register');
                             } 
@@ -174,7 +160,17 @@ class Controller_Connection extends Controller_Template
                             }   
                             
                     // ķer kļūdu un paziņo par to lietotājam 
-                    } catch(Exception $exc)
+                    } catch(\EmailSendingFailedException $e)
+                      {
+                            Session::set_flash('error','Sūtīšana neizdevās: ' . $e);
+                            Response::redirect('/user/register');
+                      }
+                      catch(\EmailValidationFailedException $e)
+                      {
+                            Session::set_flash('error','E-pasta validācija neizdevās: ' . $e);
+                            Response::redirect('/user/register');
+                      }
+                      catch(Exception $exc)
                       {
                             Session::set_flash('error', "Notikusi sistēmas iekšēja kļūda! Lūdzu, ziņojiet par šo kļūdu administrācijai.");
                             Response::redirect('/user/register');
