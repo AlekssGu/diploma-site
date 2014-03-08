@@ -4,7 +4,6 @@
                         <div class="page-header text-center">
                             <h1>Ievadi savus datus</h1>
                         </div>
-                        
                         <?php if(Session::get_flash('success')) { ?>
                                 <div class="alert alert-success">
                                 <p class="text-success"><?php echo Session::get_flash('success'); ?></p>
@@ -22,10 +21,10 @@
                         <?php } ?>
                         
                         <!-- galvenās lapas forma -->
-                        <form method="POST" action="/user/register" role="form">
+                        <form action="/user/register" method="POST" role="form">
                         <div class="form-group">
                             <label for="client_number">Klienta numurs</label>
-                            <input type="text" name="client_number" class="form-control" id="client_number" autofocus="true" placeholder="Ieraksti savu klienta numuru">
+                            <input type="text" name="client_number" class="form-control" id="client_number" placeholder="Ieraksti savu klienta numuru">
                         </div>
                         <div class="form-group">
                             <label for="email">E-pasts</label>
@@ -33,7 +32,7 @@
                         </div>
                         <div class="form-group">
                             <label for="password">Parole</label>
-                            <input type="password" name="password" class="form-control" id="password" placeholder="Ieraksti savu paroli">
+                            <input type="password" name="password" class="form-control" id="password" placeholder="Ieraksti savu paroli (vismaz 5 simboli, 1 burts, 1 cipars)">
                         </div>
                         <div class="form-group">
                             <label for="password">Atkārtota parole</label>
