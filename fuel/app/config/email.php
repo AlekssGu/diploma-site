@@ -16,7 +16,7 @@ return array(
 		/**
 		 * Mail driver (mail, smtp, sendmail, noop)
 		 */
-		'driver'		=> 'mail',
+		'driver'		=> 'smtp',
 
 		/**
 		 * Whether to send as html, set to null for autodetection.
@@ -95,13 +95,13 @@ return array(
 			'port'		=> 465,
 			'username'	=> 'gusevs.aleksandrs@gmail.com',
 			'password'	=> 'Complex1ty',
-			'timeout'	=> 5,
+                        'timeout'       => 5
 		),
 
 		/**
 		 * Newline
 		 */
-		'newline'	=> "\n",
+		'newline'	=> "\r\n",
 
 		/**
 		 * Attachment paths
