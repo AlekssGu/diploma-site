@@ -124,10 +124,11 @@ class Controller_Connection extends Controller_Template
                     // try - catch bloks kļūdas pārtveršanai
                     try
                     {
+                            $code = substr(md5(uniqid(mt_rand(), true)) , 0, 8); // unikāls kods
                             $new = new Model_Temp_User();
                             $new -> client_number = Input::post('client_number');
                             $new -> email = Input::post('email');
-                            $new -> code = substr(md5(uniqid(mt_rand(), true)) , 0, 8); // unikāls kods
+                            $new -> code = $code;
                             $new -> password = Input::post('password');
                             $new -> messages = Input::post('messages'); // vai lietotājs vēlas saņemt vēstules
 
@@ -135,16 +136,21 @@ class Controller_Connection extends Controller_Template
                                 $email = Email::forge();
 
                                 // Set the from address
-                                $email->from('gusevs.aleksandrs@gmail.com', 'REG');
+                                $email->from('gusevs.aleksandrs@gmail.com', 'IS PILSETAS UDENS');
 
                                 // Set the to address
-                                $email->to('alex282@inbox.lv', 'AG');
+                                $email->to(Input::post('email'));
 
                                 // Set a subject
-                                $email->subject('This is the subject');
+                                $email->subject('Reģistrācijas apstiprināšana');
 
                                 // And set the body.
-                                $email->body('This is my message');
+                                $email->body('Sveicināti! '
+                                        . '   Paldies par reģistrāciju mūsu sistēmā! '
+                                        . '   Lai apstiprinātu reģistrāciju, spiediet uz šīs saites: http://udens.agusevs.com vai ievadiet kodu ar rokām. '
+                                        . '   Jūsu unikālais kods ir: ' . $code . ''
+                                        . '   Ar cieņu, '
+                                        . '   IS PILSĒTAS ŪDENS');
                                 
                             // Ja process veiksmīgs, tad paziņojam par to lietotājam
                             if($new -> save() && $email->send())
