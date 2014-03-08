@@ -91,8 +91,9 @@ return array(
 		 * SMTP settings
 		 */
 		'smtp'	=> array(
-			'host'		=> 'smtp.gmail.com',
+			'host'		=> 'ssl://smtp.gmail.com',
 			'port'		=> 465,
+                        'auth'          => true,
 			'username'	=> 'gusevs.aleksandrs@gmail.com',
 			'password'	=> 'Complex1ty',
                         'timeout'       => 5
