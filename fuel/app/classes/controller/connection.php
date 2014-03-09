@@ -136,7 +136,7 @@ class Controller_Connection extends Controller_Template
                                 $email = Email::forge();
 
                                 // Set the from address
-                                $email->from('gusevs.aleksandrs@gmail.com', 'IS PILSETAS UDENS');
+                                $email->from('noreply@udens.agusevs.com', 'IS PILSETAS UDENS');
 
                                 // Set the to address
                                 $email->to(Input::post('email'));
