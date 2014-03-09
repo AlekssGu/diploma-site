@@ -1,211 +1,226 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<title>Reģistrācijas apstiprināšana</title>
-	<style type="text/css">
-
-		/***********
-		Originally based on The MailChimp Reset from Fabio Carneiro, MailChimp User Experience Design
-		More info and templates on Github: https://github.com/mailchimp/Email-Blueprints
-		http://www.mailchimp.com &amp; http://www.fabio-carneiro.com
-
-		INLINE: Yes.
-		***********/
-		/* Client-specific Styles */
-		#outlook a {padding:0;} /* Force Outlook to provide a "view in browser" menu link. */
-		body{width:100% !important; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; margin:0; padding:0;}
-		/* Prevent Webkit and Windows Mobile platforms from changing default font sizes, while not breaking desktop design. */
-		.ExternalClass {width:100%;} /* Force Hotmail to display emails at full width */
-		.ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {line-height: 100%;} /* Force Hotmail to display normal line spacing.  More on that: http://www.emailonacid.com/forum/viewthread/43/ */
-		#backgroundTable {margin:0; padding:0; width:100% !important; line-height: 100% !important;}
-		/* End reset */
-
-		/* Some sensible defaults for images
-		1. "-ms-interpolation-mode: bicubic" works to help ie properly resize images in IE. (if you are resizing them using the width and height attributes)
-		2. "border:none" removes border when linking images.
-		3. Updated the common Gmail/Hotmail image display fix: Gmail and Hotmail unwantedly adds in an extra space below images when using non IE browsers. You may not always want all of your images to be block elements. Apply the "image_fix" class to any image you need to fix.
-
-		Bring inline: Yes.
-		*/
-		img {outline:none; text-decoration:none; -ms-interpolation-mode: bicubic;}
-		a img {border:none;}
-		.image_fix {display:block;}
-
-		/** Yahoo paragraph fix: removes the proper spacing or the paragraph (p) tag. To correct we set the top/bottom margin to 1em in the head of the document. Simple fix with little effect on other styling. NOTE: It is also common to use two breaks instead of the paragraph tag but I think this way is cleaner and more semantic. NOTE: This example recommends 1em. More info on setting web defaults: http://www.w3.org/TR/CSS21/sample.html or http://meiert.com/en/blog/20070922/user-agent-style-sheets/
-
-		Bring inline: Yes.
-		**/
-		p {margin: 1em 0;}
-
-		/** Hotmail header color reset: Hotmail replaces your header color styles with a green color on H2, H3, H4, H5, and H6 tags. In this example, the color is reset to black for a non-linked header, blue for a linked header, red for an active header (limited support), and purple for a visited header (limited support).  Replace with your choice of color. The !important is really what is overriding Hotmail's styling. Hotmail also sets the H1 and H2 tags to the same size.
-
-		Bring inline: Yes.
-		**/
-		h1, h2, h3, h4, h5, h6 {color: black !important;}
-
-		h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {color: blue !important;}
-
-		h1 a:active, h2 a:active,  h3 a:active, h4 a:active, h5 a:active, h6 a:active {
-			color: red !important; /* Preferably not the same color as the normal header link color.  There is limited support for psuedo classes in email clients, this was added just for good measure. */
-		 }
-
-		h1 a:visited, h2 a:visited,  h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited {
-			color: purple !important; /* Preferably not the same color as the normal header link color. There is limited support for psuedo classes in email clients, this was added just for good measure. */
-		}
-
-		/** Outlook 07, 10 Padding issue: These "newer" versions of Outlook add some padding around table cells potentially throwing off your perfectly pixeled table.  The issue can cause added space and also throw off borders completely.  Use this fix in your header or inline to safely fix your table woes.
-
-		More info: http://www.ianhoar.com/2008/04/29/outlook-2007-borders-and-1px-padding-on-table-cells/
-		http://www.campaignmonitor.com/blog/post/3392/1px-borders-padding-on-table-cells-in-outlook-07/
-
-		H/T @edmelly
-
-		Bring inline: No.
-		**/
-		table td {border-collapse: collapse;}
-
-		/** Remove spacing around Outlook 07, 10 tables
-
-		More info : http://www.campaignmonitor.com/blog/post/3694/removing-spacing-from-around-tables-in-outlook-2007-and-2010/
-
-		Bring inline: Yes
-		**/
-		table { border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; }
-
-		/* Styling your links has become much simpler with the new Yahoo.  In fact, it falls in line with the main credo of styling in email, bring your styles inline.  Your link colors will be uniform across clients when brought inline.
-
-		Bring inline: Yes. */
-		a {color: orange;}
-
-		/* Or to go the gold star route...
-		a:link { color: orange; }
-		a:visited { color: blue; }
-		a:hover { color: green; }
-		*/
-
-		/***************************************************
-		****************************************************
-		MOBILE TARGETING
-
-		Use @media queries with care.  You should not bring these styles inline -- so it's recommended to apply them AFTER you bring the other stlying inline.
-
-		Note: test carefully with Yahoo.
-		Note 2: Don't bring anything below this line inline.
-		****************************************************
-		***************************************************/
-
-		/* NOTE: To properly use @media queries and play nice with yahoo mail, use attribute selectors in place of class, id declarations.
-		table[class=classname]
-		Read more: http://www.campaignmonitor.com/blog/post/3457/media-query-issues-in-yahoo-mail-mobile-email/
-		*/
-		@media only screen and (max-device-width: 480px) {
-
-			/* A nice and clean way to target phone numbers you want clickable and avoid a mobile phone from linking other numbers that look like, but are not phone numbers.  Use these two blocks of code to "unstyle" any numbers that may be linked.  The second block gives you a class to apply with a span tag to the numbers you would like linked and styled.
-
-			Inspired by Campaign Monitor's article on using phone numbers in email: http://www.campaignmonitor.com/blog/post/3571/using-phone-numbers-in-html-email/.
-
-			Step 1 (Step 2: line 224)
-			*/
-			a[href^="tel"], a[href^="sms"] {
-						text-decoration: none;
-						color: black; /* or whatever your want */
-						pointer-events: none;
-						cursor: default;
-					}
-
-			.mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {
-						text-decoration: default;
-						color: orange !important; /* or whatever your want */
-						pointer-events: auto;
-						cursor: default;
-					}
-		}
-
-		/* More Specific Targeting */
-
-		@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
-			/* You guessed it, ipad (tablets, smaller screens, etc) */
-
-			/* Step 1a: Repeating for the iPad */
-			a[href^="tel"], a[href^="sms"] {
-						text-decoration: none;
-						color: blue; /* or whatever your want */
-						pointer-events: none;
-						cursor: default;
-					}
-
-			.mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {
-						text-decoration: default;
-						color: orange !important;
-						pointer-events: auto;
-						cursor: default;
-					}
-		}
-
-		@media only screen and (-webkit-min-device-pixel-ratio: 2) {
-			/* Put your iPhone 4g styles in here */
-		}
-
-		/* Following Android targeting from:
-		http://developer.android.com/guide/webapps/targeting.html
-		http://pugetworks.com/2011/04/css-media-queries-for-targeting-different-mobile-devices/  */
-		@media only screen and (-webkit-device-pixel-ratio:.75){
-			/* Put CSS for low density (ldpi) Android layouts in here */
-		}
-		@media only screen and (-webkit-device-pixel-ratio:1){
-			/* Put CSS for medium density (mdpi) Android layouts in here */
-		}
-		@media only screen and (-webkit-device-pixel-ratio:1.5){
-			/* Put CSS for high density (hdpi) Android layouts in here */
-		}
-		/* end Android targeting */
-	</style>
-
-	<!-- Targeting Windows Mobile -->
-	<!--[if IEMobile 7]>
-	<style type="text/css">
-
-	</style>
-	<![endif]-->
-
-	<!-- ***********************************************
-	****************************************************
-	END MOBILE TARGETING
-	****************************************************
-	************************************************ -->
-
-	<!--[if gte mso 9]>
-	<style>
-		/* Target Outlook 2007 and 2010 */
-	</style>
-	<![endif]-->
-</head>
-<body>
-	<!-- Wrapper/Container Table: Use a wrapper table to control the width and the background color consistently of your email. Use this approach instead of setting attributes on the body tag. -->
-	<table cellpadding="0" cellspacing="0" border="0" id="backgroundTable">
-	<tr>
-		<td>
-		<!-- Tables are the most common way to format your email consistently. Set your table widths inside cells and in most cases reset cellpadding, cellspacing, and border to zero. Use nested tables as a way to space effectively in your message. -->
-		<table cellpadding="0" cellspacing="0" border="0" align="center">
-			<tr>
-				<td width="200" valign="top">Paldies par reģistrāciju!</td>
-				<td width="200" valign="top">Lai apstiprinātu reģistrāciju, nepieciešams ievadīt jūsu unikālo kodu.</td>
-                                <td width="200" valign="top"><br/></td>
-                                <td width="200" valign="top">Jūsu unikālais kods: <?php echo $code; ?></td>
-                                <td width="200" valign="top"><a href="https://udens.agusevs.com/confirm/<?php echo $code; ?>" target ="_blank" title="Apstiprināt reģistrāciju" style="color: orange; text-decoration: none;">Apstiprināt reģistrāciju</a></td>
-                                <td width="200" valign="top"><br/></td>
-                                <td width="200" valign="top">Ja rodas problēmas spiežot uz saites, tad ievadiet šo adresi interneta pārlūka adreses vietā: https://udens.agusevs.com/confirm/<?php echo $code; ?></td>
-                                <td width="200" valign="top"><br/></td>
-                                <td width="200" valign="top">Ar cieņu,</td>
-                                <td width="200" valign="top">IS Pilsētas ūdens.</td>
-			</tr>
-		</table>
-		</td>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html><head><title></title><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=320, target-densitydpi=device-dpi">
+<style type="text/css">
+/* Mobile-specific Styles */
+@media only screen and (max-width: 660px) { 
+table[class=w0], td[class=w0] { width: 0 !important; }
+table[class=w10], td[class=w10], img[class=w10] { width:10px !important; }
+table[class=w15], td[class=w15], img[class=w15] { width:5px !important; }
+table[class=w30], td[class=w30], img[class=w30] { width:10px !important; }
+table[class=w60], td[class=w60], img[class=w60] { width:10px !important; }
+table[class=w125], td[class=w125], img[class=w125] { width:80px !important; }
+table[class=w130], td[class=w130], img[class=w130] { width:55px !important; }
+table[class=w140], td[class=w140], img[class=w140] { width:90px !important; }
+table[class=w160], td[class=w160], img[class=w160] { width:180px !important; }
+table[class=w170], td[class=w170], img[class=w170] { width:100px !important; }
+table[class=w180], td[class=w180], img[class=w180] { width:80px !important; }
+table[class=w195], td[class=w195], img[class=w195] { width:80px !important; }
+table[class=w220], td[class=w220], img[class=w220] { width:80px !important; }
+table[class=w240], td[class=w240], img[class=w240] { width:180px !important; }
+table[class=w255], td[class=w255], img[class=w255] { width:185px !important; }
+table[class=w275], td[class=w275], img[class=w275] { width:135px !important; }
+table[class=w280], td[class=w280], img[class=w280] { width:135px !important; }
+table[class=w300], td[class=w300], img[class=w300] { width:140px !important; }
+table[class=w325], td[class=w325], img[class=w325] { width:95px !important; }
+table[class=w360], td[class=w360], img[class=w360] { width:140px !important; }
+table[class=w410], td[class=w410], img[class=w410] { width:180px !important; }
+table[class=w470], td[class=w470], img[class=w470] { width:200px !important; }
+table[class=w580], td[class=w580], img[class=w580] { width:280px !important; }
+table[class=w640], td[class=w640], img[class=w640] { width:300px !important; }
+table[class*=hide], td[class*=hide], img[class*=hide], p[class*=hide], span[class*=hide] { display:none !important; }
+table[class=h0], td[class=h0] { height: 0 !important; }
+p[class=footer-content-left] { text-align: center !important; }
+#headline p { font-size: 30px !important; }
+.article-content, #left-sidebar{ -webkit-text-size-adjust: 90% !important; -ms-text-size-adjust: 90% !important; }
+.header-content, .footer-content-left {-webkit-text-size-adjust: 80% !important; -ms-text-size-adjust: 80% !important;}
+img { height: auto; line-height: 100%;}
+ } 
+/* Client-specific Styles */
+#outlook a { padding: 0; }	/* Force Outlook to provide a "view in browser" button. */
+body { width: 100% !important; }
+.ReadMsgBody { width: 100%; }
+.ExternalClass { width: 100%; display:block !important; } /* Force Hotmail to display emails at full width */
+/* Reset Styles */
+/* Add 100px so mobile switch bar doesn't cover street address. */
+body { background-color: #ececec; margin: 0; padding: 0; }
+img { outline: none; text-decoration: none; display: block;}
+br, strong br, b br, em br, i br { line-height:100%; }
+h1, h2, h3, h4, h5, h6 { line-height: 100% !important; -webkit-font-smoothing: antialiased; }
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a { color: blue !important; }
+h1 a:active, h2 a:active,  h3 a:active, h4 a:active, h5 a:active, h6 a:active {	color: red !important; }
+/* Preferably not the same color as the normal header link color.  There is limited support for psuedo classes in email clients, this was added just for good measure. */
+h1 a:visited, h2 a:visited,  h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited { color: purple !important; }
+/* Preferably not the same color as the normal header link color. There is limited support for psuedo classes in email clients, this was added just for good measure. */  
+table td, table tr { border-collapse: collapse; }
+.yshortcuts, .yshortcuts a, .yshortcuts a:link,.yshortcuts a:visited, .yshortcuts a:hover, .yshortcuts a span {
+color: black; text-decoration: none !important; border-bottom: none !important; background: none !important;
+}	/* Body text color for the New Yahoo.  This example sets the font of Yahoo's Shortcuts to black. */
+/* This most probably won't work in all email clients. Don't include code blocks in email. */
+code {
+  white-space: normal;
+  word-break: break-all;
+}
+#background-table { background-color: #ececec; }
+/* Webkit Elements */
+#top-bar { border-radius:6px 6px 0px 0px; -moz-border-radius: 6px 6px 0px 0px; -webkit-border-radius:6px 6px 0px 0px; -webkit-font-smoothing: antialiased; background-color: #322d4d; color: #b2a78c; }
+#top-bar a { font-weight: bold; color: #b2a78c; text-decoration: none;}
+#footer { border-radius:0px 0px 6px 6px; -moz-border-radius: 0px 0px 6px 6px; -webkit-border-radius:0px 0px 6px 6px; -webkit-font-smoothing: antialiased; }
+/* Fonts and Content */
+body, td { font-family: 'Helvetica Neue', Arial, Helvetica, Geneva, sans-serif; }
+.header-content, .footer-content-left, .footer-content-right { -webkit-text-size-adjust: none; -ms-text-size-adjust: none; }
+/* Prevent Webkit and Windows Mobile platforms from changing default font sizes on header and footer. */
+.header-content { font-size: 12px; color: #b2a78c; }
+.header-content a { font-weight: bold; color: #b2a78c; text-decoration: none; }
+#headline p { color: #f2e9a8; font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif; font-size: 36px; text-align: center; margin-top:0px; margin-bottom:30px; }
+#headline p a { color: #f2e9a8; text-decoration: none; }
+.article-title { font-size: 18px; line-height:24px; color: #b2a78c; font-weight:bold; margin-top:0px; margin-bottom:18px; font-family: 'Helvetica Neue', Arial, Helvetica, Geneva, sans-serif; }
+.article-title a { color: #b2a78c; text-decoration: none; }
+.article-title.with-meta {margin-bottom: 0;}
+.article-meta { font-size: 13px; line-height: 20px; color: #ccc; font-weight: bold; margin-top: 0;}
+.article-content { font-size: 13px; line-height: 18px; color: #444444; margin-top: 0px; margin-bottom: 18px; font-family: 'Helvetica Neue', Arial, Helvetica, Geneva, sans-serif; }
+.article-content a { color: #b2a78c; font-weight:bold; text-decoration:none; }
+.article-content img { max-width: 100% }
+.article-content ol, .article-content ul { margin-top:0px; margin-bottom:18px; margin-left:19px; padding:0; }
+.article-content li { font-size: 13px; line-height: 18px; color: #444444; }
+.article-content li a { color: #b2a78c; text-decoration:underline; }
+.article-content p {margin-bottom: 15px;}
+.footer-content-left { font-size: 12px; line-height: 15px; color: #b2a78c; margin-top: 0px; margin-bottom: 15px; }
+.footer-content-left a { color: #f2e9a8; font-weight: bold; text-decoration: none; }
+.footer-content-right { font-size: 11px; line-height: 16px; color: #b2a78c; margin-top: 0px; margin-bottom: 15px; }
+.footer-content-right a { color: #f2e9a8; font-weight: bold; text-decoration: none; }
+#footer { background-color: #322d4d; color: #b2a78c; }
+#footer a { color: #f2e9a8; text-decoration: none; font-weight: bold; }
+#permission-reminder { white-space: normal; }
+#street-address { color: #f2e9a8; white-space: normal; }
+</style>
+<!--[if gte mso 9]>
+<style _tmplitem="620" >
+.article-content ol, .article-content ul {
+   margin: 0 0 0 24px;
+   padding: 0;
+   list-style-position: inside;
+}
+</style>
+<![endif]--></head><body><table width="100%" cellpadding="0" cellspacing="0" border="0" id="background-table">
+	<tbody><tr>
+		<td align="center" bgcolor="#ececec">
+        	<table class="w640" style="margin:0 10px;" width="640" cellpadding="0" cellspacing="0" border="0">
+            	<tbody><tr><td class="w640" width="640" height="20"></td></tr>
+                
+            	<tr>
+                	<td class="w640" width="640">
+                        <table id="top-bar" class="w640" width="640" cellpadding="0" cellspacing="0" border="0" bgcolor="#694f80">
+    <tbody><tr>
+        <td class="w15" width="15"></td>
+        <td class="w325" width="350" valign="middle" align="left">
+            <table class="w325" width="350" cellpadding="0" cellspacing="0" border="0">
+                <tbody><tr><td class="w325" width="350" height="8"></td></tr>
+            </tbody></table>
+            <div class="header-content">nbsp;</div>
+            <table class="w325" width="350" cellpadding="0" cellspacing="0" border="0">
+                <tbody><tr><td class="w325" width="350" height="8"></td></tr>
+            </tbody></table>
+        </td>
+        <td class="w30" width="30"></td>
+        <td class="w255" width="255" valign="middle" align="right">
+            <table class="w255" width="255" cellpadding="0" cellspacing="0" border="0">
+                <tbody><tr><td class="w255" width="255" height="8"></td></tr>
+            </tbody></table>
+            <table cellpadding="0" cellspacing="0" border="0">
+    <tbody><tr>
+        
+        
+        
+    </tr>
+</tbody></table>
+            <table class="w255" width="255" cellpadding="0" cellspacing="0" border="0">
+                <tbody><tr><td class="w255" width="255" height="8"></td></tr>
+            </tbody></table>
+        </td>
+        <td class="w15" width="15"></td>
+    </tr>
+</tbody></table>
+                        
+                    </td>
+                </tr>
+                <tr>
+                <td id="header" class="w640" width="640" align="center" bgcolor="#694f80">
+    
+    <table class="w640" width="640" cellpadding="0" cellspacing="0" border="0">
+        <tbody><tr><td class="w30" width="30"></td><td class="w580" width="580" height="30"></td><td class="w30" width="30"></td></tr>
+        <tr>
+            <td class="w30" width="30"></td>
+            <td class="w580" width="580">
+                <div align="center" id="headline">
+                    <p>
+                        <strong><a href="http://udens.agusevs.com"><singleline label="Title">Reģistrācijas apstiprināšana</singleline></a></strong>
+                    </p>
+                </div>
+            </td>
+            <td class="w30" width="30"></td>
+        </tr>
+    </tbody></table>
+    
+    
+</td>
+                </tr>
+                
+                <tr><td class="w640" width="640" height="30" bgcolor="#ffffff"></td></tr>
+                <tr id="simple-content-row"><td class="w640" width="640" bgcolor="#ffffff">
+    <table align="left" class="w640" width="640" cellpadding="0" cellspacing="0" border="0">
+        <tbody><tr>
+            <td class="w30" width="30"></td>
+            <td class="w580" width="580">
+                <repeater>
+                    <layout label="Text only">
+                        <table class="w580" width="580" cellpadding="0" cellspacing="0" border="0">
+                            <tbody><tr>
+                                <td class="w580" width="580">
+                                    <p align="left" class="article-title"><singleline label="Title">Vēl tikai daži soļi..</singleline></p>
+                                    <div align="left" class="article-content">
+                                        <multiline label="Description">
+                                            Lai apstiprinātu reģistrāciju, ir jāievada unikālais kods sistēmā.<br/>
+                                            Tavs unikālais kods ir: <?php echo $code; ?><br/><br/>
+                                            <a href="https://udens.agusevs.com/confirm/<?php echo $code; ?>" target ="_blank" title="Apstiprināt reģistrāciju">Apstiprināt reģistrāciju</a><br/>
+                                            Ja rodas problēmas spiežot uz saites, tad ievadiet šo adresi interneta pārlūka adreses vietā: https://udens.agusevs.com/confirm/<?php echo $code; ?><br/><br/>
+                                            Ar cieņu,<br/>IS Pilsētas ūdens.
+                                        </multiline>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr><td class="w580" width="580" height="10"></td></tr>
+                        </tbody></table>
+                    </layout>
+                </repeater>
+            </td>
+            <td class="w30" width="30"></td>
+        </tr>
+    </tbody></table>
+</td></tr>
+                <tr><td class="w640" width="640" height="15" bgcolor="#ffffff"></td></tr>
+                
+                <tr>
+                <td class="w640" width="640">
+    <table id="footer" class="w640" width="640" cellpadding="0" cellspacing="0" border="0" bgcolor="#322d4d">
+        <tbody><tr><td class="w30" width="30"></td><td class="w580 h0" width="360" height="30"></td><td class="w0" width="60"></td><td class="w0" width="160"></td><td class="w30" width="30"></td></tr>
+        <tr>
+            <td class="w30" width="30"></td>
+            <td class="w580" width="360" valign="top">
+            <span class="hide"><p id="permission-reminder" align="left" class="footer-content-left"><span>Tu šo vēstuli saņēmi, jo reģistrējies sistēmā "Pilsētas ūdens". </span><br>
+<span>Ja tu to neesi darījis, tad izdzēs šo ziņu no savas e-pasta kastītes.</span></p></span>
+            <p align="left" class="footer-content-left"><preferences lang="en">Edit your subscription</preferences> | <unsubscribe>Unsubscribe</unsubscribe></p>
+            </td>
+            <td class="hide w0" width="60"></td>
+            <td class="hide w0" width="160" valign="top">
+            <p id="street-address" align="right" class="footer-content-right"><span>http://udens.agusevs.com</span></p>
+            </td>
+            <td class="w30" width="30"></td>
+        </tr>
+        <tr><td class="w30" width="30"></td><td class="w580 h0" width="360" height="15"></td><td class="w0" width="60"></td><td class="w0" width="160"></td><td class="w30" width="30"></td></tr>
+    </tbody></table>
+</td>
+                </tr>
+                <tr><td class="w640" width="640" height="60"></td></tr>
+            </tbody></table>
+        </td>
 	</tr>
-	</table>
-	<!-- End of wrapper table -->
-</body>
-</html>
+</tbody></table></body></html>
