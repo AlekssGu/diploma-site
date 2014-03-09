@@ -115,7 +115,7 @@ body, td { font-family: 'Helvetica Neue', Arial, Helvetica, Geneva, sans-serif; 
             <table class="w325" width="350" cellpadding="0" cellspacing="0" border="0">
                 <tbody><tr><td class="w325" width="350" height="8"></td></tr>
             </tbody></table>
-            <div class="header-content">nbsp;</div>
+            <div class="header-content"></div>
             <table class="w325" width="350" cellpadding="0" cellspacing="0" border="0">
                 <tbody><tr><td class="w325" width="350" height="8"></td></tr>
             </tbody></table>
@@ -178,9 +178,9 @@ body, td { font-family: 'Helvetica Neue', Arial, Helvetica, Geneva, sans-serif; 
                                     <p align="left" class="article-title"><singleline label="Title">Vēl tikai daži soļi..</singleline></p>
                                     <div align="left" class="article-content">
                                         <multiline label="Description">
-                                            Lai apstiprinātu reģistrāciju, ir jāievada unikālais kods sistēmā.<br/>
-                                            Tavs unikālais kods ir: <?php echo $code; ?><br/><br/>
-                                            <a href="https://udens.agusevs.com/confirm/<?php echo $code; ?>" target ="_blank" title="Apstiprināt reģistrāciju">Apstiprināt reģistrāciju</a><br/>
+                                            <br/><br/>
+                                            <a href="https://udens.agusevs.com/confirm/<?php echo $code; ?>" target ="_blank" title="Apstiprināt reģistrāciju">Apstiprināt reģistrāciju</a>
+                                            <br/><br/>
                                             Ja rodas problēmas spiežot uz saites, tad ievadiet šo adresi interneta pārlūka adreses vietā: https://udens.agusevs.com/confirm/<?php echo $code; ?><br/><br/>
                                             Ar cieņu,<br/>IS Pilsētas ūdens.
                                         </multiline>
@@ -207,7 +207,6 @@ body, td { font-family: 'Helvetica Neue', Arial, Helvetica, Geneva, sans-serif; 
             <td class="w580" width="360" valign="top">
             <span class="hide"><p id="permission-reminder" align="left" class="footer-content-left"><span>Tu šo vēstuli saņēmi, jo reģistrējies sistēmā "Pilsētas ūdens". </span><br>
 <span>Ja tu to neesi darījis, tad izdzēs šo ziņu no savas e-pasta kastītes.</span></p></span>
-            <p align="left" class="footer-content-left"><preferences lang="en">Edit your subscription</preferences> | <unsubscribe>Unsubscribe</unsubscribe></p>
             </td>
             <td class="hide w0" width="60"></td>
             <td class="hide w0" width="160" valign="top">
