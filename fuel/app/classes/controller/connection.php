@@ -149,7 +149,7 @@ class Controller_Connection extends Controller_Template
                                 $email_data['code'] = $code;
                                 $email_data['client_number'] = Input::post('client_number');
                                 
-                                $email->body(\View::forge('emails/regconfirm', $email_data));
+                                $email->html_body(\View::forge('emails/regconfirm', $email_data));
                                 
                             // Ja process veiksmīgs, tad paziņojam par to lietotājam
                             if($new -> save() && $email->send())
