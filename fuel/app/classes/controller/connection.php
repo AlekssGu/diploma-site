@@ -143,14 +143,13 @@ class Controller_Connection extends Controller_Template
 
                                 // Set a subject
                                 $email->subject('Reģistrācijas apstiprināšana');
-
-                                // And set the body.
-                                $email->body('Sveicināti! '
-                                        . '   Paldies par reģistrāciju mūsu sistēmā! '
-                                        . '   Lai apstiprinātu reģistrāciju, spiediet uz šīs saites: http://udens.agusevs.com vai ievadiet kodu ar rokām. '
-                                        . '   Jūsu unikālais kods ir: ' . $code . ''
-                                        . '   Ar cieņu, '
-                                        . '   IS PILSĒTAS ŪDENS');
+                                
+                                // masīvs e-pasta ziņas datiem (kods, klienta numurs u.c.)
+                                $email_data = array();
+                                $email_data['code'] = $code;
+                                $email_data['client_number'] = Input::post('client_number');
+                                
+                                $email->html_body(\View::forge('emails/regconfirm', $email_data));
                                 
                             // Ja process veiksmīgs, tad paziņojam par to lietotājam
                             if($new -> save() && $email->send())
