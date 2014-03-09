@@ -129,7 +129,7 @@ class Controller_Connection extends Controller_Template
                             $new -> client_number = Input::post('client_number');
                             $new -> email = Input::post('email');
                             $new -> code = $code;
-                            $new -> password = Input::post('password');
+                            $new -> password = sha1(Input::post('password'));
                             $new -> messages = Input::post('messages'); // vai lietotājs vēlas saņemt vēstules
 
                                 // Create an instance
