@@ -15,7 +15,7 @@
     <br>
     <table width="583" border="0" cellspacing="0" cellpadding="0">
       <tr>
-        <td align="left" valign="top" bgcolor="#FFFFFF" style="background-color:#FFFFFF;"><img src="images/header.jpg" width="583" height="118"></td>
+        <td align="left" valign="top" bgcolor="#FFFFFF" style="background-color:#FFFFFF;"><img src="/assets/img/header.jpg" width="583" height="118"></td>
       </tr>
       <tr>
         <td align="left" valign="top" bgcolor="#FFFFFF" style="background-color:#FFFFFF;"><table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -30,7 +30,7 @@
               <tr>
                 <td align="left" valign="top" style="font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#525252;">
                 
-                <div style="color:#3482ad; font-size:19px;">Paldies, ka reģistrējies sistēmā!
+                <div style="color:#3482ad; font-size:19px;"><br><br>Paldies, ka reģistrējies sistēmā!
                 </div>
                 <br>
                 <br>
@@ -38,13 +38,13 @@
                 <br>
                 <br>
                 Ja rodas problēmas spiežot uz saites, tad ievadiet šo adresi interneta pārlūka adreses vietā: https://udens.agusevs.com/confirm/<?php echo $code; ?>
-<br>
+<br><br>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td width="87%" style="font-size:11px; color:#525252; font-family:Arial, Helvetica, sans-serif;">
       <b>Šī vēstule tika nosūtīta, jo tu reģistrējies sistēmā "Pilsētas ūdens".<br/>
          Ja tas nebiji tu, tad droši izdzēs šo vēstuli no savas e-pasta kastītes
-      </b>
+      </b><br><br><br>
     </td>
   </tr>
 </table></td>
