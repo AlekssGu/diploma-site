@@ -191,4 +191,152 @@ class Controller_Connection extends Controller_Template
                 $this -> template -> content = View::forge('connection/register');
             
       }
+      
+        /**
+	 * Funkcija: 4.2.1.2. Lietotāja reģistrācijas apstiprināšana (viesis)
+         * Identifikators: IS_USER_REGCONF
+	 *
+	 * Apstiprina lietotāja reģistrāciju sistēmā
+         * 
+	 */
+      public function action_confirm($code = null) 
+      {
+          // Ja lietotājs jau ir autorizējies un mēģina ievadīt reģistrācijas 
+            // kontroliera adresi, tad aizvedam viņu uz sākuma lapu
+            if(Auth::check()) {
+                Response::redirect('/');
+            }
+            
+            // Ja dati nāk no formas
+            if(Input::method()=='POST')
+            {
+                // Pārbauda, vai ir pagaidu lietotājs (tabulā temp_users), kuram ir ievadītais kods (code)
+                $temp_user = Model_Temp_User::find('all', array(
+                        'where' => array(
+                            array('code', Input::post('code')),
+                        )
+                    ));
+
+                // Ja lietotājs ir atrasts
+                if($temp_user)
+                {
+                    // Iegūst no objekta izveidošanas laiku
+                    foreach ($temp_user as $user) {
+                        $created = $user -> created_at;
+                    }
+                    // Pieskaita 2 dienas (vienāds ar 48h)
+                    $created = strtotime('+2 days', $created);
+                    
+                    // Pārbauda, vai nav iztecējis 48h termiņš
+                    if($created > Date::forge()->get_timestamp())
+                    {
+                        // Nav iztecējis termiņš
+                        Session::set_flash('success','Reģistrācija apstiprināta! Tagad droši var sākt lietot sistēmu.');
+                        //Response::redirect('/confirm');
+                    }
+                    else
+                    {
+                        // Ir iztecējis termiņš
+                        Session::set_flash('error','Reģistrācija nav apstiprināta! Reģistrācijas apstiprināšanas termiņš ir iztecējis (48 stundas).');
+                        //Response::redirect('/confirm');
+                    }
+                }
+                else
+                {
+                    Session::set_flash('error', 'Sistēmā nav lietotāja, kuram ir jūsu ievadītais kods!');
+                    //Response::redirect('/confirm');
+                }
+            }
+
+            // Ja dati nāk no e-pasta saites
+            else if(Input::method()=='GET')
+            {
+                // Pārbauda, vai ir pagaidu lietotājs (tabulā temp_users), kuram ir ievadītais kods (code)
+                $temp_user = Model_Temp_User::find('all', array(
+                        'where' => array(
+                            array('code', $code),
+                        )
+                    ));
+                
+                // Ja tāds lietotājs ir atrasts
+                if($temp_user)
+                {
+                    // Iegūst no objekta izveidošanas laiku
+                    foreach ($temp_user as $user) {
+                        $created = $user -> created_at;
+                    }
+                    // Pieskaita 2 dienas (vienāds ar 48h)
+                    $created = strtotime('+2 days', $created);
+                    
+                    // Pārbauda, vai nav iztecējis 48h termiņš
+                    if($created > Date::forge()->get_timestamp())
+                    {
+                        Session::set_flash('success', 'Reģistrācija apstiprināta! Tagad droši var sākt lietot sistēmu.');
+                        //Response::redirect('/confirm');
+                    }
+                    else
+                    {
+                        Session::set_flash('error','Reģistrācija nav apstiprināta! Reģistrācijas apstiprināšanas termiņš ir iztecējis (48 stundas).');
+                        //Response::redirect('/confirm');
+                    }
+                }
+                else
+                {
+                    Session::set_flash('error', 'Sistēmā nav lietotāja, kuram ir jūsu ievadītais kods!');
+                    //Response::redirect('/confirm');
+                }
+            }
+            else
+            {
+                $this -> template -> content = View::forge('connection/confirm');
+            }
+            
+                if(empty($this -> template -> content))
+                $this -> template -> content = View::forge('connection/confirm');
+                $this -> template -> title = 'Reģistrācijas apstiprināšana - Pilsētas ūdens';
+      }
+      
+        /**
+	 * Funkcija: 4.2.1.4. Lietotāja autorizācija (viesis)
+         * Identifikators: IS_USER_LOGIN
+	 *
+	 * Autorizē lietotāju sistēmā
+         * 
+	 */
+        public function action_login()
+        {
+            // Ja lietotājs jau ir autorizējies un mēģina vēlreiz autorizēties, 
+            // tad vedam viņu uz sistēmas sākumu
+            if(Auth::check()) {
+                Response::redirect('/');
+            }
+            
+            if(Input::method()=='POST' && Security::check_token())
+            {
+                if((filter_var(Input::post('email'), FILTER_VALIDATE_EMAIL)) && (Input::post('password')!=''))
+                {
+                    if (Auth::login(Input::post('username'), Input::post('password'))) {
+                    //Session::set_flash('success', 'Tu esi autorizējies!');
+                        Response::redirect('/');
+                    } else {
+                        Session::set_flash('error', 'Diemžēl reģistrācija neveiksmīga! Ievadīta nepareiza ievades datu kombinācija.');
+                    }
+                }
+                else 
+                {
+                    if (Auth::login(Input::post('username'), Input::post('password'))) {
+                    //Session::set_flash('success', 'Tu esi autorizējies!');
+                        Response::redirect('/');
+                    } else {
+                        Session::set_flash('error', 'Diemžēl reģistrācija neveiksmīga! Ievadīta nepareiza ievades datu kombinācija.');
+                    }
+                }
+                
+                $this->template->title="Lietotāja autorizācija - Pilsētas ūdens";
+                $this->template->content = View::forge('connection/login');
+                
+            }
+            
+            
+        }
 }
