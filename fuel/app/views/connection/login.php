@@ -6,6 +6,17 @@
                             <h1>Ieiet sistēmā</h1>
                         </div>
                         
+                        <?php if(Session::get_flash('success')) { ?>
+                                <div class="alert alert-success">
+                                    <p class="text-success"><?php echo Session::get_flash('success'); ?></p>
+                                </div>
+
+                        <?php } elseif(Session::get_flash('error')) { ?>
+                                <div class="alert alert-danger">
+                                    <p class="text-danger"><?php echo Session::get_flash('error'); ?></p>
+                                </div>
+                        <?php } ?>
+                        
                         <div class="col-md-offset-3 col-md-6">
                             <form id="login-form" method="POST" action="/user/login" role="form">
                                 <div class="form-group">

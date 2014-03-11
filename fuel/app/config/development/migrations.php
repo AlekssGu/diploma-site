@@ -6,7 +6,7 @@ return array(
 		array(
 			'default' => 
 			array(
-				0 => '001_create_isu_users',
+				0 => '001_create_users',
 				1 => '002_create_temp_users',
 			),
 		),

@@ -1,10 +1,10 @@
 <?php
 
-class Model_Isu_User extends \Orm\Model
+class Model_User extends \Orm\Model
 {
 	protected static $_properties = array(
 		'id',
-		'client_number',
+		'username', // klienta numurs
 		'email',
 		'password',
 		'group',
@@ -32,6 +32,6 @@ class Model_Isu_User extends \Orm\Model
 			'mysql_timestamp' => false,
 		),
 	);
-	protected static $_table_name = 'isu_users';
+	protected static $_table_name = 'users';
 
 }
