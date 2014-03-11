@@ -223,7 +223,7 @@ class Controller_Connection extends Controller_Template
                     // Iegūst no objekta izveidošanas laiku
                     foreach ($temp_user as $user) {
                         $created = $user -> created_at;
-                        $client_number = $user -> username;
+                        $client_number = $user -> client_number;
                         $email = $user -> email;
                         $password = $user -> password;
                     }
@@ -236,19 +236,21 @@ class Controller_Connection extends Controller_Template
                         $create_process = Auth::create_user
                         (
                             $client_number, 
-                            $email, 
                             $password, 
-                            1, 
-                            'Aleksandrs',
-                            'Gusevs',
-                            1,
-                            'Bāriņu iela',
-                            '4/6',
-                            '28',
-                            'Liepājas rajons',
-                            'LV-3401',
-                            '29826904',
-                            'Y'
+                            $email, 
+                            100,
+                            array(
+                            'name' => 'Aleksandrs',
+                            'surname' => 'Gusevs',
+                            'city_id' => 1,
+                            'street' => 'Bāriņu iela',
+                            'house' => '4/6',
+                            'flat' => '28',
+                            'district' => 'Liepājas rajons',
+                            'post_code' => 'LV-3401',
+                            'mobile_phone' => '29826904',
+                            'is_active' => 'Y'
+                            )
                         );
                         
                         if($create_process)
@@ -257,7 +259,6 @@ class Controller_Connection extends Controller_Template
                             Session::set_flash('success','Reģistrācija apstiprināta! Tagad droši var sākt lietot sistēmu.');
                             //Response::redirect('/confirm'); 
                         }
-                        
                     }
                     else
                     {
@@ -289,6 +290,9 @@ class Controller_Connection extends Controller_Template
                     // Iegūst no objekta izveidošanas laiku
                     foreach ($temp_user as $user) {
                         $created = $user -> created_at;
+                        $client_number = $user -> client_number;
+                        $email = $user -> email;
+                        $password = $user -> password;
                     }
                     // Pieskaita 2 dienas (vienāds ar 48h)
                     $created = strtotime('+2 days', $created);
@@ -296,8 +300,32 @@ class Controller_Connection extends Controller_Template
                     // Pārbauda, vai nav iztecējis 48h termiņš
                     if($created > Date::forge()->get_timestamp())
                     {
-                        Session::set_flash('success', 'Reģistrācija apstiprināta! Tagad droši var sākt lietot sistēmu.');
-                        //Response::redirect('/confirm');
+                        $create_process = Auth::create_user
+                        (
+                            $client_number, 
+                            $password, 
+                            $email, 
+                            100,
+                            array(
+                            'name' => 'Aleksandrs',
+                            'surname' => 'Gusevs',
+                            'city_id' => 1,
+                            'street' => 'Bāriņu iela',
+                            'house' => '4/6',
+                            'flat' => '28',
+                            'district' => 'Liepājas rajons',
+                            'post_code' => 'LV-3401',
+                            'mobile_phone' => '29826904',
+                            'is_active' => 'Y'
+                            )
+                        );
+                        
+                        if($create_process)
+                        {
+                            // Nav iztecējis termiņš
+                            Session::set_flash('success','Reģistrācija apstiprināta! Tagad droši var sākt lietot sistēmu.');
+                            //Response::redirect('/confirm'); 
+                        }
                     }
                     else
                     {
