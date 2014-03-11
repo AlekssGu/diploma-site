@@ -2,13 +2,13 @@
 
 namespace Fuel\Migrations;
 
-class Create_isu_users
+class Create_users
 {
 	public function up()
 	{
-		\DBUtil::create_table('isu_users', array(
+		\DBUtil::create_table('users', array(
 			'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true, 'unsigned' => true),
-			'client_number' => array('constraint' => 12, 'type' => 'varchar'),
+			'username' => array('constraint' => 12, 'type' => 'varchar'), // klienta numurs
 			'email' => array('constraint' => 255, 'type' => 'varchar'),
 			'password' => array('constraint' => 255, 'type' => 'varchar'),
 			'group' => array('constraint' => 11, 'type' => 'int'),
@@ -30,6 +30,6 @@ class Create_isu_users
 
 	public function down()
 	{
-		\DBUtil::drop_table('isu_users');
+		\DBUtil::drop_table('users');
 	}
 }

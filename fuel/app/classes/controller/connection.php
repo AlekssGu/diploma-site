@@ -75,7 +75,7 @@ class Controller_Connection extends Controller_Template
                 }    
 
                 // Pārbauda, vai sistēmā ir lietotājs ar šādu klienta numuru
-                $get_client_number = Model_Isu_User::find_by('client_number', Input::post('client_number'));
+                $get_client_number = Model_User::find_by('username', Input::post('client_number'));
                 if($get_client_number)
                 {
                     $error_count++;
@@ -91,7 +91,7 @@ class Controller_Connection extends Controller_Template
                 }
 
                 // Pārbauda, vai sistēmā ir lietotājs ar šādu e-pasta adresi
-                $getemail = Model_Isu_User::find_by('email', Input::post('email'));
+                $getemail = Model_User::find_by('email', Input::post('email'));
                 if($getemail)
                 {
                     $error_count++;
@@ -223,6 +223,9 @@ class Controller_Connection extends Controller_Template
                     // Iegūst no objekta izveidošanas laiku
                     foreach ($temp_user as $user) {
                         $created = $user -> created_at;
+                        $client_number = $user -> username;
+                        $email = $user -> email;
+                        $password = $user -> password;
                     }
                     // Pieskaita 2 dienas (vienāds ar 48h)
                     $created = strtotime('+2 days', $created);
@@ -230,9 +233,31 @@ class Controller_Connection extends Controller_Template
                     // Pārbauda, vai nav iztecējis 48h termiņš
                     if($created > Date::forge()->get_timestamp())
                     {
-                        // Nav iztecējis termiņš
-                        Session::set_flash('success','Reģistrācija apstiprināta! Tagad droši var sākt lietot sistēmu.');
-                        //Response::redirect('/confirm');
+                        $create_process = Auth::create_user
+                        (
+                            $client_number, 
+                            $email, 
+                            $password, 
+                            1, 
+                            'Aleksandrs',
+                            'Gusevs',
+                            1,
+                            'Bāriņu iela',
+                            '4/6',
+                            '28',
+                            'Liepājas rajons',
+                            'LV-3401',
+                            '29826904',
+                            'Y'
+                        );
+                        
+                        if($create_process)
+                        {
+                            // Nav iztecējis termiņš
+                            Session::set_flash('success','Reģistrācija apstiprināta! Tagad droši var sākt lietot sistēmu.');
+                            //Response::redirect('/confirm'); 
+                        }
+                        
                     }
                     else
                     {
@@ -305,6 +330,7 @@ class Controller_Connection extends Controller_Template
 	 */
         public function action_login()
         {
+            $auth = Auth::instance();
             // Ja lietotājs jau ir autorizējies un mēģina vēlreiz autorizēties, 
             // tad vedam viņu uz sistēmas sākumu
             if(Auth::check()) {
@@ -313,30 +339,17 @@ class Controller_Connection extends Controller_Template
             
             if(Input::method()=='POST' && Security::check_token())
             {
-                if((filter_var(Input::post('email'), FILTER_VALIDATE_EMAIL)) && (Input::post('password')!=''))
-                {
-                    if (Auth::login(Input::post('username'), Input::post('password'))) {
+                    if ($auth->login(Input::post('username'), Input::post('password'))) {
                     //Session::set_flash('success', 'Tu esi autorizējies!');
                         Response::redirect('/');
                     } else {
-                        Session::set_flash('error', 'Diemžēl reģistrācija neveiksmīga! Ievadīta nepareiza ievades datu kombinācija.');
+                        Session::set_flash('error', var_dump($auth->login(Input::post('username'), Input::post('password'))) . Input::post('username') . ' ' . Input::post('password') . 'Diemžēl reģistrācija neveiksmīga! Ievadīta nepareiza ievades datu kombinācija.');
                     }
-                }
-                else 
-                {
-                    if (Auth::login(Input::post('username'), Input::post('password'))) {
-                    //Session::set_flash('success', 'Tu esi autorizējies!');
-                        Response::redirect('/');
-                    } else {
-                        Session::set_flash('error', 'Diemžēl reģistrācija neveiksmīga! Ievadīta nepareiza ievades datu kombinācija.');
-                    }
-                }
-                
-                $this->template->title="Lietotāja autorizācija - Pilsētas ūdens";
-                $this->template->content = View::forge('connection/login');
-                
             }
             
+                            
+                $this->template->title="Lietotāja autorizācija - Pilsētas ūdens";
+                $this->template->content = View::forge('connection/login');
             
         }
 }
