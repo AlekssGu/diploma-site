@@ -11,4 +11,5 @@ return array(
         'confirm/post' => 'connection/confirm',         // Reģistrācijas apstiprināšanas lapa (POST)
         
         'user/login' => 'connection/login',             // Autorizācijas lapa
+        'user/logout' => 'connection/logout',             // Autorizācijas lapa
 );

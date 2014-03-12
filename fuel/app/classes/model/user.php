@@ -3,16 +3,27 @@
 class Model_User extends \Orm\Model
 {
 	protected static $_properties = array(
-                'id',
-                'username', // klienta numurs
-                'password',
-                'email',
-                'profile_fields',
-                'group',
-                'last_login',
-                'login_hash',
-                'created_at',
-                'updated_at'
+		'id',
+		'city_id',
+		'username',
+		'password',
+		'email',
+            	'profile_fields',
+		'group',
+		'street',
+		'house',
+		'flat',
+		'district',
+		'post_code',
+		'mobile_phone',
+		'is_active',
+		'is_confirmed',
+		'unique_code',
+		'is_messages',
+            	'last_login',
+		'login_hash',
+		'created_at',
+		'updated_at',
 	);
 
 	protected static $_observers = array(
