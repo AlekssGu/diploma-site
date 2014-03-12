@@ -27,7 +27,7 @@
                                     <label for="password">Parole</label>
                                     <input type="password" name="password" class="form-control" id="password" placeholder="">
                                 </div>
-                                
+                                    
                                 <input type="hidden" name="<?php echo \Config::get('security.csrf_token_key');?>" value="<?php echo \Security::fetch_token();?>" />
                                 
                                 <div class="form-group">

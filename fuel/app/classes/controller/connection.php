@@ -32,6 +32,7 @@ class Controller_Connection extends Controller_Template
                 Response::redirect('/');
             }            
             
+            // Ja tiek saņemti POST dati un valīds (valid) CSRF žetons (token)
             if(Input::method() == 'POST' && Security::check_token())
             {
                 // Nodefinējam un inicializējam parametrus
@@ -76,15 +77,16 @@ class Controller_Connection extends Controller_Template
 
                 // Pārbauda, vai sistēmā ir lietotājs ar šādu klienta numuru
                 $get_client_number = Model_User::find_by('username', Input::post('client_number'));
-                if($get_client_number)
+                if($get_client_number==true && $get_client_number->is_confirmed=='Y')
                 {
                     $error_count++;
                     $error_message.='<li>Lietotājs ar šādu klienta numuru jau ir reģistrēts sistēmā</li>';
                 }
 
                 // Pārbauda, vai sistēmā ir lietotājs ar šādu klienta numuru
-                $get_client_number2 = Model_Temp_User::find_by('client_number', Input::post('client_number'));
-                if($get_client_number2)
+                $get_client_number2 = Model_User::find_by('username', Input::post('client_number'));
+                
+                if($get_client_number2==true && $get_client_number2->is_confirmed=='N')
                 {
                     $error_count++;
                     $error_message.='<li>Lietotājs ar šādu klienta numuru jau pastāv sistēmā, bet vēl nav apstiprinājis reģistrāciju</li>';
@@ -92,15 +94,15 @@ class Controller_Connection extends Controller_Template
 
                 // Pārbauda, vai sistēmā ir lietotājs ar šādu e-pasta adresi
                 $getemail = Model_User::find_by('email', Input::post('email'));
-                if($getemail)
+                if($getemail==true && $getemail->is_confirmed=='Y')
                 {
                     $error_count++;
                     $error_message.='<li>Lietotājs ar šādu e-pasta adresi jau ir reģistrēts sistēmā</li>';
                 }
 
                 // Pārbauda, vai sistēmā ir lietotājs ar šādu e-pasta adresi
-                $getemail2 = Model_Temp_User::find_by('email', Input::post('email'));
-                if($getemail2)
+                $getemail2 = Model_User::find_by('email', Input::post('email'));
+                if($getemail2==true && $getemail2->is_confirmed=='N')
                 {
                     $error_count++;
                     $error_message.='<li>Lietotājs ar šādu e-pasta adresi jau pastāv sistēmā, taču nav apstiprinājis reģistrāciju</li>';
@@ -108,7 +110,6 @@ class Controller_Connection extends Controller_Template
 
                 // Ja ir kļūdas, tad uzstāda kļūdas statusu un sagatavo paziņojumu lietotājam
                 if ($error_count != 0){
-                    //$result_status = 'error';
                             if($error_count == 1){
                                 $result_message = 'Radusies viena kļūda: <br/><ul>'. $error_message . "</ul><br/>Lūdzu salabot kļūdu un mēģināt vēlreiz!";
                             }
@@ -124,24 +125,34 @@ class Controller_Connection extends Controller_Template
                     // try - catch bloks kļūdas pārtveršanai
                     try
                     {
-                            $code = substr(md5(uniqid(mt_rand(), true)) , 0, 8); // unikāls kods
-                            $new = new Model_Temp_User();
-                            $new -> client_number = Input::post('client_number');
-                            $new -> email = Input::post('email');
-                            $new -> code = $code;
-                            $new -> password = sha1(Input::post('password'));
-                            $new -> messages = Input::post('messages'); // vai lietotājs vēlas saņemt vēstules
+                          //Sagatavo lietotāja unikālo kodu
+                          $code = substr(md5(uniqid(mt_rand(), true)) , 0, 8);
 
-                                // Create an instance
+                            //Izveido lietotāju
+                            $create_user = Auth::create_user(
+                                                Input::post('client_number'),
+                                                Input::post('password'),
+                                                Input::post('email'),
+                                                1 
+                                           );
+                            //Ja nav iespējams izveidot lietotāju, tad iet uz exception bloku
+                            if(!$create_user) throw new Exception('Nevarēja izveidot lietotāju!'); // todo
+                            
+                            //Ja izveidoja lietotāju, tad ievieto papildus vērtības
+                            $new_user = Model_User::find($create_user);
+                            $new_user -> city_id = 1; // Liepāja - todo
+                            $new_user->unique_code = $code; 
+                            if(isset($messages)) 
+                                $new_user->is_messages = $messages;  
+                            
+
+                                // Izveido e-pasta instanci 
                                 $email = Email::forge();
-
-                                // Set the from address
+                                // Uzstāda "no kā" sūtīs e-pastu
                                 $email->from('gusevs.aleksandrs@gmail.com', 'IS PILSETAS UDENS');
-
-                                // Set the to address
+                                // Uzstāda "kam" sūtīs e-pastu
                                 $email->to(Input::post('email'));
-
-                                // Set a subject
+                                // Temats
                                 $email->subject('Reģistrācijas apstiprināšana');
                                 
                                 // masīvs e-pasta ziņas datiem (kods, klienta numurs u.c.)
@@ -149,10 +160,11 @@ class Controller_Connection extends Controller_Template
                                 $email_data['code'] = $code;
                                 $email_data['client_number'] = Input::post('client_number');
                                 
+                                // Izveido html ķermeni no skata, ko sūtīt
                                 $email->html_body(\View::forge('emails/regconfirm', $email_data));
                                 
                             // Ja process veiksmīgs, tad paziņojam par to lietotājam
-                            if($new -> save() && $email->send())
+                            if($new_user->save() && $email->send())
                             {
                                 Session::set_flash('success','Reģistrācija veiksmīga! Uz jūsu norādīto e-pastu tika nosūtīta reģistrācijas apstiprināšanas vēstule.');
                                 Response::redirect('/user/register');
@@ -165,23 +177,26 @@ class Controller_Connection extends Controller_Template
                             }   
                             
                     // ķer kļūdu un paziņo par to lietotājam 
+                    // E-pastu aizsūtīt nevarēja
                     } catch(\EmailSendingFailedException $e)
                       {
                             Session::set_flash('error','Sūtīšana neizdevās: ' . $e);
                             Response::redirect('/user/register');
                       }
+                    // Netika ievadīts pareizs e-pasts
                       catch(\EmailValidationFailedException $e)
                       {
                             Session::set_flash('error','E-pasta validācija neizdevās: ' . $e);
                             Response::redirect('/user/register');
                       }
+                    // Cita kļūda
                       catch(Exception $exc)
                       {
-                            Session::set_flash('error', "Notikusi sistēmas iekšēja kļūda! Lūdzu, ziņojiet par šo kļūdu administrācijai.");
+                            Session::set_flash('error',"Notikusi sistēmas iekšēja kļūda! Lūdzu, ziņojiet par šo kļūdu administrācijai.");
                             Response::redirect('/user/register');
                       }
-                } // kļūdas paziņojumu bloks
-            } // POST bloks
+                } // kļūdas paziņojumu bloks beidzas
+            } // POST bloks beidzas
                 
                 // Uzstāda lapas nosaukumu (title)
                 $this -> template -> title = 'Reģistrācija - Pilsētas ūdens';
@@ -211,49 +226,97 @@ class Controller_Connection extends Controller_Template
             if(Input::method()=='POST')
             {
                 // Pārbauda, vai ir pagaidu lietotājs (tabulā temp_users), kuram ir ievadītais kods (code)
-                $temp_user = Model_Temp_User::find('all', array(
-                        'where' => array(
-                            array('code', Input::post('code')),
-                        )
-                    ));
-
+                $temp_user = Model_User::find_by('unique_code',Input::post('code'));
+                // Paņem no objekta lietotāja id
+                foreach ($temp_user as $data) {
+                    $user_id = $data->id;
+                }
+                // Ja ir atrasts lietotāja id, tad atrod lietotāja objektu
+                if(!empty($user_id)) $user_data = Model_User::find($user_id);
+                else $user_data = false;
+                
                 // Ja lietotājs ir atrasts
-                if($temp_user)
+                if($user_data)
                 {
-                    // Iegūst no objekta izveidošanas laiku
-                    foreach ($temp_user as $user) {
-                        $created = $user -> created_at;
-                        $client_number = $user -> client_number;
-                        $email = $user -> email;
-                        $password = $user -> password;
+                    // Pieskaita 2 dienas izveidošanas datumam (vienāds ar 48h)
+                    $created = strtotime('+2 days', $user_data->created_at);
+                    
+                    // Pārbauda, vai nav iztecējis 48h termiņš un vai lietotājs jau nav apstiprināts
+                    if($created > Date::forge()->get_timestamp() && $user_data -> is_confirmed != 'Y')
+                    {
+                        //todo
+                        $user_data -> name = 'Aleksandrs';
+                        $user_data -> surname = 'Gusevs';
+                        $user_data -> city_id = 1;
+                        $user_data -> street = 'Bāriņu iela';
+                        $user_data -> house = '4/6';
+                        $user_data -> flat = '28';
+                        $user_data -> district = 'Liepājas rajons';
+                        $user_data -> post_code = 'LV-3401';
+                        $user_data -> mobile_phone = '29826904';
+                        $user_data -> is_active = 'Y';
+                        $user_data -> is_confirmed = 'Y';
+
+                        // Ja izdevies pielasīt datus no esošas sistēmas, tad paziņo par to lietotājam
+                        if($user_data->save())
+                        {
+                            // Nav iztecējis termiņš
+                            Session::set_flash('success','Reģistrācija ir apstiprināta! Tagad droši var sākt lietot sistēmu.');
+                        }
+                        else 
+                        {
+                            // Nav iztecējis termiņš
+                            Session::set_flash('error','Reģistrācija nav apstiprināta! Ir notikusi sistēmas iekšēja kļūda.');
+                        }
                     }
+                    else
+                    {
+                        // Ir iztecējis termiņš
+                        Session::set_flash('error','Reģistrācija nav apstiprināta! Reģistrācijas apstiprināšanas termiņš ir iztecējis (48 stundas) vai lietotājs jau ir apstiprināts!');
+                    }
+                }
+                else
+                {
+                    Session::set_flash('error', 'Sistēmā nav lietotāja, kuram ir jūsu ievadītais kods!');
+                }
+            }
+
+            // Ja dati nāk no e-pasta saites ar GET parametru
+            else if(Input::method()=='GET')
+            {
+                // Pārbauda, vai ir pagaidu lietotājs (tabulā temp_users), kuram ir ievadītais kods (code)
+                $temp_user = Model_User::find_by('unique_code',$code);
+                // Paņem no objekta lietotāja id
+                foreach ($temp_user as $data) {
+                    $user_id = $data->id;
+                }
+                // Ja ir atrasts lietotāja id, tad atrod lietotāja objektu
+                if(!empty($user_id)) $user_data = Model_User::find($user_id);
+                else $user_data = false;
+
+                
+                // Ja lietotājs ir atrasts
+                if($user_data)
+                {
                     // Pieskaita 2 dienas (vienāds ar 48h)
-                    $created = strtotime('+2 days', $created);
+                    $created = strtotime('+2 days', $user_data->created_at);
                     
                     // Pārbauda, vai nav iztecējis 48h termiņš
-                    if($created > Date::forge()->get_timestamp())
+                    if($created > Date::forge()->get_timestamp() && $user_data -> is_confirmed != 'Y')
                     {
-                        $create_process = Auth::create_user
-                        (
-                            $client_number, 
-                            $password, 
-                            $email, 
-                            100,
-                            array(
-                            'name' => 'Aleksandrs',
-                            'surname' => 'Gusevs',
-                            'city_id' => 1,
-                            'street' => 'Bāriņu iela',
-                            'house' => '4/6',
-                            'flat' => '28',
-                            'district' => 'Liepājas rajons',
-                            'post_code' => 'LV-3401',
-                            'mobile_phone' => '29826904',
-                            'is_active' => 'Y'
-                            )
-                        );
+                        $user_data -> name = 'Aleksandrs';
+                        $user_data -> surname = 'Gusevs';
+                        $user_data -> city_id = 1;
+                        $user_data -> street = 'Bāriņu iela';
+                        $user_data -> house = '4/6';
+                        $user_data -> flat = '28';
+                        $user_data -> district = 'Liepājas rajons';
+                        $user_data -> post_code = 'LV-3401';
+                        $user_data -> mobile_phone = '29826904';
+                        $user_data -> is_active = 'Y';
+                        $user_data -> is_confirmed = 'Y';
                         
-                        if($create_process)
+                        if($user_data->save())
                         {
                             // Nav iztecējis termiņš
                             Session::set_flash('success','Reģistrācija apstiprināta! Tagad droši var sākt lietot sistēmu.');
@@ -263,73 +326,7 @@ class Controller_Connection extends Controller_Template
                     else
                     {
                         // Ir iztecējis termiņš
-                        Session::set_flash('error','Reģistrācija nav apstiprināta! Reģistrācijas apstiprināšanas termiņš ir iztecējis (48 stundas).');
-                        //Response::redirect('/confirm');
-                    }
-                }
-                else
-                {
-                    Session::set_flash('error', 'Sistēmā nav lietotāja, kuram ir jūsu ievadītais kods!');
-                    //Response::redirect('/confirm');
-                }
-            }
-
-            // Ja dati nāk no e-pasta saites
-            else if(Input::method()=='GET')
-            {
-                // Pārbauda, vai ir pagaidu lietotājs (tabulā temp_users), kuram ir ievadītais kods (code)
-                $temp_user = Model_Temp_User::find('all', array(
-                        'where' => array(
-                            array('code', $code),
-                        )
-                    ));
-                
-                // Ja tāds lietotājs ir atrasts
-                if($temp_user)
-                {
-                    // Iegūst no objekta izveidošanas laiku
-                    foreach ($temp_user as $user) {
-                        $created = $user -> created_at;
-                        $client_number = $user -> client_number;
-                        $email = $user -> email;
-                        $password = $user -> password;
-                    }
-                    // Pieskaita 2 dienas (vienāds ar 48h)
-                    $created = strtotime('+2 days', $created);
-                    
-                    // Pārbauda, vai nav iztecējis 48h termiņš
-                    if($created > Date::forge()->get_timestamp())
-                    {
-                        $create_process = Auth::create_user
-                        (
-                            $client_number, 
-                            $password, 
-                            $email, 
-                            100,
-                            array(
-                            'name' => 'Aleksandrs',
-                            'surname' => 'Gusevs',
-                            'city_id' => 1,
-                            'street' => 'Bāriņu iela',
-                            'house' => '4/6',
-                            'flat' => '28',
-                            'district' => 'Liepājas rajons',
-                            'post_code' => 'LV-3401',
-                            'mobile_phone' => '29826904',
-                            'is_active' => 'Y'
-                            )
-                        );
-                        
-                        if($create_process)
-                        {
-                            // Nav iztecējis termiņš
-                            Session::set_flash('success','Reģistrācija apstiprināta! Tagad droši var sākt lietot sistēmu.');
-                            //Response::redirect('/confirm'); 
-                        }
-                    }
-                    else
-                    {
-                        Session::set_flash('error','Reģistrācija nav apstiprināta! Reģistrācijas apstiprināšanas termiņš ir iztecējis (48 stundas).');
+                        Session::set_flash('error','Reģistrācija nav apstiprināta! Reģistrācijas apstiprināšanas termiņš ir iztecējis (48 stundas) vai lietotājs jau ir apstiprināts!');
                         //Response::redirect('/confirm');
                     }
                 }
@@ -358,26 +355,31 @@ class Controller_Connection extends Controller_Template
 	 */
         public function action_login()
         {
-            $auth = Auth::instance();
             // Ja lietotājs jau ir autorizējies un mēģina vēlreiz autorizēties, 
             // tad vedam viņu uz sistēmas sākumu
             if(Auth::check()) {
                 Response::redirect('/');
             }
             
+            // Ja tiek saņemti POST dati un CSRF žetons (token)
             if(Input::method()=='POST' && Security::check_token())
             {
-                    if ($auth->login(Input::post('username'), Input::post('password'))) {
-                    //Session::set_flash('success', 'Tu esi autorizējies!');
+                    if (Auth::login(Input::post('username'),Input::post('password'))) {
+                        Session::set_flash('success', 'Autorizācija veiksmīga!');
                         Response::redirect('/');
                     } else {
-                        Session::set_flash('error', var_dump($auth->login(Input::post('username'), Input::post('password'))) . Input::post('username') . ' ' . Input::post('password') . 'Diemžēl reģistrācija neveiksmīga! Ievadīta nepareiza ievades datu kombinācija.');
+                        Session::set_flash('error', 'Diemžēl autorizācija neveiksmīga! Ievadīta nepareiza ievades datu kombinācija.');
                     }
             }
             
-                            
                 $this->template->title="Lietotāja autorizācija - Pilsētas ūdens";
                 $this->template->content = View::forge('connection/login');
             
+        }
+        //todo
+        public function action_logout()
+        {
+            Auth::logout();
+            Response::redirect('/');
         }
 }
