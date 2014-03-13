@@ -149,7 +149,7 @@ class Controller_Connection extends Controller_Template
                                 // Izveido e-pasta instanci 
                                 $email = Email::forge();
                                 // Uzstāda "no kā" sūtīs e-pastu
-                                $email->from('gusevs.aleksandrs@gmail.com', 'IS PILSETAS UDENS');
+                                $email->from('pilsetasudens@gmail.com', 'IS PILSETAS UDENS');
                                 // Uzstāda "kam" sūtīs e-pastu
                                 $email->to(Input::post('email'));
                                 // Temats
