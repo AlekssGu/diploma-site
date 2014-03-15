@@ -507,7 +507,7 @@ class Controller_Connection extends Controller_Template
                         else
                         {
                             // Šo kodu izmanto funkcijā IS_USER_CHANGE_PASSW, lai pārbaudītu, vai tiešām tāds lietotājs ir
-                            $code = substr($user_data->username, 4) . substr($user_data->username,0,2) . substr($user_data->created_at,0,2);
+                            $code = substr($user_data->username, 4) . substr($user_data->username,0,2) . substr($user_data->created_at,8,2);
 
                             // Izveido e-pasta instanci 
                             $email = Email::forge();

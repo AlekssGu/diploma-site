@@ -26,7 +26,7 @@
                                 
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-block btn-default">Ieiet</button>
-                                    <a href="#" class="btn btn-link">Aizmirsu paroli</a> 
+                                    <a href="/user/forgot" class="btn btn-link">Aizmirsu paroli</a> 
                                 </div>
                             </form>
                         </div>

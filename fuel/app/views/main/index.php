@@ -1,5 +1,6 @@
         <?php if(Auth::check()) { // Lietotāju grupas "Klients" sākumlapas bloks ?>  
-<script src="http://code.highcharts.com/highcharts.js"></script>
+<?php echo Asset::js('highcharts.js'); ?>
+<?php echo Asset::js('exporting.js'); ?>
 <script>
 $(function () {
         $('#container').highcharts({
