@@ -47,6 +47,13 @@ class Controller_Connection extends Controller_Template
                     $error_message.='<li>Nav ievadīts klienta numurs</li>'; 
 
                 }
+                
+                // Ja nav ievadīts klienta numurs
+                if (mb_strlen(Input::post('client_number'))!=8){
+                    $error_count++;
+                    $error_message.='<li>Klienta numuram jāsastāv no 8 simboliem</li>'; 
+
+                }
 
                 // Pārbauda, vai ir ievadīts korekts e-pasts
                 if (!filter_var(Input::post('email'), FILTER_VALIDATE_EMAIL)){
@@ -364,22 +371,181 @@ class Controller_Connection extends Controller_Template
             // Ja tiek saņemti POST dati un CSRF žetons (token)
             if(Input::method()=='POST' && Security::check_token())
             {
-                    if (Auth::login(Input::post('username'),Input::post('password'))) {
-                        Session::set_flash('success', 'Autorizācija veiksmīga!');
-                        Response::redirect('/');
-                    } else {
-                        Session::set_flash('error', 'Diemžēl autorizācija neveiksmīga! Ievadīta nepareiza ievades datu kombinācija.');
+                // var autorizēties gan ar klienta numuru, gan ar e-pastu
+
+                // meklē lietotāju pēc klienta numura
+                $user_name = Model_User::find_by('username', Input::post('username'));
+                // Paņem no objekta lietotāja id
+                foreach ($user_name as $data) {
+                    $user_id = $data->id;
+                }
+                
+                // ja tukšs, tad meklējam pēc e-pasta
+                if(empty($user_name)) 
+                {
+                    // meklē lietotāju pēc e-pasta
+                    $user_email = Model_User::find_by('email', Input::post('username'));
+                    // Paņem no objekta lietotāja id
+                    foreach ($user_email as $data) {
+                        $user_id = $data->id;
                     }
+                }
+                
+                // Ja ir atrasts lietotāja id, tad atrod lietotāja objektu
+                if(!empty($user_id)) $user_data = Model_User::find($user_id);
+                else $user_data = false;
+
+                // ja ir atrasts lietotājs
+                if($user_data) 
+                {
+                    // Lietotājs būs neaktīvs, ja nav vēl apstiprināts
+                    if($user_data->is_active == 'N' && $user_data->is_confirmed == 'N')
+                    {
+                        Session::set_flash('error', 'Autorizācija neveiksmīga! '
+                                . 'Lietotājam ir jāapstiprina reģistrācija. '
+                                . 'Lūdzu, pārbaudi savu e-pastu, tur noteikti jābūt vēstulei par to. '
+                                . 'Spied <a href="/user/resend/'.$user_data->id.'">šeit</a>, lai izsūtītu apstiprināšanas kodu vēlreiz.');
+                        
+                        Response::redirect('/user/login');
+                    }
+                    
+                    // Lietotājs bloķēts (administrators vai darbinieks bloķējis)
+                    else if ($user_data->is_active == 'N')
+                    {
+                        Session::set_flash('error', 'Autorizācija neveiksmīga! Diemžēl tavs lietotāja konts ir bloķēts!');
+                        Response::redirect('/user/login');
+                    }
+                    
+                    // Viss kārtībā, var autorizēt lietotāju
+                    else
+                    {
+                        // Ir iziets cauri pārbaudēm un var veikt autorizāciju
+                        if (Auth::login(Input::post('username'),Input::post('password'))) 
+                        {
+                            //Session::set_flash('success', 'Autorizācija veiksmīga!');
+                            Response::redirect('/');
+                        } 
+                        // Autorizēt nevarēja - nepareizi dati
+                        else 
+                        {
+                            Session::set_flash('error', 'Diemžēl autorizācija neveiksmīga! Ievadīta nepareiza ievades datu kombinācija.');
+                        }
+                    }
+                }
+                // ja nav atrasts lietotājs
+                else
+                {
+                    Session::set_flash('error', 'Autorizācija neveiksmīga! Nav tāda lietotāja sistēmā!');
+                    Response::redirect('/user/login');
+                }
             }
             
                 $this->template->title="Lietotāja autorizācija - Pilsētas ūdens";
                 $this->template->content = View::forge('connection/login');
-            
         }
-        //todo
+        
+        /**
+	 * Funkcija: 4.2.1.5.	Lietotāja atteikšanās (klients, darbinieks, administrators)
+         * Identifikators: IS_USER_LOGOUT
+	 *
+	 * Atslēdz lietotāju no sistēmas
+         * 
+	 */
         public function action_logout()
         {
+            // Atslēdz autorizēto lietotāju no sistēmas un sūta uz galveno lapu
             Auth::logout();
             Response::redirect('/');
+        }
+        
+        /**
+	 * Funkcija: 4.2.1.6.	Lietotāja paroles atjaunošana (klients)
+         * Identifikators: IS_USER_FORGOT
+	 *
+	 * Nosūta lietotājam e-pastu ar iespēju mainīt paroli
+         * 
+	 */
+        public function action_forgot()
+        {
+            // Ja tiek saņemti POST dati un CSRF žetons (token)
+            if(Input::method()=='POST' && Security::check_token())
+            {
+                // Ja ir saņemts korekts e-pasts
+                if(filter_var(Input::post('email'), FILTER_VALIDATE_EMAIL))
+                {   
+                    // Meklē lietotāju pēc e-pasta
+                    $user = Model_User::find_by('email',Input::post('email'));
+                    
+                    // Paņem no objekta lietotāja id
+                    foreach ($user as $data) {
+                        $user_id = $data->id;
+                    }
+                    // Ja ir atrasts lietotāja id, tad atrod lietotāja objektu
+                    if(!empty($user_id)) $user_data = Model_User::find($user_id);
+                    else $user_data = false;
+                    
+                    if($user_data) 
+                    {
+                        // Lietotājs būs neaktīvs, ja nav vēl apstiprināts
+                        if($user_data->is_active == 'N' && $user_data->is_confirmed == 'N')
+                        {
+                            Session::set_flash('error', 'Lietotājam ir jāapstiprina reģistrācija. '
+                                    . 'Lūdzu, pārbaudi savu e-pastu, tur noteikti jābūt vēstulei par to. '
+                                    . 'Spied <a href="/user/resend/'.$user_data->id.'">šeit</a>, lai izsūtītu apstiprināšanas kodu vēlreiz.');
+
+                            Response::redirect('/user/forgot');
+                        }
+
+                        // Lietotājs bloķēts (administrators vai darbinieks bloķējis)
+                        else if ($user_data->is_active == 'N')
+                        {
+                            Session::set_flash('error', 'Neveiksme! Diemžēl tavs lietotāja konts ir bloķēts!');
+                            Response::redirect('/user/forgot');
+                        }
+
+                        // Viss kārtībā, var autorizēt lietotāju
+                        else
+                        {
+                            // Šo kodu izmanto funkcijā IS_USER_CHANGE_PASSW, lai pārbaudītu, vai tiešām tāds lietotājs ir
+                            $code = substr($user_data->username, 4) . substr($user_data->username,0,2) . substr($user_data->created_at,0,2);
+
+                            // Izveido e-pasta instanci 
+                            $email = Email::forge();
+                            // Uzstāda "no kā" sūtīs e-pastu
+                            $email->from('pilsetasudens@gmail.com', 'IS PILSETAS UDENS');
+                            // Uzstāda "kam" sūtīs e-pastu
+                            $email->to(Input::post('email'));
+                            // Temats
+                            $email->subject('Paroles atjaunošana');
+
+                            // masīvs e-pasta ziņas datiem (kods, klienta numurs u.c.)
+                            $email_data = array();
+                            $email_data['code'] = $code;
+
+                            // Izveido html ķermeni no skata, ko sūtīt
+                            $email->html_body(\View::forge('emails/forgot', $email_data));
+                            
+                            if($email->send())
+                            {
+                                Session::set_flash('success', 'Uz tavu e-pastu tika nosūtīta ziņa. Seko norādēm un atjaunosi savu paroli!');
+                                Response::redirect('/user/forgot');
+                            }
+                            else 
+                            {
+                                Session::set_flash('error', 'Neveiksme! Neizdevās nosūtīt e-pastu.');
+                                Response::redirect('/user/forgot');
+                            }
+                        }// 
+                     }
+                     // Nav atrasts lietotājs
+                     else 
+                     {
+                        Session::set_flash('error', 'Neveiksme! Nav tāda lietotāja sistēmā!');
+                        Response::redirect('/user/forgot');
+                     }
+                }
+            }
+                $this->template->title= "Paroles atjaunošana - Pilsētas ūdens";
+                $this->template->content = View::forge('connection/forgot');
         }
 }

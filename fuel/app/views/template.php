@@ -10,6 +10,8 @@
         <?php echo Asset::css('style.css'); ?>
         <?php echo Asset::js('jquery.min.js'); ?>
         <?php echo Asset::js('bootstrap.js'); ?>
+        <?php echo Asset::js('jquery.validate.js'); ?>
+        <?php echo Asset::js('jquery-validate.bootstrap-tooltip.min.js'); ?>
 </head>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -23,40 +25,104 @@
 </script>
 
 <body>
-    <!-- navigācijas panelis -->
-    <div class="navbar navbar-default">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="visible-xs navbar-brand" href="/">Pilsētas ūdens</a>
-        </div>
-        <div class="text-center navbar-collapse collapse navbar-responsive-collapse">
+    
+<!-- navigācijas panelis -->
+<nav class="navbar navbar-default" role="navigation">
+    
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Paplašināt navigācijas izvēlni</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">IS Pilsētas ūdens</a>
+    </div>
 
-            <div id="nav-links" class="row">
-                <div class="col-lg-3">
-                    <a href="/" type="button" class="btn btn-link">Sākums</a>
-                </div>
-                <div class="col-lg-3">
-                    <a href="/" type="button" class="btn btn-link disabled">Lapa 2</a>
-                </div>
-                <div class="col-lg-3">
-                    <a href="/" type="button" class="btn btn-link disabled">Lapa 3</a>
-                </div>
-                <div class="col-lg-3">
-                    <a href="/" type="button" class="btn btn-link disabled">Lapa 4</a>
-                </div>
-            </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/" title="Doties uz lapas sākumlapu">Sākums</a></li>
+        <li><a href="#" title="Doties uz jaunāko ziņu lapu">Ziņas</a></li>
+        <li><a href="#" title="Doties uz pakalpojumu lapu">Pakalpojumi</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Informācija par uzņēmumu">Par mums <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Darbība</a></li>
+            <li><a href="#">Normatīvie dokumenti</a></li>
+            <li><a href="#">Pārvalde</a></li>
+            <li><a href="#">Projekti</a></li>
+            <li><a href="#">Vēsture</a></li>
+            <!--<li class="divider"></li>-->
 
+          </ul>
+        </li>
+      </ul>
+        
+      <form class="visible-lg navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="nevari kaut ko atrast?">
         </div>
-      </div>
-    <!-- /navigācijas panelis -->
+        <button type="submit" class="btn btn-default" title="Ieraksti, ko gribi atrast un spied pogu">Meklēt</button>
+      </form>
+        
+      <!-- mazais bloks -->
+      <ul class="visible-md visible-sm nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Pieslēgties <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+        <?php if(Auth::check()) { ?>
+            <li><a href="/user/logout">Iziet</a></li>
+        <?php } else { ?>
+            <li><a href="/user/login">Ieiet</a></li>
+            <li><a href="/user/register">Reģistrēties</a></li>
+        <?php } ?>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Palīdzība <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li class='hidden-lg'><a href='#'>Meklēt</a></li>
+            <li><a href="#">Pieslēgšanās sistēmai</a></li>
+            <li><a href="#">Patēriņa datu ievade</a></li>
+            <li><a href="#">Biežāk uzdotie jautājumi</a></li>
+            <li class="divider"></li>
+            <li><a href="#">Sazināties ar uzņēmumu</a></li>
+          </ul>
+        </li>
+      </ul>
+      <!-- mazais bloks beidzas -->
+      
+      <!-- lielais bloks -->  
+      <ul class="hidden-md hidden-sm nav navbar-nav navbar-right">
+        <?php if(Auth::check()) { ?>
+            <li><a href="/user/logout">Iziet</a></li>
+        <?php } else { ?>
+            <li><a href="/user/login">Ieiet</a></li>
+            <li><a href="/user/register">Reģistrēties</a></li>
+        <?php } ?>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Palīdzība <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Pieslēgšanās sistēmai</a></li>
+            <li><a href="#">Patēriņa datu ievade</a></li>
+            <li><a href="#">Biežāk uzdotie jautājumi</a></li>
+            <li class="divider"></li>
+            <li><a href="#">Sazināties ar uzņēmumu</a></li>
+          </ul>
+        </li>
+      </ul>
+      <!-- lielais bloks beidzas -->
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<!-- /navigācijas panelis -->
 
     
     <!-- lapas ietvars -->
-        <?php echo $content; ?>
+    <?php echo $content; ?>
     <!-- /lapas ietvars -->
     
     <!-- lapas kājene -->

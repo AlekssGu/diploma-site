@@ -1,9 +1,8 @@
 <div class="container">
         <div class="row landing-row">
                     <div id="start-now" class="col-md-offset-3 col-md-6">
-                                                
                         <div id="login-start" class="page-header text-center">
-                            <h1>Ieiet sistēmā</h1>
+                            <h1>Atjaunot paroli</h1>
                         </div>
                         
                         <?php if(Session::get_flash('success')) { ?>
@@ -18,25 +17,19 @@
                         <?php } ?>
                         
                         <div class="col-md-offset-3 col-md-6">
-                            <form id="login-form" method="POST" action="/user/login" role="form">
+                            <form id="login-form" method="POST" action="/user/forgot" role="form">
                                 <div class="form-group">
-                                    <label for="login">E-pasts vai klienta numurs</label>
-                                    <input type="text" name="username" class="form-control" id="login" placeholder="">
+                                    <label for="email">Tavs lietotāja e-pasts</label>
+                                    <input type="email" name="email" class="form-control" id="email" placeholder="">
                                 </div>
-                                <div class="form-group">
-                                    <label for="password">Parole</label>
-                                    <input type="password" name="password" class="form-control" id="password" placeholder="">
-                                </div>
-                                    
+                                
                                 <input type="hidden" name="<?php echo \Config::get('security.csrf_token_key');?>" value="<?php echo \Security::fetch_token();?>" />
                                 
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-block btn-default">Ieiet</button>
-                                    <a href="/user/forgot" class="btn btn-link">Aizmirsu paroli</a> 
+                                    <button type="submit" class="btn btn-block btn-default">Nosūtīt</button>
                                 </div>
                             </form>
-                        </div>
-                        
+                        </div>                        
                   </div>
         </div>
 </div>

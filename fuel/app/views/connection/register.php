@@ -21,7 +21,7 @@
                         <?php } ?>
                         
                         <!-- galvenās lapas forma -->
-                        <form action="/user/register" method="POST" role="form">
+                        <form id="registration_form" action="/user/register" method="POST" role="form">
                         <div class="form-group">
                             <label for="client_number">Klienta numurs</label>
                             <input type="text" name="client_number" class="form-control" id="client_number" placeholder="Ieraksti savu klienta numuru">
@@ -53,3 +53,46 @@
                     </div>
         </div>
 </div>
+<script>
+$(document).ready(function() {
+    $('#registration_form').validate({
+        rules: {
+            client_number: {
+                required: true,
+                minlength: 8,
+                maxlength:8
+            },
+            email: {
+                required: true,
+                email: true
+            },
+            password: {
+                required: true,
+                minlength: 5
+            },
+            secpassword: {
+                equalTo: "#password"
+            },
+        },
+        
+        messages: {
+            client_number: {
+                required: "Lūdzu ievadiet savu klienta numuru!",
+                minlength: "Klienta numuram jāsastāv no 8 simboliem!",
+                maxlength: "Klienta numuram jāsastāv no 8 simboliem!"
+            },
+            email: "Lūdzu ievadiet korektu e-pasta adresi!",
+            password: {
+                required: "Lūdzu ievadiet paroli!",
+                minlength: "Parolei ir jābūt vismaz 5 simbolu garai!",
+            },
+            secpassword: {
+                equalTo: "Parolēm jābūt vienādām!"
+            },
+        },
+            submitHandler: function(form) {
+                form.submit();
+            }
+    });
+});    
+</script>
