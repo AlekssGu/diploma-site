@@ -4,22 +4,19 @@ class Model_User extends \Orm\Model
 {
 	protected static $_properties = array(
 		'id',
-		'city_id',
+		'address_id', // faktiskā
+                'secondary_addr_id', // deklarētā/juridiskā adrese
 		'username',
 		'password',
 		'email',
             	'profile_fields',
 		'group',
-		'street',
-		'house',
-		'flat',
-		'district',
-		'post_code',
 		'mobile_phone',
 		'is_active',
 		'is_confirmed',
+                'is_messages',
+                'person_type',
 		'unique_code',
-		'is_messages',
             	'last_login',
 		'login_hash',
 		'created_at',

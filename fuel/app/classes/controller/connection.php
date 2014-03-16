@@ -36,6 +36,7 @@ class Controller_Connection extends Controller_Template
             if(Input::method() == 'POST' && Security::check_token())
             {
                 // Nodefinējam un inicializējam parametrus
+                $view_data = array();
                 $error_message=""; // Kļūdas ziņojuma daļa
                 $error_count = 0; // Kļūdu skaits
                 $result_status = ""; // Reģistrācijas statuss {success/error}
@@ -84,35 +85,66 @@ class Controller_Connection extends Controller_Template
 
                 // Pārbauda, vai sistēmā ir lietotājs ar šādu klienta numuru
                 $get_client_number = Model_User::find_by('username', Input::post('client_number'));
-                if($get_client_number==true && $get_client_number->is_confirmed=='Y')
+                // Paņem no objekta lietotāja id
+                foreach ($get_client_number as $data) {
+                    $user_id = $data->id;
+                }
+                // Ja ir atrasts lietotāja id, tad atrod lietotāja objektu
+                if(!empty($user_id)) $user_data = Model_User::find($user_id);
+                else $user_data = false;
+                
+                if($user_data == true && $user_data->is_confirmed=='Y')
                 {
-                    $error_count++;
-                    $error_message.='<li>Lietotājs ar šādu klienta numuru jau ir reģistrēts sistēmā</li>';
+                        $error_count++;
+                        $error_message.='<li>Lietotājs ar šādu klienta numuru jau ir reģistrēts sistēmā</li>';
                 }
 
                 // Pārbauda, vai sistēmā ir lietotājs ar šādu klienta numuru
                 $get_client_number2 = Model_User::find_by('username', Input::post('client_number'));
+               // Paņem no objekta lietotāja id
+                foreach ($get_client_number2 as $data) {
+                    $user_id = $data->id;
+                }
+                // Ja ir atrasts lietotāja id, tad atrod lietotāja objektu
+                if(!empty($user_id)) $user_data = Model_User::find($user_id);
+                else $user_data = false;
                 
-                if($get_client_number2==true && $get_client_number2->is_confirmed=='N')
+                if($user_data == true && $user_data->is_confirmed == 'N')
                 {
-                    $error_count++;
-                    $error_message.='<li>Lietotājs ar šādu klienta numuru jau pastāv sistēmā, bet vēl nav apstiprinājis reģistrāciju</li>';
+                        $error_count++;
+                        $error_message.='<li>Lietotājs ar šādu klienta numuru jau pastāv sistēmā, bet vēl nav apstiprinājis reģistrāciju</li>';
                 }
 
                 // Pārbauda, vai sistēmā ir lietotājs ar šādu e-pasta adresi
                 $getemail = Model_User::find_by('email', Input::post('email'));
-                if($getemail==true && $getemail->is_confirmed=='Y')
+                // Paņem no objekta lietotāja id
+                foreach ($getemail as $data) {
+                    $user_id = $data->id;
+                }
+                // Ja ir atrasts lietotāja id, tad atrod lietotāja objektu
+                if(!empty($user_id)) $user_data = Model_User::find($user_id);
+                else $user_data = false;
+                
+                if($user_data == true && $user_data->is_confirmed == 'Y')
                 {
-                    $error_count++;
-                    $error_message.='<li>Lietotājs ar šādu e-pasta adresi jau ir reģistrēts sistēmā</li>';
+                        $error_count++;
+                        $error_message.='<li>Lietotājs ar šādu e-pasta adresi jau ir reģistrēts sistēmā</li>';
                 }
 
                 // Pārbauda, vai sistēmā ir lietotājs ar šādu e-pasta adresi
                 $getemail2 = Model_User::find_by('email', Input::post('email'));
-                if($getemail2==true && $getemail2->is_confirmed=='N')
+                // Paņem no objekta lietotāja id
+                foreach ($getemail as $data) {
+                    $user_id = $data->id;
+                }
+                // Ja ir atrasts lietotāja id, tad atrod lietotāja objektu
+                if(!empty($user_id)) $user_data = Model_User::find($user_id);
+                else $user_data = false;
+                
+                if($user_data==true && $user_data->is_confirmed=='N')
                 {
                     $error_count++;
-                    $error_message.='<li>Lietotājs ar šādu e-pasta adresi jau pastāv sistēmā, taču nav apstiprinājis reģistrāciju</li>';
+                    $error_message.='<li>Lietotājs ar šādu e-pasta adresi jau pastāv sistēmā, bet vēl nav apstiprinājis reģistrāciju</li>';
                 }
 
                 // Ja ir kļūdas, tad uzstāda kļūdas statusu un sagatavo paziņojumu lietotājam
@@ -123,8 +155,9 @@ class Controller_Connection extends Controller_Template
                             else{
                                 $result_message = 'Radušās ' .$error_count. ' kļūdas: <br/><ul>'. $error_message . "</ul><br/>Lūdzu salabot kļūdas un mēģināt vēlreiz!";
                             }
-                     $data['result_message'] = $result_message;
-                     $this -> template -> content = View::forge('connection/register', $data);
+                            
+                     $view_data['result_message'] = $result_message;
+                     $this -> template -> content = View::forge('connection/register', $view_data);
                 } 
                 // pretējā gadījumā veidojam lietotāju
                 else 
@@ -147,7 +180,6 @@ class Controller_Connection extends Controller_Template
                             
                             //Ja izveidoja lietotāju, tad ievieto papildus vērtības
                             $new_user = Model_User::find($create_user);
-                            $new_user -> city_id = 1; // Liepāja - todo
                             $new_user->unique_code = $code; 
                             if(isset($messages)) 
                                 $new_user->is_messages = $messages;  
@@ -202,14 +234,13 @@ class Controller_Connection extends Controller_Template
                       }
                 } // kļūdas paziņojumu bloks beidzas
             } // POST bloks beidzas
-                
+
                 // Uzstāda lapas nosaukumu (title)
                 $this -> template -> title = 'Reģistrācija - Pilsētas ūdens';
                 
                 // Ja nekas nav izmainījis šablona saturu un tas ir palicis tukšs, tad uzstādam tā vērtību
                 if(empty($this -> template -> content))
                 $this -> template -> content = View::forge('connection/register');
-            
       }
       
         /**
@@ -246,7 +277,6 @@ class Controller_Connection extends Controller_Template
                 // Ja lietotājs ir atrasts
                 if($user_data)
                 {
-                    var_dump($user_data);
                     // Pieskaita 2 dienas izveidošanas datumam (vienāds ar 48h)
                     $created = strtotime('+2 days', $user_data->created_at);
                     
@@ -254,17 +284,11 @@ class Controller_Connection extends Controller_Template
                     if($created > Date::forge()->get_timestamp() && $user_data -> is_confirmed != 'Y')
                     {
                         //todo
-                        $user_data -> name = 'Aleksandrs';
-                        $user_data -> surname = 'Gusevs';
-                        $user_data -> city_id = 1;
-                        $user_data -> street = 'Bāriņu iela';
-                        $user_data -> house = '4/6';
-                        $user_data -> flat = '28';
-                        $user_data -> district = 'Liepājas rajons';
-                        $user_data -> post_code = 'LV-3401';
-                        $user_data -> mobile_phone = '29826904';
+                        $user_data -> address_id = 1;
+                        $user_data -> secondary_addr_id = 1;
                         $user_data -> is_active = 'Y';
                         $user_data -> is_confirmed = 'Y';
+                        $user_data -> person_type = 'F'; //= fiziska persona
 
                         // Ja izdevies pielasīt datus no esošas sistēmas, tad paziņo par to lietotājam
                         if($user_data->save())
