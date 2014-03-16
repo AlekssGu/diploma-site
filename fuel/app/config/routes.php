@@ -13,4 +13,8 @@ return array(
         'user/login' => 'connection/login',             // Autorizācijas lapa
         'user/logout' => 'connection/logout',           // Iziet no sistēmas
         'user/forgot' => 'connection/forgot',           // Aizmirsta parole
+        'user/resend/:id' => 'connection/resend/$1',    // Paroles atjaunošana
+    
+        'user/change/:code' => 'connection/change/$1',  // Paroles maiņa (GET)
+       // 'user/change/post' => 'connection/change',  // Paroles maiņa (POST)
 );

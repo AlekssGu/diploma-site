@@ -60,19 +60,20 @@
                         <div class="page-header text-center">
                                     <h1>Ievadi saņemto kodu</h1>
                         </div>
-                        
-                        <form action="/confirm/post" method="POST" role="form">
-                        <div class="form-group">
-                            <label for="code">Kods</label>
-                            <input type="text" name="code" class="form-control" id="code" placeholder="Ieraksti saņemto kodu">
+                        <div class="col-md-offset-3 col-md-6">
+                            <form action="/confirm/post" method="POST" role="form">
+                            <div class="form-group">
+                                <label for="code">Kods</label>
+                                <input type="text" name="code" class="form-control" id="code" placeholder="Ieraksti saņemto kodu">
+                            </div>
+
+                            <input type="hidden" name="<?php echo \Config::get('security.csrf_token_key');?>" value="<?php echo \Security::fetch_token();?>" />
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-block btn-primary">Apstiprināt</button>
+                            </div>
+                            </form>
                         </div>
-                        
-                        <input type="hidden" name="<?php echo \Config::get('security.csrf_token_key');?>" value="<?php echo \Security::fetch_token();?>" />
-                        
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-block btn-primary">Apstiprināt</button>
-                        </div>
-                        </form>
                         
                         <?php } ?>
                         

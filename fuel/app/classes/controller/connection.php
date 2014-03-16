@@ -151,7 +151,6 @@ class Controller_Connection extends Controller_Template
                             $new_user->unique_code = $code; 
                             if(isset($messages)) 
                                 $new_user->is_messages = $messages;  
-                            
 
                                 // Izveido e-pasta instanci 
                                 $email = Email::forge();
@@ -165,7 +164,6 @@ class Controller_Connection extends Controller_Template
                                 // masīvs e-pasta ziņas datiem (kods, klienta numurs u.c.)
                                 $email_data = array();
                                 $email_data['code'] = $code;
-                                $email_data['client_number'] = Input::post('client_number');
                                 
                                 // Izveido html ķermeni no skata, ko sūtīt
                                 $email->html_body(\View::forge('emails/regconfirm', $email_data));
@@ -187,13 +185,13 @@ class Controller_Connection extends Controller_Template
                     // E-pastu aizsūtīt nevarēja
                     } catch(\EmailSendingFailedException $e)
                       {
-                            Session::set_flash('error','Sūtīšana neizdevās: ' . $e);
+                            Session::set_flash('error','Notikusi sistēmas iekšēja kļūda! Nav iespējams nosūtīt e-pastu!');
                             Response::redirect('/user/register');
                       }
                     // Netika ievadīts pareizs e-pasts
                       catch(\EmailValidationFailedException $e)
                       {
-                            Session::set_flash('error','E-pasta validācija neizdevās: ' . $e);
+                            Session::set_flash('error','E-pasts netika nosūtīts! Ievadīts nekorekts e-pasts.');
                             Response::redirect('/user/register');
                       }
                     // Cita kļūda
@@ -230,8 +228,11 @@ class Controller_Connection extends Controller_Template
             }
             
             // Ja dati nāk no formas
-            if(Input::method()=='POST')
+            if(Input::method()=='POST' && Security::check_token())
             {
+                // Ja ievadīts tukšs kods, tad atgriežam lietotāju atpakaļ
+                if(Input::post('code') == "") Response::redirect('/confirm/post');
+                
                 // Pārbauda, vai ir pagaidu lietotājs (tabulā temp_users), kuram ir ievadītais kods (code)
                 $temp_user = Model_User::find_by('unique_code',Input::post('code'));
                 // Paņem no objekta lietotāja id
@@ -245,6 +246,7 @@ class Controller_Connection extends Controller_Template
                 // Ja lietotājs ir atrasts
                 if($user_data)
                 {
+                    var_dump($user_data);
                     // Pieskaita 2 dienas izveidošanas datumam (vienāds ar 48h)
                     $created = strtotime('+2 days', $user_data->created_at);
                     
@@ -289,9 +291,9 @@ class Controller_Connection extends Controller_Template
             }
 
             // Ja dati nāk no e-pasta saites ar GET parametru
-            else if(Input::method()=='GET')
+            else if(Input::method()=='GET' && strtolower ($code) != 'post')
             {
-                // Pārbauda, vai ir pagaidu lietotājs (tabulā temp_users), kuram ir ievadītais kods (code)
+                // Pārbauda, vai ir pagaidu lietotājs, kuram ir ievadītais kods (code)
                 $temp_user = Model_User::find_by('unique_code',$code);
                 // Paņem no objekta lietotāja id
                 foreach ($temp_user as $data) {
@@ -435,7 +437,7 @@ class Controller_Connection extends Controller_Template
                 // ja nav atrasts lietotājs
                 else
                 {
-                    Session::set_flash('error', 'Autorizācija neveiksmīga! Nav tāda lietotāja sistēmā!');
+                    Session::set_flash('error', 'Autorizācija neveiksmīga! Šāds lietotājs sistēmā nepastāv.');
                     Response::redirect('/user/login');
                 }
             }
@@ -503,12 +505,14 @@ class Controller_Connection extends Controller_Template
                             Response::redirect('/user/forgot');
                         }
 
-                        // Viss kārtībā, var autorizēt lietotāju
+                        // Viss kārtībā, var veikt darbības
                         else
                         {
-                            // Šo kodu izmanto funkcijā IS_USER_CHANGE_PASSW, lai pārbaudītu, vai tiešām tāds lietotājs ir
-                            $code = substr($user_data->username, 4) . substr($user_data->username,0,2) . substr($user_data->created_at,8,2);
-
+                            //Sagatavo lietotāja unikālo kodu
+                            $code = substr(md5(uniqid(mt_rand(), true)) , 0, 8);
+                            $user_data->unique_code = $code;
+                            $user_data->save();
+                            
                             // Izveido e-pasta instanci 
                             $email = Email::forge();
                             // Uzstāda "no kā" sūtīs e-pastu
@@ -521,6 +525,7 @@ class Controller_Connection extends Controller_Template
                             // masīvs e-pasta ziņas datiem (kods, klienta numurs u.c.)
                             $email_data = array();
                             $email_data['code'] = $code;
+                            $email_data['user_id'] = $user_data->id;
 
                             // Izveido html ķermeni no skata, ko sūtīt
                             $email->html_body(\View::forge('emails/forgot', $email_data));
@@ -540,12 +545,158 @@ class Controller_Connection extends Controller_Template
                      // Nav atrasts lietotājs
                      else 
                      {
-                        Session::set_flash('error', 'Neveiksme! Nav tāda lietotāja sistēmā!');
+                        Session::set_flash('error', 'Neveiksme! Šāds lietotājs sistēmā nepastāv.');
                         Response::redirect('/user/forgot');
                      }
                 }
             }
                 $this->template->title= "Paroles atjaunošana - Pilsētas ūdens";
                 $this->template->content = View::forge('connection/forgot');
+        }
+        
+        /**
+         * todo
+         */
+        public function action_resend($user_id = null)
+        {
+            // Ja lietotājs jau ir autorizējies un mēģina vēlreiz autorizēties, 
+            // tad vedam viņu uz sistēmas sākumu
+            if(Auth::check()) {
+                Response::redirect('/');
+            }
+            
+            if(!empty($user_id))
+            {
+                $user = Model_User::find($user_id);
+                
+                if($user)
+                {
+                    //Sagatavo lietotāja unikālo kodu
+                    $code = substr(md5(uniqid(mt_rand(), true)) , 0, 8);
+                    
+                    $user->unique_code = $code;
+                    
+                    // Izveido e-pasta instanci 
+                    $email = Email::forge();
+                    // Uzstāda "no kā" sūtīs e-pastu
+                    $email->from('pilsetasudens@gmail.com', 'IS PILSETAS UDENS');
+                    // Uzstāda "kam" sūtīs e-pastu
+                    $email->to($user->email);
+                    // Temats
+                    $email->subject('Reģistrācijas apstiprināšana');
+
+                    // masīvs e-pasta ziņas datiem (kods, klienta numurs u.c.)
+                    $email_data = array();
+                    $email_data['code'] = $code;
+
+                    // Izveido html ķermeni no skata, ko sūtīt
+                    $email->html_body(\View::forge('emails/regconfirm', $email_data));
+                    
+                    try
+                    {
+                        if($email->send() && $user->save())
+                        {
+                          Session::set_flash('success','E-pasts par reģistrācijas apstiprināšanu atkārtoti nosūtīts uz reģistrēto e-pastu. Lūdzu, seko norādēm e-pasta ziņā!');
+                          Response::redirect('/confirm/post');
+                        }
+                    } 
+                      catch(\EmailSendingFailedException $e)
+                      {
+                            Session::set_flash('error','Notikusi sistēmas iekšēja kļūda! Nav iespējams nosūtīt e-pastu!');
+                            Response::redirect('/confirm/post');
+                      }
+                      // Netika ievadīts pareizs e-pasts
+                      catch(\EmailValidationFailedException $e)
+                      {
+                            Session::set_flash('error','E-pasts netika nosūtīts! Ievadīts nekorekts e-pasts.');
+                            Response::redirect('/confirm/post');
+                      }
+                      // Cita kļūda
+                      catch(Exception $exc)
+                      {
+                            Session::set_flash('error',"Notikusi sistēmas iekšēja kļūda! Lūdzu, ziņojiet par šo kļūdu administrācijai.");
+                            Response::redirect('/confirm/post');
+                      }
+                }
+                else
+                {
+                    Session::set_flash('error','Lietotājs neeksistē!');
+                    Response::redirect('/confirm/post');
+                }
+            }
+        }
+        
+        /**
+         * 4.2.1.7.	Lietotāja paroles maiņa (klients, administrators)
+         * Identifikators: IS_USER_CHANGE_PASSW
+         * 
+         * Maina lietotāja paroli
+         */
+        public function action_change($code = null)
+        {
+            // datu masīvs, ko padod skatam
+            $view_data = array();
+            
+            if(Input::method()=='GET')
+            {
+                // Pārbauda, vai ir pagaidu lietotājs, kuram ir ievadītais kods (code)
+                $temp_user = Model_User::find_by('unique_code',$code);
+                // Paņem no objekta lietotāja id
+                foreach ($temp_user as $data) {
+                    $user_id = $data->id;
+                }
+                // Ja ir atrasts lietotāja id, tad atrod lietotāja objektu
+                if(!empty($user_id)) $user_data = Model_User::find($user_id);
+                else $user_data = false;
+                
+                if($user_data)
+                {
+                    if($user_data->unique_code == $code)
+                    {
+                        //Sagatavo lietotāja unikālo kodu
+                        $code = substr(md5(uniqid(mt_rand(), true)) , 0, 8);
+                        // mainam lietotāja unikālo kodu
+                        $user_data -> unique_code = $code;
+                        // jaunā parole, kas jānosūta klientam
+                        $new = Auth::reset_password($user_data -> username);
+                        
+                        // Izveido e-pasta instanci 
+                        $email = Email::forge();
+                        // Uzstāda "no kā" sūtīs e-pastu
+                        $email->from('pilsetasudens@gmail.com', 'IS PILSETAS UDENS');
+                        // Uzstāda "kam" sūtīs e-pastu
+                        $email->to($user_data->email);
+                        // Temats
+                        $email->subject('Mainīta parole');
+
+                        // masīvs e-pasta ziņas datiem (kods, klienta numurs u.c.)
+                        $email_data = array();
+                        $email_data['code'] = $new;
+
+                        // Izveido html ķermeni no skata, ko sūtīt
+                        $email->html_body(\View::forge('emails/change', $email_data));
+                        
+                        if($email -> send())
+                        {
+                            Session::set_flash('success', 'Parole nosūtīta jums uz e-pastu!');
+                            Response::redirect('/user/forgot');
+                        }
+                        else
+                        {
+                            Session::set_flash('error', 'Sistēmas kļūda! Paroli nebija iespējams nosūtīt uz e-pastu, taču tā tika nomainīta. Lūdzam sazināties ar administrāciju!');
+                            Response::redirect('/user/forgot');
+                        }
+                        
+                    }
+                }
+                else
+                {
+                    Session::set_flash('error', 'Neveiksme! Šāds lietotājs sistēmā nepastāv.');
+                    Response::redirect('/user/forgot');
+                }
+            }
+
+            $this->template->title = "Paroles maiņa - Pilsētas ūdens";
+            $this->template->content = View::forge('connection/change');
         }
 }

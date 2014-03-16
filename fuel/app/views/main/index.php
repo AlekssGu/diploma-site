@@ -254,6 +254,24 @@ $(function () {
         })
 
 $(document).ready(function() {
+    
+    jQuery.validator.addMethod("complex", function(element) {
+                    var has_char = false;
+                    var has_num = false;
+                    
+                    /*contains characters*/
+                    if(element.match(/[a-zA-Z+]+/) ) {
+                            has_char = true;
+                    }
+                    /*contains digits*/
+                    if(element.match(/[0-9]+/)) {
+                            has_num = true;
+                    }
+                    if(has_char && has_num) return true;
+                    else return false;
+
+}, "Parolei jāsatur vismaz viens burts un viens cipars!");
+    
     $('#registration_form').validate({
         rules: {
             client_number: {
@@ -267,7 +285,8 @@ $(document).ready(function() {
             },
             password: {
                 required: true,
-                minlength: 5
+                minlength: 5,
+                complex: true
             },
             secpassword: {
                 equalTo: "#password"
@@ -277,13 +296,14 @@ $(document).ready(function() {
         messages: {
             client_number: {
                 required: "Lūdzu ievadiet savu klienta numuru!",
-                minlength: "Klienta numuram jāsastāv no 8 simboliem!",
-                maxlength: "Klienta numuram jāsastāv no 8 simboliem!"
+                minlength: "Klienta numuram jāsastāv tieši no 8 simboliem!",
+                maxlength: "Klienta numuram jāsastāv tieši no 8 simboliem!"
             },
             email: "Lūdzu ievadiet korektu e-pasta adresi!",
             password: {
                 required: "Lūdzu ievadiet paroli!",
                 minlength: "Parolei ir jābūt vismaz 5 simbolu garai!",
+                complex: "Parolei jāsatur vismaz viens burts un viens cipars!"
             },
             secpassword: {
                 equalTo: "Parolēm jābūt vienādām!"
@@ -292,8 +312,8 @@ $(document).ready(function() {
             submitHandler: function(form) {
                 form.submit();
             }
-    });
-});
+    });    
+});    
 
         </script>
         <!-- /Galvenās lapas skripts -->
