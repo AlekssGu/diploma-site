@@ -549,6 +549,11 @@ class Controller_Connection extends Controller_Template
                         Response::redirect('/user/forgot');
                      }
                 }
+                else
+                {
+                    Session::set_flash('error', 'Netika ievadīts korekts e-pasts!');
+                    Response::redirect('/user/forgot'); 
+                }
             }
                 $this->template->title= "Paroles atjaunošana - Pilsētas ūdens";
                 $this->template->content = View::forge('connection/forgot');

@@ -13,6 +13,7 @@
 <h2>Jūsu kontam mainīta parole!</h2>
 <br>
     <p>Jaunā parole: <strong><?php echo $code; ?></strong> </p>
+    <p><a href="https://udens.agusevs.com/user/login" title="Ieiet sistēmā">Ieiet sistēmā</a></p>
 <br>
 <br>
 <p style="margin:10px">Ar cieņu, <br>IS "Pilsētas ūdens" administrācija.</p>

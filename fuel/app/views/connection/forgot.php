@@ -33,3 +33,24 @@
                   </div>
         </div>
 </div>
+
+<script>
+    
+$(document).ready(function() {
+    $('#login-form').validate({
+        rules: {
+            email: {
+                required: true,
+                email: true
+            }
+        },
+        
+        messages: {
+            email: "Lūdzu ievadiet korektu e-pasta adresi!"
+        },
+            submitHandler: function(form) {
+                form.submit();
+            }
+    });    
+});    
+</script>
