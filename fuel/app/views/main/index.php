@@ -153,7 +153,7 @@ $(function () {
                   <div class="caption">
                         <h3>Kas mēs esam?</h3>
                         <p>IS Pilsētas ūdens galvenais mērķis ir ūdens apgāde un notekūdeņu attīrīšana.</p>
-                        <p><a href="#" class="btn btn-primary" role="button">Uzzināt vairāk</a></p>
+                        <p><a href="/par-uznemumu/darbiba" class="btn btn-primary" role="button">Uzzināt vairāk</a></p>
                   </div>
                 </div>
               </div>
@@ -185,7 +185,7 @@ $(function () {
                   <div class="caption">
                         <h3>Ko mēs piedāvājam?</h3>
                         <p>Ievadi skaitītāja mērījumus, seko līdzi saviem rēķiniem, apskati plānotos remontus un paziņo par bojājumu pats.</p>
-                        <p><a href="#" class="btn btn-primary" role="button">Uzzināt vairāk</a></p>
+                        <p><a href="/pakalpojumi" class="btn btn-primary" role="button">Uzzināt vairāk</a></p>
                   </div>
                 </div>
               </div>
@@ -233,7 +233,7 @@ $(function () {
                     <div class="page-header text-center">
                         <h1>Īsa pamācība <small><br/>parādīs tev svarīgākās sistēmas funkcijas</small></h1>
                     </div>
-                    <iframe style="margin-top:40px" width="560" height="315" src="//www.youtube.com/embed/-Wn3fgh-sNs" frameborder="0" allowfullscreen></iframe>
+                    <iframe width="560" height="315" src="//www.youtube.com/embed/gyA2L3Tl6h4" frameborder="0" allowfullscreen></iframe>
                 </div>
               <!-- /galvenās lapas forma -->
             </div>
@@ -243,7 +243,7 @@ $(function () {
         <script>
         $('.start-more').click(function(){
             $(document.body).animate({
-                "scrollTop": $("#start-now").offset().top
+                "scrollTop": $("#start-now").offset().top - 50
             }, 800, "swing"); // animācijas laiks un beigu kustība
             return false; // prevent default
         });

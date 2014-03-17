@@ -40,21 +40,20 @@
       </button>
       <a class="navbar-brand" href="/">IS Pilsētas ūdens</a>
     </div>
-
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="/" title="Doties uz lapas sākumlapu">Sākums</a></li>
-        <li><a href="#" title="Doties uz jaunāko ziņu lapu">Ziņas</a></li>
-        <li><a href="#" title="Doties uz pakalpojumu lapu">Pakalpojumi</a></li>
-        <li class="dropdown">
+        <li <?php if(Uri::string()=='') echo 'class="active"'; ?>><a href="/" title="Doties uz lapas sākumlapu">Sākums</a></li>
+        <li <?php if(Uri::string()=='jaunumi') echo 'class="active"'; ?>><a href="/jaunumi" title="Doties uz jaunāko ziņu lapu">Ziņas</a></li>
+        <li <?php if(Uri::string()=='pakalpojumi') echo 'class="active"'; ?>><a href="/pakalpojumi" title="Doties uz pakalpojumu lapu">Pakalpojumi</a></li>
+        <li class="<?php if(Uri::segment(1)=='par-uznemumu') echo "active"; ?> dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Informācija par uzņēmumu">Par mums <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Darbība</a></li>
-            <li><a href="#">Normatīvie dokumenti</a></li>
-            <li><a href="#">Pārvalde</a></li>
-            <li><a href="#">Projekti</a></li>
-            <li><a href="#">Vēsture</a></li>
+            <li><a href="/par-uznemumu/darbiba">Darbība</a></li>
+            <li><a href="/par-uznemumu/dokumenti">Normatīvie dokumenti</a></li>
+            <li><a href="/par-uznemumu/parvalde">Pārvalde</a></li>
+            <li><a href="/par-uznemumu/projekti">Projekti</a></li>
+            <li><a href="/par-uznemumu/vesture">Vēsture</a></li>
             <!--<li class="divider"></li>-->
 
           </ul>
@@ -136,6 +135,6 @@
         </div>
     </div
     <!-- /lapas kājene -->
-    
+
 </body>
 </html>
