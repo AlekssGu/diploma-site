@@ -53,7 +53,7 @@ $(function () {
             <div style="margin-top:20px" class="container">
                 <div class="row">
                     <div class="col-md-3">
-                        <a href="#" class="btn btn-block btn-primary" title="Apskatīt klienta datus"><span class="glyphicon glyphicon-user"></span> Klienta informācija</a>
+                        <a href="/klients" class="btn btn-block btn-primary" title="Apskatīt klienta datus"><span class="glyphicon glyphicon-user"></span> Klienta informācija</a>
                     </div>
                     <div class="col-md-3">
                         <a href="#" class="btn btn-block btn-primary" title="Dati par patērētajiem resursiem"><span class="glyphicon glyphicon-tint"></span> Patēriņa dati</a>
@@ -72,7 +72,7 @@ $(function () {
                                 <h3 class="text-center">Mana pēdējā aktivitāte</h3>
                                 <hr/>
                                 <h4>Iesniegtais mērījums:</h4>
-                                <p>Pēdējais mērījums: 000413<span class="text-danger">45</span></p>
+                                <p>Pēdējais mērījums: 00041345 (15m<span style="vertical-align:super; font-size:0.7em;">3</span>)</p>
                                 <h4>Veiktie maksājumi:</h4>
                                 <p>Pēdējais maksājums: 13.03.2014</p>
                                 <h4>Saņemtie pakalpojumi:</h4>

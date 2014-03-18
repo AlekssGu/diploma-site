@@ -70,4 +70,23 @@ class Controller_Static extends Controller_Template
                 $this -> template -> title = "Uzņēmuma vēsture - Pilsētas ūdens";
                 $this -> template -> content = View::forge('static/about/history');
 	}
+        // par mums sadaļas beidzas
+        
+        // palīdzības sadaļas
+        public function action_help()
+        {
+            Response::redirect('/');
+        }
+        
+        public function action_help_contact()
+        {
+                $this -> template -> title = "Sazināties ar uzņēmumu - Pilsētas ūdens";
+                $this -> template -> content = View::forge('static/help/contact');
+        }
+        
+        public function action_help_faq()
+        {
+                $this -> template -> title = "Biežāk uzdotie jautājumi (BUJ) - Pilsētas ūdens";
+                $this -> template -> content = View::forge('static/help/faq');
+        }
 }

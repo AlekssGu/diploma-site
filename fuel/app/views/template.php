@@ -86,9 +86,9 @@
             <li class='hidden-lg'><a href='#'>Meklēt</a></li>
             <li><a href="#">Pieslēgšanās sistēmai</a></li>
             <li><a href="#">Patēriņa datu ievade</a></li>
-            <li><a href="#">Biežāk uzdotie jautājumi</a></li>
+            <li><a href="/palidziba/buj">Biežāk uzdotie jautājumi</a></li>
             <li class="divider"></li>
-            <li><a href="#">Sazināties ar uzņēmumu</a></li>
+            <li><a href="/palidziba/sazinaties">Sazināties ar uzņēmumu</a></li>
           </ul>
         </li>
       </ul>
@@ -102,14 +102,14 @@
             <li><a href="/user/login">Ieiet</a></li>
             <li><a href="/user/register">Reģistrēties</a></li>
         <?php } ?>
-        <li class="dropdown">
+        <li class="<?php if(Uri::segment(1)=='palidziba') echo "active"; ?> dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Palīdzība <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href="#">Pieslēgšanās sistēmai</a></li>
             <li><a href="#">Patēriņa datu ievade</a></li>
-            <li><a href="#">Biežāk uzdotie jautājumi</a></li>
+            <li><a href="/palidziba/buj">Biežāk uzdotie jautājumi</a></li>
             <li class="divider"></li>
-            <li><a href="#">Sazināties ar uzņēmumu</a></li>
+            <li><a href="/palidziba/sazinaties">Sazināties ar uzņēmumu</a></li>
           </ul>
         </li>
       </ul>

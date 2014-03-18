@@ -27,6 +27,15 @@ return array(
         'par-uznemumu/dokumenti' => 'static/about_docs',
         'par-uznemumu/parvalde' => 'static/about_board',
         'par-uznemumu/projekti' => 'static/about_projects',
-        'par-uznemumu/vesture' => 'static/about_history'
+        'par-uznemumu/vesture' => 'static/about_history',
         //--
+    
+        // Palīdzības sadaļas:
+        'palidziba' => 'static/help',
+        'palidziba/buj' => 'static/help_faq',
+        'palidziba/sazinaties' => 'static/help_contact',
+        // --
+    
+        // Klientam pieejamās sadaļas:
+        'klients' => 'client/client',
 );

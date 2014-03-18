@@ -1,5 +1,5 @@
 
-<div class="container">
+<div id="top" class="container">
     <div class="row">
         <div id="services" class="col-md-3">
             <ul class="nav nav-pills nav-stacked hidden-print visible-lg visible-md" data-spy="affix">
@@ -11,9 +11,10 @@
                 <li><a id="service_payments" href="#payments">Norēķini</a></li>
                 <li><a id="service_template" href="#template">Veidlapas</a></li>
                 <li><a id="service_other" href="#other">Citi pakalpojumi</a></li>
+                <li><a class="text-muted" id="go_top" href="#top">Atpakaļ uz augšu</a></li>
             </ul>
         </div>
-        <div class="col-md-9">
+        <div class="text-justify col-md-9">
             <div id="water" class="page">
                 <h2>Ūdensapgāde</h2>
                 <hr/>
@@ -132,9 +133,11 @@ Maecenas varius ipsum sed sagittis aliquam. Donec faucibus eros sit amet tortor 
 
 <script>
     $(document).ready(function() {
+        $("body").scrollspy({target: "#services", offset:100});
+        
         $('#service_water').click(function(){
             $(document.body).animate({
-                "scrollTop": $("#water").offset().top - 50
+                "scrollTop": $("#water").offset().top - 75
             }, 800, "swing"); // animācijas laiks un beigu kustība
             return false; // prevent default
         });
@@ -180,5 +183,13 @@ Maecenas varius ipsum sed sagittis aliquam. Donec faucibus eros sit amet tortor 
             }, 800, "swing"); // animācijas laiks un beigu kustība
             return false; // prevent default
         });
+        $('#go_top').click(function(){
+            $(document.body).animate({
+                "scrollTop": $("#top").offset().top - 55
+            }, 800, "swing"); // animācijas laiks un beigu kustība
+            return false; // prevent default
+        });
+        
+        
     });
 </script>
