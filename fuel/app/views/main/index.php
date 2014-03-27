@@ -80,7 +80,7 @@ $(function () {
                             </div>
                         </div>
                         <div class='text-center'>
-                        <a href="#" class="btn btn-info">Ievadīt mērījumu</a>
+                        <a href="/klients/iesniegt-merijumu" class="btn btn-info">Ievadīt mērījumu</a>
                         <a href="#" class="btn btn-info">Paziņot par bojājumu</a>
                         <a href="#" class="btn btn-info">Pasūtīt pakalpojumus</a>
                         </div>
@@ -241,8 +241,8 @@ $(function () {
 
         <!-- galvenās lapas skripts -->
         <script>
-        $('.start-more').click(function(){
-            $(document.body).animate({
+        $('.start-more').click(function(){      
+            $('body, html').animate({
                 "scrollTop": $("#start-now").offset().top - 50
             }, 800, "swing"); // animācijas laiks un beigu kustība
             return false; // prevent default

@@ -136,55 +136,55 @@ Maecenas varius ipsum sed sagittis aliquam. Donec faucibus eros sit amet tortor 
         $("body").scrollspy({target: "#services", offset:100});
         
         $('#service_water').click(function(){
-            $(document.body).animate({
+            $('body, html').animate({
                 "scrollTop": $("#water").offset().top - 75
             }, 800, "swing"); // animācijas laiks un beigu kustība
             return false; // prevent default
         });
         $('#service_sewage').click(function(){
-            $(document.body).animate({
+            $('body, html').animate({
                 "scrollTop": $("#sewage").offset().top - 50
             }, 800, "swing"); // animācijas laiks un beigu kustība
             return false; // prevent default
         });
         $('#service_meter').click(function(){
-            $(document.body).animate({
+            $('body, html').animate({
                 "scrollTop": $("#meter").offset().top - 50
             }, 800, "swing"); // animācijas laiks un beigu kustība
             return false; // prevent default
         });
         $('#service_charge').click(function(){
-            $(document.body).animate({
+            $('body, html').animate({
                 "scrollTop": $("#charge").offset().top - 50
             }, 800, "swing"); // animācijas laiks un beigu kustība
             return false; // prevent default
         });
         $('#service_contract').click(function(){
-            $(document.body).animate({
+            $('body, html').animate({
                 "scrollTop": $("#contract").offset().top - 50
             }, 800, "swing"); // animācijas laiks un beigu kustība
             return false; // prevent default
         });
         $('#service_payments').click(function(){
-            $(document.body).animate({
+            $('body, html').animate({
                 "scrollTop": $("#payments").offset().top - 50
             }, 800, "swing"); // animācijas laiks un beigu kustība
             return false; // prevent default
         });        
         $('#service_template').click(function(){
-            $(document.body).animate({
+            $('body, html').animate({
                 "scrollTop": $("#template").offset().top - 50
             }, 800, "swing"); // animācijas laiks un beigu kustība
             return false; // prevent default
         });
         $('#service_other').click(function(){
-            $(document.body).animate({
+            $('body, html').animate({
                 "scrollTop": $("#other").offset().top - 50
             }, 800, "swing"); // animācijas laiks un beigu kustība
             return false; // prevent default
         });
         $('#go_top').click(function(){
-            $(document.body).animate({
+            $('body, html').animate({
                 "scrollTop": $("#top").offset().top - 55
             }, 800, "swing"); // animācijas laiks un beigu kustība
             return false; // prevent default

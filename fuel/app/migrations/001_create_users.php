@@ -8,14 +8,12 @@ class Create_users
 	{
 		\DBUtil::create_table('users', array(
 			'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true, 'unsigned' => true),
-			'address_id' => array('constraint' => 11, 'type' => 'int'), // Faktiskā adrese
-                        'secondary_addr_id' => array('constraint' => 11, 'type' => 'int'), // Juridiskā/Deklarētā adrese
-			'username' => array('constraint' => 12, 'type' => 'varchar'),
+			'userinfo_id' => array('constraint' => 11, 'type' => 'int'),
+                        'username' => array('constraint' => 12, 'type' => 'varchar'),
 			'password' => array('constraint' => 255, 'type' => 'varchar'),
 			'email' => array('constraint' => 250, 'type' => 'varchar'),
                     	'profile_fields' => array('type' => 'text'),
 			'group' => array('constraint' => 11, 'type' => 'int'),
-			'mobile_phone' => array('constraint' => 45, 'type' => 'varchar', 'null' => true),
 			'is_active' => array('constraint' => 1, 'type' => 'varchar', 'default' => 'N'),
 			'is_confirmed' => array('constraint' => 1, 'type' => 'varchar', 'default' => 'N'),
 			'is_messages' => array('constraint' => 1, 'type' => 'varchar', 'default' => 'N'),

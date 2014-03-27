@@ -1,17 +1,15 @@
 <?php
 
 class Model_User extends \Orm\Model
-{
+{       // Šo visu aizpilda pie reģistrācijas / reģistrācijas apstiprināšanas
 	protected static $_properties = array(
 		'id',
-		'address_id', // faktiskā
-                'secondary_addr_id', // deklarētā/juridiskā adrese
+                'userinfo_id',
 		'username',
 		'password',
 		'email',
             	'profile_fields',
 		'group',
-		'mobile_phone',
 		'is_active',
 		'is_confirmed',
                 'is_messages',

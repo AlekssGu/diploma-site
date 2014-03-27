@@ -1,16 +1,13 @@
 <?php
 
-class Model_Userinfo extends \Orm\Model
-{       // Šo visu informāciju iegūst no esošas sistēmas
+class Model_Object extends \Orm\Model
+{
 	protected static $_properties = array(
 		'id',
-		'address_id',
-		'secondary_addr_id',
+		'client_id', 
+		'address_id', 
 		'name',
-		'surname',
-		'person_code',
-		'client_number',
-		'mobile_phone',
+		'notes',
 		'created_at',
 		'updated_at',
 	);
@@ -25,6 +22,6 @@ class Model_Userinfo extends \Orm\Model
 			'mysql_timestamp' => false,
 		),
 	);
-	protected static $_table_name = 'userinfos';
+	protected static $_table_name = 'objects';
 
 }

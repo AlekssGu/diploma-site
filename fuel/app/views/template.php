@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="Informācijas sistēma \"Pilsētas ūdens\"">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Informācijas sistēma Pilsētas ūdens">
         <meta name="author" content="Aleksandrs Gusevs">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title><?php echo $title; ?></title>
 	<?php echo Asset::css('bootstrap.min.css'); ?>
         <?php echo Asset::css('style.css'); ?>
@@ -12,7 +13,15 @@
         <?php echo Asset::js('bootstrap.js'); ?>
         <?php echo Asset::js('jquery.validate.js'); ?>
         <?php echo Asset::js('jquery-validate.bootstrap-tooltip.min.js'); ?>
+        
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+          <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
 </head>
+<body>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -24,8 +33,6 @@
 
 </script>
 
-<body>
-    
 <!-- navigācijas panelis -->
 <nav class="navbar navbar-default" role="navigation">
     
@@ -44,7 +51,13 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li <?php if(Uri::string()=='') echo 'class="active"'; ?>><a href="/" title="Doties uz lapas sākumlapu">Sākums</a></li>
-        <li <?php if(Uri::string()=='jaunumi') echo 'class="active"'; ?>><a href="/jaunumi" title="Doties uz jaunāko ziņu lapu">Ziņas</a></li>
+        <li class="<?php if(Uri::segment(1)=='aktuali') echo "active"; ?> dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Aktuālā informācija">Aktuāli <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="/aktuali/jaunumi">Ziņas</a></li>
+            <li><a href="/aktuali/karte">Aktuālo notikumu karte</a></li>
+          </ul>
+        </li>
         <li <?php if(Uri::string()=='pakalpojumi') echo 'class="active"'; ?>><a href="/pakalpojumi" title="Doties uz pakalpojumu lapu">Pakalpojumi</a></li>
         <li class="<?php if(Uri::segment(1)=='par-uznemumu') echo "active"; ?> dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Informācija par uzņēmumu">Par mums <b class="caret"></b></a>
@@ -89,6 +102,9 @@
             <li><a href="/palidziba/buj">Biežāk uzdotie jautājumi</a></li>
             <li class="divider"></li>
             <li><a href="/palidziba/sazinaties">Sazināties ar uzņēmumu</a></li>
+            <?php if(Auth::get('group')==100) { ?>
+            <li><a href="/vadiba/">Administrācijas panelis</a></li>
+            <?php } ?>
           </ul>
         </li>
       </ul>
@@ -110,6 +126,9 @@
             <li><a href="/palidziba/buj">Biežāk uzdotie jautājumi</a></li>
             <li class="divider"></li>
             <li><a href="/palidziba/sazinaties">Sazināties ar uzņēmumu</a></li>
+            <?php if(Auth::get('group')==100) { ?>
+            <li><a href="/vadiba/">Administrācijas panelis</a></li>
+            <?php } ?>
           </ul>
         </li>
       </ul>

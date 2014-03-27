@@ -1,16 +1,18 @@
 <?php
 
-class Model_Userinfo extends \Orm\Model
-{       // Šo visu informāciju iegūst no esošas sistēmas
+class Model_Meter extends \Orm\Model
+{
 	protected static $_properties = array(
 		'id',
-		'address_id',
-		'secondary_addr_id',
-		'name',
-		'surname',
-		'person_code',
-		'client_number',
-		'mobile_phone',
+		'object_id',
+		'date_from',
+		'date_to',
+		'meter_type',
+		'water_type',
+		'worker_id',
+		'meter_number',
+		'meter_model',
+		'meter_lead',
 		'created_at',
 		'updated_at',
 	);
@@ -25,6 +27,6 @@ class Model_Userinfo extends \Orm\Model
 			'mysql_timestamp' => false,
 		),
 	);
-	protected static $_table_name = 'userinfos';
+	protected static $_table_name = 'meters';
 
 }

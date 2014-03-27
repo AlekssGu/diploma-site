@@ -18,7 +18,9 @@ return array(
         //--
 
         // navigācijas lapas (ar statisko saturu):
-        'jaunumi' => 'static/news',
+        'aktuali' => 'static/recent',
+        'aktuali/karte' => 'static/recent_map',
+        'aktuali/jaunumi' => 'static/recent_news',
         'pakalpojumi' => 'static/services',
 
         // Par mums sadaļas:
@@ -38,4 +40,10 @@ return array(
     
         // Klientam pieejamās sadaļas:
         'klients' => 'client/client',
+        'klients/pievienot-objektu' => 'client/add_object', 
+        'klients/pievienot-skaititaju' => 'client/add_meter',
+        'klients/iesniegt-merijumu' => 'client/add_reading',
+        'klients/objekti' => 'client/all_objects',
+        'klients/objekti/dzest/:id' => 'client/all_objects_delete/$1',
+        'klients/objekti/apskatit/:id' => 'client/all_objects_show/$1',
 );

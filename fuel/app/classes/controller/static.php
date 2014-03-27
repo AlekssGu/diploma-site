@@ -17,16 +17,33 @@
 class Controller_Static extends Controller_Template
 {
 
-	/**
+	public function action_recent()
+	{
+                Response::redirect('/');
+	}
+        
+        /**
 	 * Galvenā lapas (index) funkcija
 	 *
 	 * Uzstāda: lapas nosaukums, saturs
          * 
 	 */
-	public function action_news()
+	public function action_recent_news()
 	{
                 $this -> template -> title = "Ziņas - Pilsētas ūdens";
-                $this -> template -> content = View::forge('static/news');
+                $this -> template -> content = View::forge('static/recent/news');
+	}
+        
+        /**
+	 * Aktuālo bojājumu karte
+	 *
+	 * Uzstāda: lapas nosaukums, saturs
+         * 
+	 */
+	public function action_recent_map()
+	{
+                $this -> template -> title = "Karte - Pilsētas ūdens";
+                $this -> template -> content = View::forge('static/recent/map');
 	}
         
 	public function action_services()
