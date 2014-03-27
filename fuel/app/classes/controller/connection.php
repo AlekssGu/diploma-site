@@ -292,13 +292,13 @@ class Controller_Connection extends Controller_Template
                         // deklarētā pilsēta
                         $query_pri_city_id = DB::select('id') 
                                          -> from('cities')
-                                         -> where('cities.city_name',$ext_data -> pri_city);
+                                         -> where('cities.city_name','=',$ext_data -> pri_city);
                         $pri_city_id = $query_pri_city_id -> as_object() -> execute() -> as_array();
                         
                         // faktiskā pilsēta
                         $query_sec_city_id = DB::select('id') 
                                          -> from('cities')
-                                         -> where('cities.city_name',$ext_data -> sec_city);
+                                         -> where('cities.city_name','=',$ext_data -> sec_city);
                         $sec_city_id = $query_sec_city_id -> as_object() -> execute() -> as_array();
                         
                         // Deklarētā adrese
@@ -398,13 +398,13 @@ class Controller_Connection extends Controller_Template
                         // deklarētā pilsēta
                         $query_pri_city_id = DB::select('id') 
                                          -> from('cities')
-                                         -> where('cities.city_name',$ext_data -> pri_city);
+                                         -> where('cities.city_name','=',$ext_data -> pri_city);
                         $pri_city_id = $query_pri_city_id -> as_object() -> execute() -> as_array();
                         
                         // faktiskā pilsēta
                         $query_sec_city_id = DB::select('id') 
                                          -> from('cities')
-                                         -> where('cities.city_name',$ext_data -> sec_city);
+                                         -> where('cities.city_name','=',$ext_data -> sec_city);
                         $sec_city_id = $query_sec_city_id -> as_object() -> execute() -> as_array();
                         
                         // Deklarētā adrese
