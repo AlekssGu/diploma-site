@@ -286,7 +286,7 @@ class Controller_Connection extends Controller_Template
                         
                         $query_ext_user = DB::select() 
                                     -> from('external_users')
-                                    -> where('external_users.client_number',$user_data->username);
+                                    -> where('external_users.client_number','=',$user_data->username);
                         $ext_data = $query_ext_user -> as_object() -> execute() -> as_array();
                         
                         // deklarētā pilsēta
@@ -392,7 +392,7 @@ class Controller_Connection extends Controller_Template
                     {
                         $query_ext_user = DB::select() 
                                     -> from('external_users')
-                                    -> where('external_users.client_number',$user_data->username);
+                                    -> where('external_users.client_number','=',$user_data->username);
                         $ext_data = $query_ext_user -> as_object() -> execute() -> as_array();
                         
                         // deklarētā pilsēta
