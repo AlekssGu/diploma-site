@@ -273,7 +273,7 @@ class Controller_Connection extends Controller_Template
             
             // Deklarētā adrese
             $pri_addr = Model_Address::forge();
-            $pri_addr -> client_id = $user_data -> id;
+            $pri_addr -> client_id = $data -> id;
             $pri_addr -> city_id = $ext_data[0]->pri_city_id;
             $pri_addr -> street = $ext_data[0] -> pri_street;
             $pri_addr -> house = $ext_data[0] -> pri_house;
@@ -284,7 +284,7 @@ class Controller_Connection extends Controller_Template
 
             // Faktiskā adrese
             $sec_addr = Model_Address::forge();
-            $sec_addr -> client_id = $user_data -> id;
+            $sec_addr -> client_id = $data -> id;
             $sec_addr -> city_id = $ext_data[0]->sec_city_id;
             $sec_addr -> street = $ext_data[0] -> sec_street;
             $sec_addr -> house = $ext_data[0] -> sec_house;
