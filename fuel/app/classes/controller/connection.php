@@ -362,7 +362,7 @@ class Controller_Connection extends Controller_Template
                     if($created > Date::forge()->get_timestamp() && $user_data -> is_confirmed != 'Y')
                     {                  
                         
-                        $user_created = get_user_data($user_data);
+                        $user_created = Controller_Connection::get_user_data($user_data);
                         
 
                         // Ja izdevies pielasīt datus no esošas sistēmas, tad paziņo par to lietotājam
@@ -412,7 +412,7 @@ class Controller_Connection extends Controller_Template
                     if($created > Date::forge()->get_timestamp() && $user_data -> is_confirmed != 'Y')
                     {
 
-                         $user_created = get_user_data($user_data);
+                         $user_created = Controller_Connection::get_user_data($user_data);
                         
                         // Ja izdevies pielasīt datus no esošas sistēmas, tad paziņo par to lietotājam
                         if($user_created)
