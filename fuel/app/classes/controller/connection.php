@@ -166,7 +166,7 @@ class Controller_Connection extends Controller_Template
                     try
                     {
                           //Sagatavo lietotāja unikālo kodu
-                          $code = substr(md5(uniqid(mt_rand(), true)) , 0, 8); //Stackoverflow.com
+                          $code = substr(md5(uniqid(mt_rand(), true)) , 0, 8); 
 
                             //Izveido lietotāju
                             $create_user = Auth::create_user(
@@ -181,8 +181,8 @@ class Controller_Connection extends Controller_Template
                             //Ja izveidoja lietotāju, tad ievieto papildus vērtības
                             $new_user = Model_User::find($create_user);
                             $new_user->unique_code = $code; 
-                            if(isset($messages)) 
-                                $new_user->is_messages = $messages;  
+                            if(Input::post('messages')!='') 
+                                $new_user->is_messages = Input::post('messages');  
 
                                 // Izveido e-pasta instanci 
                                 $email = Email::forge();
@@ -243,6 +243,84 @@ class Controller_Connection extends Controller_Template
                 $this -> template -> content = View::forge('connection/register');
       }
       
+      static function get_user_data($data)
+      {
+          $user_confirmed = false;
+          
+            $query_ext_user = DB::select() 
+                        -> from('external_users')
+                        -> where('external_users.client_number','=',$data->username)
+                        -> limit(1);
+            $ext_data = $query_ext_user -> as_object() -> execute() -> as_array();
+
+            // deklarētā pilsēta
+            $query_pri_city_id = DB::select('id') 
+                             -> from('cities')
+                             -> where('cities.city_name','=',$ext_data[0] -> pri_city)
+                             -> limit(1);
+            $pri_city_id_obj = $query_pri_city_id -> as_object() -> execute() -> as_array();
+
+            // faktiskā pilsēta
+            $query_sec_city_id = DB::select('id') 
+                             -> from('cities')
+                             -> where('cities.city_name','=',$ext_data[0] -> sec_city)
+                             -> limit(1);
+            $sec_city_id_obj = $query_sec_city_id -> as_object() -> execute() -> as_array();
+            
+            $ext_data[0]->pri_city_id = $pri_city_id_obj[0]->id;
+            $ext_data[0]->sec_city_id = $sec_city_id_obj[0]->id;
+            
+            
+            // Deklarētā adrese
+            $pri_addr = Model_Address::forge();
+            $pri_addr -> client_id = $user_data -> id;
+            $pri_addr -> city_id = $ext_data[0]->pri_city_id;
+            $pri_addr -> street = $ext_data[0] -> pri_street;
+            $pri_addr -> house = $ext_data[0] -> pri_house;
+            $pri_addr -> flat = $ext_data[0] -> pri_flat;
+            $pri_addr -> district = $ext_data[0] -> pri_district;
+            $pri_addr -> post_code = $ext_data[0] -> pri_postcode;
+            $pri_addr -> addr_type = 'D';
+
+            // Faktiskā adrese
+            $sec_addr = Model_Address::forge();
+            $sec_addr -> client_id = $user_data -> id;
+            $sec_addr -> city_id = $ext_data[0]->sec_city_id;
+            $sec_addr -> street = $ext_data[0] -> sec_street;
+            $sec_addr -> house = $ext_data[0] -> sec_house;
+            $sec_addr -> flat = $ext_data[0] -> sec_flat;
+            $sec_addr -> district = $ext_data[0] -> sec_district;
+            $sec_addr -> post_code = $ext_data[0] -> sec_postcode;
+            $sec_addr -> addr_type = 'F';
+
+            if($pri_addr->save() && $sec_addr->save())
+            {
+                $userinfo_data = Model_Userinfo::forge();
+                $userinfo_data -> address_id = $pri_addr->id;
+                $userinfo_data -> secondary_addr_id = $sec_addr->id;
+                $userinfo_data -> name = $ext_data[0] -> name;
+                $userinfo_data -> surname = $ext_data[0] -> surname;
+                $userinfo_data -> person_code = $ext_data[0] -> person_code;
+                $userinfo_data -> client_number = $ext_data[0] -> client_number;
+                $userinfo_data -> mobile_phone = $ext_data[0] -> mobile_phone;
+
+                if($userinfo_data->save())
+                {
+                    $data -> userinfo_id = $userinfo_data->id;
+                    $data -> is_active = 'Y';
+                    $data -> is_confirmed = 'Y';
+                    $data -> person_type = 'F'; // fiziska persona
+                    
+                    if($data -> save())
+                    {
+                        $user_confirmed = true;                        
+                    }
+                }
+            }
+            
+            return $user_confirmed;
+      }
+      
         /**
 	 * Funkcija: 4.2.1.2. Lietotāja reģistrācijas apstiprināšana (viesis)
          * Identifikators: IS_USER_REGCONF
@@ -282,73 +360,13 @@ class Controller_Connection extends Controller_Template
                     
                     // Pārbauda, vai nav iztecējis 48h termiņš un vai lietotājs jau nav apstiprināts
                     if($created > Date::forge()->get_timestamp() && $user_data -> is_confirmed != 'Y')
-                    {
+                    {                  
                         
-                        $query_ext_user = DB::select() 
-                                    -> from('external_users')
-                                    -> where('external_users.client_number','=',$user_data->username)
-                                    -> limit(1);
-                        $ext_data = $query_ext_user -> as_object() -> execute() -> as_array();
+                        $user_created = get_user_data($user_data);
                         
-                        // deklarētā pilsēta
-                        $query_pri_city_id = DB::select('id') 
-                                         -> from('cities')
-                                         -> where('cities.city_name','=',$ext_data[0] -> pri_city)
-                                         -> limit(1);
-                        $pri_city_id = $query_pri_city_id -> as_object() -> execute() -> as_array();
-                        
-                        // faktiskā pilsēta
-                        $query_sec_city_id = DB::select('id') 
-                                         -> from('cities')
-                                         -> where('cities.city_name','=',$ext_data[0] -> sec_city)
-                                         -> limit(1);
-                        $sec_city_id = $query_sec_city_id -> as_object() -> execute() -> as_array();
-                        
-                        // Deklarētā adrese
-                        $pri_addr = Model_Address::forge();
-                        $pri_addr -> client_id = $user_data -> id;
-                        $pri_addr -> city_id = $pri_city_id[0]->id;
-                        $pri_addr -> street = $ext_data[0] -> pri_street;
-                        $pri_addr -> house = $ext_data[0] -> pri_house;
-                        $pri_addr -> flat = $ext_data[0] -> pri_flat;
-                        $pri_addr -> district = $ext_data[0] -> pri_district;
-                        $pri_addr -> post_code = $ext_data[0] -> pri_postcode;
-                        $pri_addr -> addr_type = 'D';
-                        
-                        // Faktiskā adrese
-                        $sec_addr = Model_Address::forge();
-                        $sec_addr -> client_id = $user_data -> id;
-                        $sec_addr -> city_id = $sec_city_id[0]->id;
-                        $sec_addr -> street = $ext_data[0] -> sec_street;
-                        $sec_addr -> house = $ext_data[0] -> sec_house;
-                        $sec_addr -> flat = $ext_data[0] -> sec_flat;
-                        $sec_addr -> district = $ext_data[0] -> sec_district;
-                        $sec_addr -> post_code = $ext_data[0] -> sec_postcode;
-                        $sec_addr -> addr_type = 'F';
-                        
-                        if($pri_addr->save() && $sec_addr->save())
-                        {
-                            
-                            $userinfo_data = Model_Userinfo::forge();
-                            $userinfo_data -> address_id = $pri_addr->id;
-                            $userinfo_data -> secondary_addr_id = $sec_addr->id;
-                            $userinfo_data -> name = $ext_data[0] -> name;
-                            $userinfo_data -> surname = $ext_data[0] -> surname;
-                            $userinfo_data -> person_code = $ext_data[0] -> person_code;
-                            $userinfo_data -> client_number = $ext_data[0] -> client_number;
-                            $userinfo_data -> mobile_phone = $ext_data[0] -> mobile_phone;
-                            
-                            if($userinfo_data->save())
-                            {
-                                $user_data -> userinfo_id = $userinfo_data->id;
-                                $user_data -> is_active = 'Y';
-                                $user_data -> is_confirmed = 'Y';
-                                $user_data -> person_type = 'F'; // fiziska persona
-                            }
-                        }
 
                         // Ja izdevies pielasīt datus no esošas sistēmas, tad paziņo par to lietotājam
-                        if($user_data->save())
+                        if($user_created)
                         {
                             // Nav iztecējis termiņš
                             Session::set_flash('success','Reģistrācija ir apstiprināta! Tagad droši var sākt lietot sistēmu.');
@@ -393,71 +411,11 @@ class Controller_Connection extends Controller_Template
                     // Pārbauda, vai nav iztecējis 48h termiņš un vai lietotājs jau nav apstiprināts
                     if($created > Date::forge()->get_timestamp() && $user_data -> is_confirmed != 'Y')
                     {
-                        $query_ext_user = DB::select() 
-                                            -> from('external_users')
-                                            -> where('external_users.client_number','=',$user_data->username)
-                                            -> limit(1);
-                        $ext_data = $query_ext_user -> as_object() -> execute() -> as_array();
-                        
-                        // deklarētā pilsēta
-                        $query_pri_city_id = DB::select('id') 
-                                         -> from('cities')
-                                         -> where('cities.city_name','=',$ext_data[0] -> pri_city)
-                                         -> limit(1);
-                        $pri_city_id = $query_pri_city_id -> as_object() -> execute() -> as_array();
-                        
-                        // faktiskā pilsēta
-                        $query_sec_city_id = DB::select('id') 
-                                         -> from('cities')
-                                         -> where('cities.city_name','=',$ext_data[0] -> sec_city)
-                                         -> limit(1);
-                        $sec_city_id = $query_sec_city_id -> as_object() -> execute() -> as_array();
-                        
-                        // Deklarētā adrese
-                        $pri_addr = Model_Address::forge();
-                        $pri_addr -> client_id = $user_data -> id;
-                        $pri_addr -> city_id = $pri_city_id[0]->id;
-                        $pri_addr -> street = $ext_data[0] -> pri_street;
-                        $pri_addr -> house = $ext_data[0] -> pri_house;
-                        $pri_addr -> flat = $ext_data[0] -> pri_flat;
-                        $pri_addr -> district = $ext_data[0] -> pri_district;
-                        $pri_addr -> post_code = $ext_data[0] -> pri_postcode;
-                        $pri_addr -> addr_type = 'D';
-                        
-                        // Faktiskā adrese
-                        $sec_addr = Model_Address::forge();
-                        $sec_addr -> client_id = $user_data -> id;
-                        $sec_addr -> city_id = $sec_city_id[0]-> id;
-                        $sec_addr -> street = $ext_data[0] -> sec_street;
-                        $sec_addr -> house = $ext_data[0] -> sec_house;
-                        $sec_addr -> flat = $ext_data[0] -> sec_flat;
-                        $sec_addr -> district = $ext_data[0] -> sec_district;
-                        $sec_addr -> post_code = $ext_data[0] -> sec_postcode;
-                        $sec_addr -> addr_type = 'F';
-                        
-                        if($pri_addr->save() && $sec_addr->save())
-                        {
-                            
-                            $userinfo_data = Model_Userinfo::forge();
-                            $userinfo_data -> address_id = $pri_addr->id;
-                            $userinfo_data -> secondary_addr_id = $sec_addr->id;
-                            $userinfo_data -> name = $ext_data[0] -> name;
-                            $userinfo_data -> surname = $ext_data[0] -> surname;
-                            $userinfo_data -> person_code = $ext_data[0] -> person_code;
-                            $userinfo_data -> client_number = $ext_data[0] -> client_number;
-                            $userinfo_data -> mobile_phone = $ext_data[0] -> mobile_phone;
-                            
-                            if($userinfo_data->save())
-                            {
-                                $user_data -> userinfo_id = $userinfo_data->id;
-                                $user_data -> is_active = 'Y';
-                                $user_data -> is_confirmed = 'Y';
-                                $user_data -> person_type = 'F'; // fiziska persona
-                            }
-                        }
+
+                         $user_created = get_user_data($user_data);
                         
                         // Ja izdevies pielasīt datus no esošas sistēmas, tad paziņo par to lietotājam
-                        if($user_data->save())
+                        if($user_created)
                         {
                             // Ir apstiprināts un viss kārtībā
                             Session::set_flash('success','Reģistrācija ir apstiprināta! Tagad droši var sākt lietot sistēmu.');

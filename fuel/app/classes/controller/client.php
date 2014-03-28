@@ -140,6 +140,10 @@ class Controller_Client extends Controller_Template
             {
                 $data = array();
                 
+                $useer = Controller_Connection::get_user_data('12345678');
+                
+                var_dump($useer);
+                
                 $query = DB::select(array('objects.id', 'object_id'),
                                     'objects.name',
                                     'objects.notes',
@@ -290,6 +294,7 @@ class Controller_Client extends Controller_Template
             {
                 if(Input::method()=='POST' && Security::check_token())
                 {
+                    
                     $new_meter = new Model_Meter();
                     $new_meter -> object_id = Input::post('object_id');
                     $new_meter -> date_from = Input::post('date_from');
@@ -299,7 +304,7 @@ class Controller_Client extends Controller_Template
                     $new_meter -> worker_id = 1;
                     $new_meter -> meter_number = Input::post('number');
                     $new_meter -> meter_model = 'dummy';
-                    $new_meter -> meter_lead = Input::post('lead');
+                    $new_meter -> meter_lead = Num::format(Input::post('lead'), '00000000');
                     
                     if($new_meter -> save())
                     {
