@@ -249,14 +249,14 @@ class Controller_Connection extends Controller_Template
           
             $query_ext_user = DB::select() 
                         -> from('external_users')
-                        -> where('external_users.client_number','=',$data)
+                        -> where('external_users.client_number','=',$data->username)
                         -> limit(1);
             
             $ext_data = $query_ext_user -> as_object() -> execute() -> as_array();
 
             $query_local_user = DB::select() 
                         -> from('users')
-                        -> where('users.username','=',$data)
+                        -> where('users.username','=',$data->username)
                         -> limit(1);
             
             $local_user = $query_local_user -> as_object() -> execute() -> as_array();
