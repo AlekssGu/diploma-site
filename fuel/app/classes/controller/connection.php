@@ -249,75 +249,87 @@ class Controller_Connection extends Controller_Template
           
             $query_ext_user = DB::select() 
                         -> from('external_users')
-                        -> where('external_users.client_number','=',$data->username)
+                        -> where('external_users.client_number','=',$data)
                         -> limit(1);
+            
             $ext_data = $query_ext_user -> as_object() -> execute() -> as_array();
 
-            // deklarētā pilsēta
-            $query_pri_city_id = DB::select('id') 
-                             -> from('cities')
-                             -> where('cities.city_name','=',$ext_data[0] -> pri_city)
-                             -> limit(1);
-            $pri_city_id_obj = $query_pri_city_id -> as_object() -> execute() -> as_array();
-
-            // faktiskā pilsēta
-            $query_sec_city_id = DB::select('id') 
-                             -> from('cities')
-                             -> where('cities.city_name','=',$ext_data[0] -> sec_city)
-                             -> limit(1);
-            $sec_city_id_obj = $query_sec_city_id -> as_object() -> execute() -> as_array();
+            $query_local_user = DB::select() 
+                        -> from('users')
+                        -> where('users.username','=',$data)
+                        -> limit(1);
             
-            $ext_data[0]->pri_city_id = $pri_city_id_obj[0]->id;
-            $ext_data[0]->sec_city_id = $sec_city_id_obj[0]->id;
+            $local_user = $query_local_user -> as_object() -> execute() -> as_array();
             
-            
-            // Deklarētā adrese
-            $pri_addr = Model_Address::forge();
-            $pri_addr -> client_id = $data -> id;
-            $pri_addr -> city_id = $ext_data[0]->pri_city_id;
-            $pri_addr -> street = $ext_data[0] -> pri_street;
-            $pri_addr -> house = $ext_data[0] -> pri_house;
-            $pri_addr -> flat = $ext_data[0] -> pri_flat;
-            $pri_addr -> district = $ext_data[0] -> pri_district;
-            $pri_addr -> post_code = $ext_data[0] -> pri_postcode;
-            $pri_addr -> addr_type = 'D';
-
-            // Faktiskā adrese
-            $sec_addr = Model_Address::forge();
-            $sec_addr -> client_id = $data -> id;
-            $sec_addr -> city_id = $ext_data[0]->sec_city_id;
-            $sec_addr -> street = $ext_data[0] -> sec_street;
-            $sec_addr -> house = $ext_data[0] -> sec_house;
-            $sec_addr -> flat = $ext_data[0] -> sec_flat;
-            $sec_addr -> district = $ext_data[0] -> sec_district;
-            $sec_addr -> post_code = $ext_data[0] -> sec_postcode;
-            $sec_addr -> addr_type = 'F';
-
-            if($pri_addr->save() && $sec_addr->save())
+            if($ext_data && $local_user)
             {
-                $userinfo_data = Model_Userinfo::forge();
-                $userinfo_data -> address_id = $pri_addr->id;
-                $userinfo_data -> secondary_addr_id = $sec_addr->id;
-                $userinfo_data -> name = $ext_data[0] -> name;
-                $userinfo_data -> surname = $ext_data[0] -> surname;
-                $userinfo_data -> person_code = $ext_data[0] -> person_code;
-                $userinfo_data -> client_number = $ext_data[0] -> client_number;
-                $userinfo_data -> mobile_phone = $ext_data[0] -> mobile_phone;
+                // deklarētā pilsēta
+                $query_pri_city_id = DB::select('id') 
+                                 -> from('cities')
+                                 -> where('cities.city_name','=',$ext_data[0] -> pri_city)
+                                 -> limit(1);
+                $pri_city_id_obj = $query_pri_city_id -> as_object() -> execute() -> as_array();
 
-                if($userinfo_data->save())
+                // faktiskā pilsēta
+                $query_sec_city_id = DB::select('id') 
+                                 -> from('cities')
+                                 -> where('cities.city_name','=',$ext_data[0] -> sec_city)
+                                 -> limit(1);
+                $sec_city_id_obj = $query_sec_city_id -> as_object() -> execute() -> as_array();
+
+                $ext_data[0]->pri_city_id = $pri_city_id_obj[0]->id;
+                $ext_data[0]->sec_city_id = $sec_city_id_obj[0]->id;
+
+
+                // Deklarētā adrese
+                $pri_addr = Model_Address::forge();
+                $pri_addr -> client_id = $ext_data[0] -> id;
+                $pri_addr -> city_id = $ext_data[0]->pri_city_id;
+                $pri_addr -> street = $ext_data[0] -> pri_street;
+                $pri_addr -> house = $ext_data[0] -> pri_house;
+                $pri_addr -> flat = $ext_data[0] -> pri_flat;
+                $pri_addr -> district = $ext_data[0] -> pri_district;
+                $pri_addr -> post_code = $ext_data[0] -> pri_postcode;
+                $pri_addr -> addr_type = 'D';
+
+                // Faktiskā adrese
+                $sec_addr = Model_Address::forge();
+                $sec_addr -> client_id = $ext_data[0] -> id;
+                $sec_addr -> city_id = $ext_data[0]->sec_city_id;
+                $sec_addr -> street = $ext_data[0] -> sec_street;
+                $sec_addr -> house = $ext_data[0] -> sec_house;
+                $sec_addr -> flat = $ext_data[0] -> sec_flat;
+                $sec_addr -> district = $ext_data[0] -> sec_district;
+                $sec_addr -> post_code = $ext_data[0] -> sec_postcode;
+                $sec_addr -> addr_type = 'F';
+
+                if($pri_addr->save() && $sec_addr->save())
                 {
-                    $data -> userinfo_id = $userinfo_data->id;
-                    $data -> is_active = 'Y';
-                    $data -> is_confirmed = 'Y';
-                    $data -> person_type = 'F'; // fiziska persona
-                    
-                    if($data -> save())
+                    $userinfo_data = Model_Userinfo::forge();
+                    $userinfo_data -> address_id = $pri_addr->id;
+                    $userinfo_data -> secondary_addr_id = $sec_addr->id;
+                    $userinfo_data -> name = $ext_data[0] -> name;
+                    $userinfo_data -> surname = $ext_data[0] -> surname;
+                    $userinfo_data -> person_code = $ext_data[0] -> person_code;
+                    $userinfo_data -> client_number = $ext_data[0] -> client_number;
+                    $userinfo_data -> mobile_phone = $ext_data[0] -> mobile_phone;
+
+                    if($userinfo_data->save())
                     {
-                        $user_confirmed = true;                        
+                        $ext_data[0] -> userinfo_id = $userinfo_data->id;
+                        $data -> is_active = 'Y';
+                        $data -> is_confirmed = 'Y';
+                        $data -> person_type = 'F'; // fiziska persona
+
+                        if($data -> save())
+                        {
+                            $user_confirmed = true;                        
+                        }
                     }
                 }
             }
-            
+            else $user_confirmed = false;
+
             return $user_confirmed;
       }
       

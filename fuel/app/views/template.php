@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<title><?php echo $title; ?></title>    
 	<meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Informācijas sistēma Pilsētas ūdens">
         <meta name="author" content="Aleksandrs Gusevs">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title><?php echo $title; ?></title>
 	<?php echo Asset::css('bootstrap.min.css'); ?>
         <?php echo Asset::css('style.css'); ?>
         <?php echo Asset::js('jquery.min.js'); ?>

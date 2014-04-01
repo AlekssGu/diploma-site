@@ -102,6 +102,15 @@
             </select>
         </div>
           
+        <div class="form-group">
+            <label for="water_type">Ūdens veids</label>       
+            <select name='water_type' type="text" class="form-control">
+                <option disabled selected>Izvēlēties</option>
+                <option value='K'>Karstais ūdens</option>
+                <option value='A'>Aukstais ūdens</option>
+            </select>
+        </div>
+          
         <div class="modal-footer">
           <button id="reset" type="button" class="btn btn-default" data-dismiss="modal">Notīrīt un aizvērt</button>
           <button type="submit" class="btn btn-primary">Pievienot</button>

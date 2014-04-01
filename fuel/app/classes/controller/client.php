@@ -64,10 +64,20 @@ class Controller_Client extends Controller_Template
                 $data['fullname'] = $userdata -> name . ' ' . $userdata -> surname;
                 $data['email'] = $user -> email;
                 $data['phone'] = $userdata -> mobile_phone;
+                
                 // deklarētā adrese
-                $data['primary_address'] = $useraddr1 -> street . ' ' . $useraddr1 -> house . ' - ' . $useraddr1 -> flat . ', ' . $useraddr1 -> district . ', ' . $city1->city_name . ', ' . $useraddr1 -> post_code;
+                if($useraddr1 -> flat != 0) // Ja tā ir privātmājas adrese, tad dzīvoklis nepastāv
+                {
+                    $data['primary_address'] = $useraddr1 -> street . ' ' . $useraddr1 -> house . ' - ' . $useraddr1 -> flat . ', ' . $useraddr1 -> district . ', ' . $city1->city_name . ', ' . $useraddr1 -> post_code;
+                }
+                else $data['primary_address'] = $useraddr1 -> street . ' ' . $useraddr1 -> house . ', ' . $useraddr1 -> district . ', ' . $city1->city_name . ', ' . $useraddr1 -> post_code;
+                
                 // faktiskā adrese
-                $data['secondary_address'] = $useraddr2 -> street . ' ' . $useraddr2 -> house . ' - ' . $useraddr2 -> flat . ', ' . $useraddr2 -> district . ', ' . $city2->city_name . ', ' . $useraddr2 -> post_code;
+                if($useraddr2 -> flat != 0) // Ja tā ir privātmājas adrese, tad dzīvoklis nepastāv
+                {
+                    $data['secondary_address'] = $useraddr2 -> street . ' ' . $useraddr2 -> house . ' - ' . $useraddr2 -> flat . ', ' . $useraddr2 -> district . ', ' . $city2->city_name . ', ' . $useraddr2 -> post_code;
+                }
+                else $data['secondary_address'] = $useraddr2 -> street . ' ' . $useraddr2 -> house . ', ' . $useraddr2 -> district . ', ' . $city2->city_name . ', ' . $useraddr2 -> post_code;
                 
                 $this -> template -> title = "Klienta informācija - Pilsētas ūdens";
                 $this -> template -> content = View::forge('client/client',$data);
@@ -139,10 +149,6 @@ class Controller_Client extends Controller_Template
             if(Auth::check())
             {
                 $data = array();
-                
-                $useer = Controller_Connection::get_user_data('12345678');
-                
-                var_dump($useer);
                 
                 $query = DB::select(array('objects.id', 'object_id'),
                                     'objects.name',
@@ -300,7 +306,7 @@ class Controller_Client extends Controller_Template
                     $new_meter -> date_from = Input::post('date_from');
                     $new_meter -> date_to = Input::post('date_to');
                     $new_meter -> meter_type = Input::post('meter_type');
-                    $new_meter -> water_type = 'dummy';
+                    $new_meter -> water_type = Input::post('water_type');
                     $new_meter -> worker_id = 1;
                     $new_meter -> meter_number = Input::post('number');
                     $new_meter -> meter_model = 'dummy';
@@ -332,8 +338,18 @@ class Controller_Client extends Controller_Template
         {
             if(Auth::check())
             {
+                $query_meters = DB::select(array('meters.id', 'meter_id'),
+                                                'meters.*',
+                                                'objects.name') 
+                                        -> from('meters')
+                                        -> join('objects')
+                                        -> on('objects.id', '=', 'meters.object_id')
+                                        -> where('objects.client_id',Auth::get('id'));
+
+                $data['meters'] = $query_meters -> as_object() -> execute() -> as_array();
+                
                 $this -> template -> title = "Skaitītāju rādījumi - Pilsētas ūdens";
-                $this -> template -> content = View::forge('client/add_reading');
+                $this -> template -> content = View::forge('client/add_reading', $data);
             }
             else
             {

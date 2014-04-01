@@ -8,26 +8,25 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <form id="add_meter" action="/klients/pievienot-skaititaju" method="POST" role="form">
+            <form id="add_reading" action="/klients/pievienot-radijumu" method="POST" role="form">
                   <input type="hidden" name="<?php echo \Config::get('security.csrf_token_key');?>" value="<?php echo \Security::fetch_token();?>" />
                   <div class="modal-body">
                     <div class="form-group">
-                        <label for="number">Skaitītāja numurs</label>       
-                        <input id="number" name="number" type="text" class="form-control" placeholder="Numurs, kas rakstīts uz skaitītāja priekšējā stikliņa">
-                    </div>
-                    <div class="form-group">
-                       <label for="lead">Skaitītāja rādījums uzstādīšanas brīdī</label>
-                       <input id="lead" name="lead" type="text" class="form-control" placeholder="000000">
-                     </div>
-
-                    <div class="form-group">
-                        <label for="meter_type">Skaitītāja veids</label>       
-                        <select name='meter_type' type="text" class="form-control">
+                        <label for="number">Skaitītājs</label>       
+                        <select name='meter_number' type="text" class="form-control">
                             <option disabled selected>Izvēlēties</option>
-                            <option value='FILTER'>Ar filtru</option>
-                            <option value='NO_FILTER'>Bez filtra</option>
+                            <?php foreach ($meters as $meter) { ?>
+                            <option value="<?php echo $meter->meter_id; ?>"><?php if($meter -> water_type == 'A') 
+                                            echo $meter -> name . ' - Aukstais ūdens - ' . $meter -> meter_number;
+                                          else 
+                                            echo $meter -> name . ' - Karstais ūdens - ' . $meter -> meter_number; ?> </option>
+                            <?php } ?>
                         </select>
                     </div>
+                    <div class="form-group">
+                       <label for="lead">Skaitītāja rādījums</label>
+                       <input id="lead" name="lead" type="text" class="form-control" placeholder="000000">
+                     </div>
 
                       <button id="reset" type="reset" class="btn btn-default">Notīrīt</button>
                       <button type="submit" class="btn btn-primary">Pievienot</button>
