@@ -316,7 +316,7 @@ class Controller_Connection extends Controller_Template
 
                     if($userinfo_data->save())
                     {
-                        $ext_data[0] -> userinfo_id = $userinfo_data->id;
+                        $data -> userinfo_id = $userinfo_data->id;
                         $data -> is_active = 'Y';
                         $data -> is_confirmed = 'Y';
                         $data -> person_type = 'F'; // fiziska persona
