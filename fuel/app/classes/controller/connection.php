@@ -18,7 +18,7 @@ class Controller_Connection extends Controller_Template
 {
 
 	/**
-	 * Funkcija: 4.2.1.1. Lietotāju reģistrēšana (viesis)
+	 * Funkcija: 3.3.1.1. Lietotāju reģistrēšana (viesis)
          * Identifikators: IS_USER_REGISTER
 	 *
 	 * Reģistrē lietotāju sistēmā
@@ -204,13 +204,13 @@ class Controller_Connection extends Controller_Template
                             if($new_user->save() && $email->send())
                             {
                                 Session::set_flash('success','Reģistrācija veiksmīga! Uz jūsu norādīto e-pastu tika nosūtīta reģistrācijas apstiprināšanas vēstule.');
-                                Response::redirect('/user/register');
+                                Response::redirect('/abonents/registreties');
                             } 
                             // Paziņojam par neveiksmi
                             else
                             {
                                 Session::set_flash('error','Reģistrācija neveiksmīga! Notikusi sistēmas iekšēja kļūda. Lūdzu, ziņojiet par šo kļūdu sistēmas administrācijai.');
-                                Response::redirect('/user/register');
+                                Response::redirect('/abonents/registreties');
                             }   
                             
                     // ķer kļūdu un paziņo par to lietotājam 
@@ -218,19 +218,19 @@ class Controller_Connection extends Controller_Template
                     } catch(\EmailSendingFailedException $e)
                       {
                             Session::set_flash('error','Notikusi sistēmas iekšēja kļūda! Nav iespējams nosūtīt e-pastu!');
-                            Response::redirect('/user/register');
+                            Response::redirect('/abonents/registreties');
                       }
                     // Netika ievadīts pareizs e-pasts
                       catch(\EmailValidationFailedException $e)
                       {
                             Session::set_flash('error','E-pasts netika nosūtīts! Ievadīts nekorekts e-pasts.');
-                            Response::redirect('/user/register');
+                            Response::redirect('/abonents/registreties');
                       }
                     // Cita kļūda
                       catch(Exception $exc)
                       {
                             Session::set_flash('error',"Notikusi sistēmas iekšēja kļūda! Lūdzu, ziņojiet par šo kļūdu administrācijai.");
-                            Response::redirect('/user/register');
+                            Response::redirect('/abonents/registreties');
                       }
                 } // kļūdas paziņojumu bloks beidzas
             } // POST bloks beidzas
@@ -243,6 +243,13 @@ class Controller_Connection extends Controller_Template
                 $this -> template -> content = View::forge('connection/register');
       }
       
+    /**
+     * Funkcija: 3.3.1.4. Lietotāja datu izgūšana (sistēma)
+     * Identifikators: GLOBAL_GET_USR_DATA
+     *
+     * Saņem datus no esošas sistēmas
+     * 
+     */
       static function get_user_data($data)
       {
           $user_confirmed = false;
@@ -305,21 +312,22 @@ class Controller_Connection extends Controller_Template
 
                 if($pri_addr->save() && $sec_addr->save())
                 {
-                    $userinfo_data = Model_Userinfo::forge();
-                    $userinfo_data -> address_id = $pri_addr->id;
-                    $userinfo_data -> secondary_addr_id = $sec_addr->id;
-                    $userinfo_data -> name = $ext_data[0] -> name;
-                    $userinfo_data -> surname = $ext_data[0] -> surname;
-                    $userinfo_data -> person_code = $ext_data[0] -> person_code;
-                    $userinfo_data -> client_number = $ext_data[0] -> client_number;
-                    $userinfo_data -> mobile_phone = $ext_data[0] -> mobile_phone;
+                    // Klienta dati
+                    $person_data = Model_Person::forge();
+                    $person_data -> address_id = $pri_addr->id;
+                    $person_data -> secondary_addr_id = $sec_addr->id;
+                    $person_data -> name = $ext_data[0] -> name;
+                    $person_data -> surname = $ext_data[0] -> surname;
+                    $person_data -> person_code = $ext_data[0] -> person_code;
+                    $person_data -> client_number = $ext_data[0] -> client_number;
+                    $person_data -> mobile_phone = $ext_data[0] -> mobile_phone;
+                    $person_data -> person_type = 'F';
 
-                    if($userinfo_data->save())
+                    if($person_data->save())
                     {
-                        $data -> userinfo_id = $userinfo_data->id;
+                        $data -> person_id = $person_data->id;
                         $data -> is_active = 'Y';
                         $data -> is_confirmed = 'Y';
-                        $data -> person_type = 'F'; // fiziska persona
 
                         if($data -> save())
                         {
@@ -334,7 +342,7 @@ class Controller_Connection extends Controller_Template
       }
       
         /**
-	 * Funkcija: 4.2.1.2. Lietotāja reģistrācijas apstiprināšana (viesis)
+	 * Funkcija: 3.3.1.2. Lietotāja reģistrācijas apstiprināšana (viesis)
          * Identifikators: IS_USER_REGCONF
 	 *
 	 * Apstiprina lietotāja reģistrāciju sistēmā
@@ -352,7 +360,7 @@ class Controller_Connection extends Controller_Template
             if(Input::method()=='POST' && Security::check_token())
             {
                 // Ja ievadīts tukšs kods, tad atgriežam lietotāju atpakaļ
-                if(Input::post('code') == "") Response::redirect('/confirm/post');
+                if(Input::post('code') == "") Response::redirect('/apstiprinat/post');
                 
                 // Pārbauda, vai ir pagaidu lietotājs (tabulā temp_users), kuram ir ievadītais kods (code)
                 $temp_user = Model_User::find_by('unique_code',Input::post('code'));
@@ -462,7 +470,7 @@ class Controller_Connection extends Controller_Template
       }
       
         /**
-	 * Funkcija: 4.2.1.4. Lietotāja autorizācija (viesis)
+	 * Funkcija: 3.3.1.5. Lietotāja autorizācija (viesis)
          * Identifikators: IS_USER_LOGIN
 	 *
 	 * Autorizē lietotāju sistēmā
@@ -512,16 +520,16 @@ class Controller_Connection extends Controller_Template
                         Session::set_flash('error', 'Autorizācija neveiksmīga! '
                                 . 'Lietotājam ir jāapstiprina reģistrācija. '
                                 . 'Lūdzu, pārbaudi savu e-pastu, tur noteikti jābūt vēstulei par to. '
-                                . 'Spied <a href="/user/resend/'.$user_data->id.'">šeit</a>, lai izsūtītu apstiprināšanas kodu vēlreiz.');
+                                . 'Spied <a href="/abonents/izsutit/'.$user_data->id.'">šeit</a>, lai izsūtītu apstiprināšanas kodu vēlreiz.');
                         
-                        Response::redirect('/user/login');
+                        Response::redirect('/abonents/pieslegties');
                     }
                     
                     // Lietotājs bloķēts (administrators vai darbinieks bloķējis)
                     else if ($user_data->is_active == 'N')
                     {
                         Session::set_flash('error', 'Autorizācija neveiksmīga! Diemžēl tavs lietotāja konts ir bloķēts!');
-                        Response::redirect('/user/login');
+                        Response::redirect('/abonents/pieslegties');
                     }
                     
                     // Viss kārtībā, var autorizēt lietotāju
@@ -544,7 +552,7 @@ class Controller_Connection extends Controller_Template
                 else
                 {
                     Session::set_flash('error', 'Autorizācija neveiksmīga! Šāds lietotājs sistēmā nepastāv.');
-                    Response::redirect('/user/login');
+                    Response::redirect('/abonents/pieslegties');
                 }
             }
             
@@ -553,7 +561,7 @@ class Controller_Connection extends Controller_Template
         }
         
         /**
-	 * Funkcija: 4.2.1.5.	Lietotāja atteikšanās (klients, darbinieks, administrators)
+	 * Funkcija: 3.3.1.6.	Lietotāja atteikšanās (klients, darbinieks, administrators)
          * Identifikators: IS_USER_LOGOUT
 	 *
 	 * Atslēdz lietotāju no sistēmas
@@ -567,7 +575,7 @@ class Controller_Connection extends Controller_Template
         }
         
         /**
-	 * Funkcija: 4.2.1.6.	Lietotāja paroles atjaunošana (klients)
+	 * Funkcija: 3.3.1.7.	Lietotāja paroles atjaunošana (klients)
          * Identifikators: IS_USER_FORGOT
 	 *
 	 * Nosūta lietotājam e-pastu ar iespēju mainīt paroli
@@ -599,16 +607,16 @@ class Controller_Connection extends Controller_Template
                         {
                             Session::set_flash('error', 'Lietotājam ir jāapstiprina reģistrācija. '
                                     . 'Lūdzu, pārbaudi savu e-pastu, tur noteikti jābūt vēstulei par to. '
-                                    . 'Spied <a href="/user/resend/'.$user_data->id.'">šeit</a>, lai izsūtītu apstiprināšanas kodu vēlreiz.');
+                                    . 'Spied <a href="/abonents/izsutit/'.$user_data->id.'">šeit</a>, lai izsūtītu apstiprināšanas kodu vēlreiz.');
 
-                            Response::redirect('/user/forgot');
+                            Response::redirect('/abonents/aizmirsta-parole');
                         }
 
                         // Lietotājs bloķēts (administrators vai darbinieks bloķējis)
                         else if ($user_data->is_active == 'N')
                         {
                             Session::set_flash('error', 'Neveiksme! Diemžēl tavs lietotāja konts ir bloķēts!');
-                            Response::redirect('/user/forgot');
+                            Response::redirect('/abonents/aizmirsta-parole');
                         }
 
                         // Viss kārtībā, var veikt darbības
@@ -639,12 +647,12 @@ class Controller_Connection extends Controller_Template
                             if($email->send())
                             {
                                 Session::set_flash('success', 'Uz tavu e-pastu tika nosūtīta ziņa. Seko norādēm un atjaunosi savu paroli!');
-                                Response::redirect('/user/forgot');
+                                Response::redirect('/abonents/aizmirsta-parole');
                             }
                             else 
                             {
                                 Session::set_flash('error', 'Neveiksme! Neizdevās nosūtīt e-pastu.');
-                                Response::redirect('/user/forgot');
+                                Response::redirect('/abonents/aizmirsta-parole');
                             }
                         }// 
                      }
@@ -652,13 +660,13 @@ class Controller_Connection extends Controller_Template
                      else 
                      {
                         Session::set_flash('error', 'Neveiksme! Šāds lietotājs sistēmā nepastāv.');
-                        Response::redirect('/user/forgot');
+                        Response::redirect('/abonents/aizmirsta-parole');
                      }
                 }
                 else
                 {
                     Session::set_flash('error', 'Netika ievadīts korekts e-pasts!');
-                    Response::redirect('/user/forgot'); 
+                    Response::redirect('/abonents/aizmirsta-parole'); 
                 }
             }
                 $this->template->title= "Paroles atjaunošana - Pilsētas ūdens";
@@ -666,8 +674,12 @@ class Controller_Connection extends Controller_Template
         }
         
         /**
-         * todo
-         */
+	 * Funkcija: 3.3.1.3.	Lietotāja reģistrācijas apstiprināšanas e-pasta izsūtīšana (viesis)
+         * Identifikators: IS_USER_RESEND
+	 *
+	 * Nosūta lietotājam atkārtotu reģistrācijas apstiprināšanas e-pastu
+         * 
+	 */
         public function action_resend($user_id = null)
         {
             // Ja lietotājs jau ir autorizējies un mēģina vēlreiz autorizēties, 
@@ -680,12 +692,14 @@ class Controller_Connection extends Controller_Template
             {
                 $user = Model_User::find($user_id);
                 
-                if($user)
+                if($user && $user->is_confirmed == 'N')
                 {
                     //Sagatavo lietotāja unikālo kodu
                     $code = substr(md5(uniqid(mt_rand(), true)) , 0, 8);
                     
                     $user->unique_code = $code;
+                    // atjaunojam izveidošanas laiku, lai atkal ir 48h, lai varētu apstiprināt reģistrāciju
+                    $user->created_at = Date::forge()->get_timestamp();
                     
                     // Izveido e-pasta instanci 
                     $email = Email::forge();
@@ -708,41 +722,42 @@ class Controller_Connection extends Controller_Template
                         if($email->send() && $user->save())
                         {
                           Session::set_flash('success','E-pasts par reģistrācijas apstiprināšanu atkārtoti nosūtīts uz reģistrēto e-pastu. Lūdzu, seko norādēm e-pasta ziņā!');
-                          Response::redirect('/confirm/post');
+                          Response::redirect('/apstiprinat/post');
                         }
                     } 
                       catch(\EmailSendingFailedException $e)
                       {
                             Session::set_flash('error','Notikusi sistēmas iekšēja kļūda! Nav iespējams nosūtīt e-pastu!');
-                            Response::redirect('/confirm/post');
+                            Response::redirect('/apstiprinat/post');
                       }
                       // Netika ievadīts pareizs e-pasts
                       catch(\EmailValidationFailedException $e)
                       {
                             Session::set_flash('error','E-pasts netika nosūtīts! Ievadīts nekorekts e-pasts.');
-                            Response::redirect('/confirm/post');
+                            Response::redirect('/apstiprinat/post');
                       }
                       // Cita kļūda
                       catch(Exception $exc)
                       {
                             Session::set_flash('error',"Notikusi sistēmas iekšēja kļūda! Lūdzu, ziņojiet par šo kļūdu administrācijai.");
-                            Response::redirect('/confirm/post');
+                            Response::redirect('/apstiprinat/post');
                       }
                 }
                 else
                 {
                     Session::set_flash('error','Lietotājs neeksistē!');
-                    Response::redirect('/confirm/post');
+                    Response::redirect('/apstiprinat/post');
                 }
             }
         }
         
         /**
-         * 4.2.1.7.	Lietotāja paroles maiņa (klients, administrators)
-         * Identifikators: IS_USER_CHANGE_PASSW
+	 * Funkcija: 3.3.1.8.	Lietotāja paroles izsūtīšana (klients)
+         * Identifikators: IS_USER_RESET_PASS
+	 *
+	 * Nosūta lietotājam uz e-pastu jauno paroli
          * 
-         * Maina lietotāja paroli
-         */
+	 */
         public function action_change($code = null)
         {
             // datu masīvs, ko padod skatam
@@ -790,12 +805,12 @@ class Controller_Connection extends Controller_Template
                         if($email -> send())
                         {
                             Session::set_flash('success', 'Parole nosūtīta jums uz e-pastu!');
-                            Response::redirect('/user/forgot');
+                            Response::redirect('/abonents/aizmirsta-parole');
                         }
                         else
                         {
                             Session::set_flash('error', 'Sistēmas kļūda! Paroli nebija iespējams nosūtīt uz e-pastu, taču tā tika nomainīta. Lūdzam sazināties ar administrāciju!');
-                            Response::redirect('/user/forgot');
+                            Response::redirect('/abonents/aizmirsta-parole');
                         }
                         
                     }
@@ -803,7 +818,7 @@ class Controller_Connection extends Controller_Template
                 else
                 {
                     Session::set_flash('error', 'Neveiksme! Šāds lietotājs sistēmā nepastāv.');
-                    Response::redirect('/user/forgot');
+                    Response::redirect('/abonents/aizmirsta-parole');
                 }
             }
 

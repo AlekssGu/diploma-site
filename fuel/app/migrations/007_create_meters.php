@@ -16,7 +16,7 @@ class Create_meters
 			'worker_id' => array('constraint' => 11, 'type' => 'int'),
 			'meter_number' => array('constraint' => 20, 'type' => 'varchar'),
 			'meter_model' => array('constraint' => 50, 'type' => 'varchar'),
-			'meter_lead' => array('constraint' => 11, 'type' => 'int'),
+			'meter_lead' => array('constraint' => 11, 'type' => 'varchar'),
 			'created_at' => array('constraint' => 11, 'type' => 'int', 'null' => true),
 			'updated_at' => array('constraint' => 11, 'type' => 'int', 'null' => true),
 

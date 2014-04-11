@@ -24,7 +24,7 @@
                         
                         <?php if(isset($show_get) && $show_get == 'Y') { ?>
                         <div class="col-md-offset-3 col-md-6">
-                            <form id="login-form" method="POST" action="/user/change/post" role="form">
+                            <form id="login-form" method="POST" action="/abonents/mainit/post" role="form">
                                 <div class="form-group">
                                     <label for="password">Parole</label>
                                     <input type="password" name="password" class="form-control" id="password" placeholder="">
@@ -45,7 +45,7 @@
                         </div>
                         <?php } else { ?>
                         <div class="col-md-offset-1 col-md-10">
-                            <p>Ja esi aizmirsis paroli, dodies uz <a href="/user/forgot">paroles maiņas</a> pieprasījumu lapu.</p>
+                            <p>Ja esi aizmirsis paroli, dodies uz <a href="/abonents/aizmirsta-parole">paroles maiņas</a> pieprasījumu lapu.</p>
                         </div>
                         <?php } ?>
                   </div>

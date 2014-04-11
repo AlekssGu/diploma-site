@@ -32,20 +32,25 @@ class Controller_Client extends Controller_Template
                 
                 // atrod nepieciešamos objektus un paņem no tiem nepieciešamos elementus
                 $user = Model_User::find(Auth::get('id')); // klients
-                $userdata = Model_Userinfo::find($user->userinfo_id); // klienta dati
+                $userdata = Model_Person::find($user->person_id); // klienta dati
+                //
+                // deklarētā adrese
                 $useraddr1 = Model_Address::find($userdata -> address_id, array(
                                             'where' => array(
                                                 array('addr_type', 'D')
                                             )
-                                )); // deklarētā adrese
+                                )); 
+                
+                // faktiskā adrese
                 $useraddr2 = Model_Address::find($userdata -> secondary_addr_id, array(
                                             'where' => array(
                                                 array('addr_type', 'F')
                                             )
-                                )); // faktiskā adrese
+                                )); 
+                
                 $city1 = Model_City::find($useraddr1->city_id); // deklarētās adreses pilsēta
                 $city2 = Model_City::find($useraddr2->city_id); // faktiskās adreses pilsēta
-                $cities = Model_City::find('all');
+                $cities = Model_City::find('all'); // visas pilsētas
                 
                 // klienta objekti (dzīvokļi, mājas u.c. ēkas, kur uzstādīti skaitītāji)
                 $query = DB::select(array('objects.id', 'object_id'),
@@ -58,6 +63,10 @@ class Controller_Client extends Controller_Template
                 
                 $objects = $query->as_object()->execute()->as_array();
                 
+                $query_history = DB::select('*')->from('client_histories')->where('client_id','=',Auth::get('id'));
+                $history = $query_history->as_object()->execute()->as_array();
+                
+                $data['history'] = $history;
                 $data['cities'] = $cities;
                 $data['objects'] = $objects;
                 $data['client_number'] = $user -> username;
@@ -260,17 +269,28 @@ class Controller_Client extends Controller_Template
                             }
                         }
                 
-                        $query_meters = DB::select(array('meters.id', 'meter_id'),
-                                                        'meters.*') 
-                                                -> from('meters')
-                                                -> join('objects')
-                                                -> on('objects.id', '=', 'meters.object_id')
-                                                -> where('objects.client_id',Auth::get('id'))
-                                                -> and_where('objects.id','=',$id);
+                        $query_meters = DB::select('*')
+                                                -> from('last_readings')
+                                                -> where('last_readings.client_id',Auth::get('id'))
+                                                -> and_where('last_readings.object_id','=',$id);
                         
                         $result_meters = $query_meters -> as_object() -> execute() -> as_array();
                         
+                        $query_srv = DB::select(array('user_services.id', 'usr_srv_id'),
+                                                    'services.*',
+                                                    'user_services.*') 
+                                            -> from('user_services')
+                                            -> join('objects')
+                                            -> on('objects.id', '=', 'user_services.obj_id')
+                                            -> join('services')
+                                            -> on('services.id', '=', 'user_services.srv_id')
+                                            -> where('objects.client_id',Auth::get('id'))
+                                            -> and_where('objects.id','=',$id);
+                        
+                        $result_srv = $query_srv -> as_object() -> execute() -> as_array();
+                        
                         $data['objects'] = $result_objects;
+                        $data['services'] = $result_srv;
                         $data['meters'] = $result_meters;
                         
                         $this -> template -> title = "Apskatīt objektu - Pilsētas ūdens";
@@ -338,22 +358,55 @@ class Controller_Client extends Controller_Template
         {
             if(Auth::check())
             {
-                $query_meters = DB::select(array('meters.id', 'meter_id'),
-                                                'meters.*',
-                                                'objects.name') 
-                                        -> from('meters')
-                                        -> join('objects')
-                                        -> on('objects.id', '=', 'meters.object_id')
-                                        -> where('objects.client_id',Auth::get('id'));
-
-                $data['meters'] = $query_meters -> as_object() -> execute() -> as_array();
+                if(Input::method() == 'POST' && Security::check_token()) 
+                    {
+                        if((Input::post('reading') != '') && (Input::post('meter_id') != ''))
+                        {
+                            $new_reading = new Model_Reading();
+                            $new_reading -> meter_id = Input::post('meter_id');
+                            $new_reading -> lead = Input::post('reading');
+                            $new_reading -> date_taken = Date::time()->format('%Y-%m-%d');
+                            $new_reading -> period = 'Mēnesis';
+                            
+                            $saved = $new_reading -> save();
+                            
+                            if($saved) 
+                            {
+                                Controller_Client::cre_cln_history(Auth::get('id'), 'Pievienots skaitītāja rādījums');
+                                
+                                Session::set_flash('success','Skaitītaja rādījums iesniegts!');
+                                Response::redirect_back();
+                            }
+                            else 
+                            {
+                                Session::set_flash('error','Skaitītaja rādījums nav iesniegts!');
+                                Response::redirect_back();
+                            }
+                        }
+                    }
+                    
                 
                 $this -> template -> title = "Skaitītāju rādījumi - Pilsētas ūdens";
-                $this -> template -> content = View::forge('client/add_reading', $data);
+                //$this -> template -> content = View::forge('client/show_object/' . Input::post('meter_id'));
             }
             else
             {
                 Response::redirect('/');
+            }
+        }
+        
+        static function cre_cln_history(
+            $p_cln_id = null,
+            $p_notes = null)
+        {
+            if($p_cln_id != '' && $p_notes != '')
+            {
+                $new = new Model_Client_History();
+                $new -> client_id = $p_cln_id;
+                $new -> notes = $p_notes;
+                
+                if($new->save()) return true;
+                else return false;
             }
         }
        

@@ -12,7 +12,7 @@
                         </div>
                         
                         <div class="col-md-offset-3 col-md-6">
-                            <form id="login-form" method="POST" action="/user/login" role="form">
+                            <form id="login-form" method="POST" action="/abonents/pieslegties" role="form">
                                 <div class="form-group">
                                     <label for="login">E-pasts vai klienta numurs</label>
                                     <input type="text" name="username" class="form-control" id="login" placeholder="">
@@ -41,7 +41,7 @@
                                     <p class="text-danger"><?php echo Session::get_flash('error'); ?></p>
                                 </div>
                                 <div class="col-md-offset-3 col-md-6">
-                                    <form action="/confirm/post" method="POST" role="form">
+                                    <form action="/apstiprinat/post" method="POST" role="form">
                                     <div class="form-group">
                                         <label for="code">Kods</label>
                                         <input type="text" name="code" class="form-control" id="code" placeholder="Ieraksti saņemto kodu">
@@ -61,7 +61,7 @@
                                     <h1>Ievadi saņemto kodu</h1>
                         </div>
                         <div class="col-md-offset-3 col-md-6">
-                            <form action="/confirm/post" method="POST" role="form">
+                            <form action="/apstiprinat/post" method="POST" role="form">
                             <div class="form-group">
                                 <label for="code">Kods</label>
                                 <input type="text" name="code" class="form-control" id="code" placeholder="Ieraksti saņemto kodu">

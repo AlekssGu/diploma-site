@@ -7,14 +7,14 @@ return array(
 	'_404_'   => 'main/404',                        // 404 kļūdas ceļš
     
         // Lietotāja pieslēgšanās/paroles atjaunošanas lapas:
-        'user/register' => 'connection/register',       // Reģistrācijas lapa
-        'confirm/:code' => 'connection/confirm/$1',     // Reģistrācijas apstiprināšanas lapa (GET)
-        'confirm/post' => 'connection/confirm',         // Reģistrācijas apstiprināšanas lapa (POST)
-        'user/login' => 'connection/login',             // Autorizācijas lapa
-        'user/logout' => 'connection/logout',           // Iziet no sistēmas
-        'user/forgot' => 'connection/forgot',           // Aizmirsta parole
-        'user/resend/:id' => 'connection/resend/$1',    // Paroles atjaunošana
-        'user/change/:code' => 'connection/change/$1',  // Paroles maiņa (GET)
+        'abonents/registreties' => 'connection/register',       // Reģistrācijas lapa
+        'apstiprinat/:code' => 'connection/confirm/$1',     // Reģistrācijas apstiprināšanas lapa (GET)
+        'apstiprinat/post' => 'connection/confirm',         // Reģistrācijas apstiprināšanas lapa (POST)
+        'abonents/pieslegties' => 'connection/login',             // Autorizācijas lapa
+        'abonents/atslegties' => 'connection/logout',           // Iziet no sistēmas
+        'abonents/aizmirsta-parole' => 'connection/forgot',           // Aizmirsta parole
+        'abonents/izsutit/:id' => 'connection/resend/$1',    // Paroles atjaunošana
+        'abonents/mainit/:code' => 'connection/change/$1',  // Paroles maiņa (GET)
         //--
 
         // navigācijas lapas (ar statisko saturu):
@@ -24,13 +24,9 @@ return array(
         'pakalpojumi' => 'static/services',
 
         // Par mums sadaļas:
-        'par-uznemumu' => 'static/about', // pāradresē uz sākumu
-        'par-uznemumu/darbiba' => 'static/about_activity',
-        'par-uznemumu/dokumenti' => 'static/about_docs',
-        'par-uznemumu/parvalde' => 'static/about_board',
-        'par-uznemumu/projekti' => 'static/about_projects',
-        'par-uznemumu/vesture' => 'static/about_history',
+        'par-uznemumu/:page_name' => 'static/about/$1',
         //--
+    
     
         // Palīdzības sadaļas:
         'palidziba' => 'static/help',
@@ -42,7 +38,7 @@ return array(
         'klients' => 'client/client',
         'klients/pievienot-objektu' => 'client/add_object', 
         'klients/pievienot-skaititaju' => 'client/add_meter',
-        'klients/iesniegt-merijumu' => 'client/add_reading',
+        'abonents/iesniegt-merijumu' => 'client/add_reading',
         'klients/objekti' => 'client/all_objects',
         'klients/objekti/dzest/:id' => 'client/all_objects_delete/$1',
         'klients/objekti/apskatit/:id' => 'client/all_objects_show/$1',

@@ -25,8 +25,14 @@ class Controller_Main extends Controller_Template
 	 */
 	public function action_index()
 	{          
-                $this -> template -> title = "Sākums - Pilsētas ūdens";
+            if(Auth::member(1))
+                $this -> template -> content = View::forge('main/user_index');
+            else if(Auth::member(50)) 
+                $this -> template -> content = View::forge('main/worker_index');
+            else
                 $this -> template -> content = View::forge('main/index');
+            
+                $this -> template -> title = "Sākums - Pilsētas ūdens";
 	}
 
 	/**

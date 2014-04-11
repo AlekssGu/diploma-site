@@ -30,7 +30,6 @@
 
   ga('create', 'UA-47792219-1', 'agusevs.com');
   ga('send', 'pageview');
-
 </script>
 
 <!-- navigācijas panelis -->
@@ -51,26 +50,49 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li <?php if(Uri::string()=='') echo 'class="active"'; ?>><a href="/" title="Doties uz lapas sākumlapu">Sākums</a></li>
+        
+        
         <li class="<?php if(Uri::segment(1)=='aktuali') echo "active"; ?> dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Aktuālā informācija">Aktuāli <b class="caret"></b></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Aktuālā informācija">Jaunumi <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href="/aktuali/jaunumi">Ziņas</a></li>
-            <li><a href="/aktuali/karte">Aktuālo notikumu karte</a></li>
+            <li><a href="/aktuali/darbi">Plānotie darbi</a></li>
+            <li><a href="/aktuali/medijiem">Medijiem</a></li>
+            <li><a href="/aktuali/fakti">Interesanti fakti</a></li>
           </ul>
         </li>
-        <li <?php if(Uri::string()=='pakalpojumi') echo 'class="active"'; ?>><a href="/pakalpojumi" title="Doties uz pakalpojumu lapu">Pakalpojumi</a></li>
+        
         <li class="<?php if(Uri::segment(1)=='par-uznemumu') echo "active"; ?> dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Informācija par uzņēmumu">Par mums <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="/par-uznemumu/darbiba">Darbība</a></li>
-            <li><a href="/par-uznemumu/dokumenti">Normatīvie dokumenti</a></li>
-            <li><a href="/par-uznemumu/parvalde">Pārvalde</a></li>
-            <li><a href="/par-uznemumu/projekti">Projekti</a></li>
-            <li><a href="/par-uznemumu/vesture">Vēsture</a></li>
-            <!--<li class="divider"></li>-->
-
+            <li><a href="/par-uznemumu/rekviziti" title="Uzņēmuma rekvizīti">Rekvizīti</a></li>
+            <li><a href="/par-uznemumu/sertifikati" title="Uzņēmuma sertifikāti">Sertifikāti</a></li>
+            <li><a href="/par-uznemumu/struktura" title="Organizatoriskā struktūra">Struktūra</a></li>
+            <li><a href="/par-uznemumu/nozare" title="Uzņēmuma nozares">Nozare</a></li>
+            <li><a href="/par-uznemumu/vesture" title="Uzņēmuma vēsture">Vēsture</a></li>
+            <li><a href="/par-uznemumu/ekskursijas" title="Ekskursijas pa uzņēmumu">Ekskursijas</a></li>
           </ul>
         </li>
+        
+        <li class="<?php if(Uri::segment(1)=='abonents') echo "active"; ?> dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Sadaļa uzņēmuma abonentiem">Abonentiem <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <?php if(!Auth::check()) { ?>
+            <li><a href="/abonents/pieslegties" title="Uzņēmuma rekvizīti">Ieiet sistēmā</a></li>
+            <li><a href="/abonents/registreties" title="Uzņēmuma rekvizīti">Reģistrēties</a></li>
+            <li class='divider'></li>
+            <?php } ?>
+            <li><a href="/par-uznemumu/dokumenti" title="Uzņēmuma sertifikāti">Aktuālā informācija</a></li>
+            <li><a href="/par-uznemumu/parvalde" title="Organizatoriskā struktūra">Cenas un tarifi</a></li>
+            <li><a href="/par-uznemumu/projekti" title="Uzņēmuma nozares">Skaitītāju maiņa</a></li>
+          </ul>
+        </li>
+        
+        <li <?php if(Uri::string()=='pakalpojumi') echo 'class="active"'; ?>><a href="/pakalpojumi" title="Doties uz pakalpojumu lapu">Pakalpojumi</a></li>
+        <li <?php if(Uri::string()=='projekti') echo 'class="active"'; ?>><a href="/projekti" title="Doties uz projektu lapu">Projekti</a></li>
+
+        
+        
       </ul>
         
       <form class="visible-lg navbar-form navbar-left" role="search">
@@ -82,17 +104,6 @@
         
       <!-- mazais bloks -->
       <ul class="visible-md visible-sm nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Pieslēgties <b class="caret"></b></a>
-          <ul class="dropdown-menu">
-        <?php if(Auth::check()) { ?>
-            <li><a href="/user/logout">Iziet</a></li>
-        <?php } else { ?>
-            <li><a href="/user/login">Ieiet</a></li>
-            <li><a href="/user/register">Reģistrēties</a></li>
-        <?php } ?>
-          </ul>
-        </li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Palīdzība <b class="caret"></b></a>
           <ul class="dropdown-menu">
@@ -113,10 +124,7 @@
       <!-- lielais bloks -->  
       <ul class="hidden-md hidden-sm nav navbar-nav navbar-right">
         <?php if(Auth::check()) { ?>
-            <li><a href="/user/logout">Iziet</a></li>
-        <?php } else { ?>
-            <li><a href="/user/login">Ieiet</a></li>
-            <li><a href="/user/register">Reģistrēties</a></li>
+            <li><a href="/abonents/atslegties">Iziet</a></li>
         <?php } ?>
         <li class="<?php if(Uri::segment(1)=='palidziba') echo "active"; ?> dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Palīdzība <b class="caret"></b></a>
@@ -126,9 +134,6 @@
             <li><a href="/palidziba/buj">Biežāk uzdotie jautājumi</a></li>
             <li class="divider"></li>
             <li><a href="/palidziba/sazinaties">Sazināties ar uzņēmumu</a></li>
-            <?php if(Auth::get('group')==100) { ?>
-            <li><a href="/vadiba/">Administrācijas panelis</a></li>
-            <?php } ?>
           </ul>
         </li>
       </ul>
@@ -154,6 +159,5 @@
         </div>
     </div
     <!-- /lapas kājene -->
-
 </body>
 </html>

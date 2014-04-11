@@ -2,7 +2,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-5">
-            <h1>Mana klienta informācija</h1>
+            <h1>Mana abonenta informācija</h1>
             <hr/>
             <a href="/" alt="atpakaļ">Doties atpakaļ</a>
         </div>
@@ -11,7 +11,7 @@
         <div class="col-md-4">
             <Br/>
             <div class="well well-lg">
-                <p><strong>Klienta numurs:</strong> <?php echo $client_number; ?></p>
+                <p><strong>Abonenta numurs:</strong> <?php echo $client_number; ?></p>
                 <p><strong>Vārds, uzvārds:</strong> <?php echo $fullname; ?></p>
                 <p><strong>E-pasts:</strong> <?php echo $email; ?></p>
                 <p><strong>Tālr. nr.:</strong> <?php echo $phone; ?></p>
@@ -33,15 +33,21 @@
             <?php } ?>
             <ul class="list-group">
                 <?php foreach ($objects as $object) { ?>
-                <a href="/klients/objekti/apskatit/<?php echo $object->object_id; ?>" title="Spied šeit, lai apskatītu sīkāku informāciju" class="list-group-item"><p class="text-danger"><span class="glyphicon glyphicon-exclamation-sign"></span> <strong>Parāds:</strong> <?php echo 5.45+round(rand(0, 40));?> EUR</p><?php echo $object->name; ?></a>
+                <a href="/klients/objekti/apskatit/<?php echo $object->object_id; ?>" title="Spied šeit, lai apskatītu sīkāku informāciju" class="list-group-item"><?php echo $object->name; ?></a>
                 <?php } ?>
             </ul>
             <a href="/klients/objekti" class="btn btn-default btn-large" title="Skatīt visus objektus"><span class="glyphicon glyphicon-list"></span> Skatīt visus objektus</a>
+            <?php if(Auth::member(50) || Auth::member(100)) { ?>
             <button data-toggle="modal" data-target="#pievienot_objektu" class="btn btn-default btn-large"><span class="glyphicon glyphicon-plus-sign"></span> Pievienot</button>
+            <?php } ?>
         </div>
         <div class="col-md-4">
-            <h3>Mana klienta vēsture</h3>
-            <p>Pagaidām nav nekādas klienta informācijas</p>
+            <h3>Mana abonenta vēsture</h3>
+            <?php if(!empty($history)) { 
+                   foreach ($history as $record) { ?>
+                      <p><?php echo Date::forge($record->created_at)->format('%d.%m.%Y %H:%M') . ' ' . $record -> notes; ?></p>
+                   <?php } ?>
+            <?php } else echo '<p>Pagaidām nav informācijas par abonenta vēsturi</p>'; ?>
         </div>
     </div>
 </div>

@@ -17,7 +17,7 @@
                         <?php } ?>
                         
                         <div class="col-md-offset-3 col-md-6">
-                            <form id="login-form" method="POST" action="/user/forgot" role="form">
+                            <form id="login-form" method="POST" action="/abonents/aizmirsta-parole" role="form">
                                 <div class="form-group">
                                     <label for="email">Tavs lietotāja e-pasts</label>
                                     <input type="email" name="email" class="form-control" id="email" placeholder="">

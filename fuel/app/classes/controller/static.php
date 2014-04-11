@@ -53,39 +53,39 @@ class Controller_Static extends Controller_Template
 	}
         
         // Par mums sadaļas:        
-	public function action_about()
+	public function action_about($page_name = null)
 	{
-                Response::redirect('/');
-	}
-        
-	public function action_about_activity()
-	{
+            $data = array();
+            $data['page_name'] = '';
+            
+            if($page_name=='rekviziti')
+            {
+                $data['page_name'] = 'rekviziti';
+            }
+            else if($page_name=='sertifikati')
+            {
+                $data['page_name'] = 'sertifikati';
+            }
+            else if($page_name=='struktura')
+            {
+                $data['page_name'] = 'struktura';
+            }
+            else if($page_name=='nozare')
+            {
+                $data['page_name'] = 'nozare';
+            }
+            else if($page_name=='vesture')
+            {
+                $data['page_name'] = 'vesture';
+            }
+            else if($page_name=='ekskursijas')
+            {
+                $data['page_name'] = 'ekskursijas';
+            }
+            else Response::redirect('/');
+            
                 $this -> template -> title = "Uzņēmuma darbība - Pilsētas ūdens";
-                $this -> template -> content = View::forge('static/about/activity');
-	}
-        
-	public function action_about_docs()
-	{
-                $this -> template -> title = "Normatīvie dokumenti - Pilsētas ūdens";
-                $this -> template -> content = View::forge('static/about/docs');
-	}
-        
-	public function action_about_board()
-	{
-                $this -> template -> title = "Uzņēmuma pārvalde - Pilsētas ūdens";
-                $this -> template -> content = View::forge('static/about/board');
-	}
-        
-	public function action_about_projects()
-	{
-                $this -> template -> title = "Projekti - Pilsētas ūdens";
-                $this -> template -> content = View::forge('static/about/projects');
-	}
-        
-	public function action_about_history()
-	{
-                $this -> template -> title = "Uzņēmuma vēsture - Pilsētas ūdens";
-                $this -> template -> content = View::forge('static/about/history');
+                $this -> template -> content = View::forge('static/about',$data);
 	}
         // par mums sadaļas beidzas
         

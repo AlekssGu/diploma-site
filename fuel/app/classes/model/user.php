@@ -4,7 +4,7 @@ class Model_User extends \Orm\Model
 {       // Šo visu aizpilda pie reģistrācijas / reģistrācijas apstiprināšanas
 	protected static $_properties = array(
 		'id',
-                'userinfo_id',
+                'person_id',
 		'username',
 		'password',
 		'email',
@@ -13,7 +13,6 @@ class Model_User extends \Orm\Model
 		'is_active',
 		'is_confirmed',
                 'is_messages',
-                'person_type',
 		'unique_code',
             	'last_login',
 		'login_hash',
