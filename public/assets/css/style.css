@@ -68,3 +68,10 @@ html, body {
 /* pakalpojumu lapas stils beidzas */
 
 /*==============================================================================*/
+
+/* Darbinieku lapas stils */
+.side-nav{
+    max-height: 300px;
+    overflow-y:scroll; 
+}
+/* Darbinieku lapas stils beidzas */

@@ -1,7 +1,7 @@
 #Informācijas Sistēma Pilsētas ūdens
 
-* Versija: 0
-* Statuss: darbs vēl nav uzsākts
+* Versija: 0.1
+* Statuss: sistēmas izstrāde ir procesā
 * [WWW](https://udens.agusevs.com)
 
 ## Apraksts
@@ -21,3 +21,4 @@ Darbs tiek izstrādāts iteratīvi (pa posmiem). Katrs posms tiek identificēts 
 ###Izmaiņas:
 
 * 0. versija: izveidots serveris ar HTTP/HTTPS/SSH piekļuvi, kur tika uzinstalēts webserveris un FuelPHP ietvars.
+* 0.1 versija: izveidotas statiskās lapas, klienta un darbinieka moduļi ar daļēju funkcionalitāti no darbinieka puses.

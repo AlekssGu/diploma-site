@@ -19,6 +19,7 @@
                 <div class='col-md-offset-1 col-md-10 text-center'>
                     <ul class="list-group">
                         <li class='list-group-item'>
+                            <h3><img src='/assets/img/pile2.jpg'/></h3>
                             <h3>Sabiedrība ar ierobežotu atbildību „Liepājas ūdens”</h3>
                             <p>Reģ.nr.: LV42103000897</p>
                             <p>Adrese: K. Valdemāra iela 12, Liepāja, LV-3400, Latvija</p>

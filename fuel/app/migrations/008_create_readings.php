@@ -12,6 +12,7 @@ class Create_readings
 			'lead' => array('constraint' => 11, 'type' => 'int'),
 			'date_taken' => array('type' => 'date'),
 			'period' => array('constraint' => 50, 'type' => 'varchar'),
+                        'status' => array('constraint' => 50, 'type' => 'varchar'),
 			'created_at' => array('constraint' => 11, 'type' => 'int', 'null' => true),
 			'updated_at' => array('constraint' => 11, 'type' => 'int', 'null' => true),
 

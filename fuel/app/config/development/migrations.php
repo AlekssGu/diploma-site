@@ -16,6 +16,7 @@ return array(
 				7 => '009_create_services',
 				8 => '010_create_user_services',
 				9 => '011_create_client_histories',
+				10 => '012_create_codificators',
 			),
 		),
 		'module' => 

@@ -4,7 +4,7 @@ class Model_Meter extends \Orm\Model
 {
 	protected static $_properties = array(
 		'id',
-		'object_id',
+		'service_id',
 		'date_from',
 		'date_to',
 		'meter_type',

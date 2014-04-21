@@ -2,15 +2,15 @@
 
 namespace Fuel\Migrations;
 
-class Create_services
+class Create_codificators
 {
 	public function up()
 	{
-		\DBUtil::create_table('services', array(
+		\DBUtil::create_table('codificators', array(
 			'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true, 'unsigned' => true),
-			'code_id' => array('constraint' => 40, 'type' => 'varchar'),
-			'name' => array('constraint' => 100, 'type' => 'varchar'),
-			'description' => array('constraint' => 255, 'type' => 'varchar'),
+			'code' => array('constraint' => 40, 'type' => 'varchar'),
+			'used_in' => array('constraint' => 100, 'type' => 'varchar'),
+			'comments' => array('constraint' => 255, 'type' => 'varchar'),
 			'created_at' => array('constraint' => 11, 'type' => 'int', 'null' => true),
 			'updated_at' => array('constraint' => 11, 'type' => 'int', 'null' => true),
 
@@ -19,6 +19,6 @@ class Create_services
 
 	public function down()
 	{
-		\DBUtil::drop_table('services');
+		\DBUtil::drop_table('codificators');
 	}
 }

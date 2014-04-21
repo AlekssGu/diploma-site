@@ -49,8 +49,8 @@ $(function () {
     });
     
 </script>
-            <div style="margin-top:20px" class="container">
-                <div class="row">
+            <div class="container">
+                <div class="main-block row">
                     <div class="col-md-3">
                         <a href="/klients" class="btn btn-block btn-primary" title="Apskatīt klienta datus"><span class="glyphicon glyphicon-user"></span> Klienta informācija</a>
                     </div>
@@ -64,7 +64,7 @@ $(function () {
                         <a href="#" class="btn btn-block btn-primary" title="Uzdot jautājumu"><span class="glyphicon glyphicon-question-sign"></span> Uzdot jautājumu</a>
                     </div>
                 </div>
-                <div class="row" style="margin-top:20px">
+                <div class="row">
                     <div class="col-md-6">
                         <div class="panel panel-default">
                             <div class="panel-body">

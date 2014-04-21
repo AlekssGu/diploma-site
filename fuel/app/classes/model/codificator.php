@@ -1,14 +1,12 @@
 <?php
 
-class Model_Reading extends \Orm\Model
+class Model_Codificator extends \Orm\Model
 {
 	protected static $_properties = array(
 		'id',
-		'meter_id',
-		'lead',
-		'date_taken',
-		'period',
-                'status',
+		'code',
+		'used_in',
+		'comments',
 		'created_at',
 		'updated_at',
 	);
@@ -23,6 +21,6 @@ class Model_Reading extends \Orm\Model
 			'mysql_timestamp' => false,
 		),
 	);
-	protected static $_table_name = 'readings';
+	protected static $_table_name = 'codificators';
 
 }

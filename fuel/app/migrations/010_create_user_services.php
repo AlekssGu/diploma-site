@@ -13,6 +13,7 @@ class Create_user_services
 			'date_from' => array('type' => 'date'),
 			'date_to' => array('type' => 'date'),
 			'notes' => array('constraint' => 255, 'type' => 'varchar', 'null' => true),
+                        'is_active' => array('constraint' => 1, 'type' => 'varchar', 'default' => 'N'),
 			'created_at' => array('constraint' => 11, 'type' => 'int', 'null' => true),
 			'updated_at' => array('constraint' => 11, 'type' => 'int', 'null' => true),
 

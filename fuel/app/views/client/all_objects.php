@@ -7,7 +7,7 @@
             <a href="/klients" alt="atpakaļ">Doties atpakaļ</a>
         </div>
     </div>
-    <div class="row">
+    <div class="row main-block">
         <div class="col-md-12">
             <table class="table table-striped">
                 <tr>

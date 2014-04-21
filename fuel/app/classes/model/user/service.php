@@ -1,14 +1,15 @@
 <?php
 
-class Model_Reading extends \Orm\Model
+class Model_User_Service extends \Orm\Model
 {
 	protected static $_properties = array(
 		'id',
-		'meter_id',
-		'lead',
-		'date_taken',
-		'period',
-                'status',
+		'obj_id',
+		'srv_id',
+		'date_from',
+		'date_to',
+		'notes',
+                'is_active',
 		'created_at',
 		'updated_at',
 	);
@@ -23,6 +24,6 @@ class Model_Reading extends \Orm\Model
 			'mysql_timestamp' => false,
 		),
 	);
-	protected static $_table_name = 'readings';
+	protected static $_table_name = 'user_services';
 
 }

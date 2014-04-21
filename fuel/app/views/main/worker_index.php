@@ -1,18 +1,36 @@
             <div style="margin-top:20px" class="container">
                 <div class="row">
-                    <div class="col-md-3">
-                        <a href="/klients" class="btn btn-block btn-primary" title="Apskatīt klienta datus"><span class="glyphicon glyphicon-user"></span> Klientu pārvaldība</a>
+                  <h1 class='main-block'>Darbinieka pārvaldības panelis</h1>
+                  
+                  <div class="col-sm-4 col-md-4">
+                    <div class="thumbnail">
+                      <div class="caption text-center">
+                        <h3>Abonentu pārvaldība</h3>
+                        <p>Abonentu saraksts un to dati</p>
+                        <p><a href="/darbinieks/abonenti" class="btn btn-default" role="button">Ieiet</a></p>
+                      </div>
                     </div>
-                    <div class="col-md-3">
-                        <a href="#" class="btn btn-block btn-primary" title="Dati par patērētajiem resursiem"><span class="glyphicon glyphicon-tint"></span> Skaitītāju pārvaldība</a>
+                  </div>
+                  
+                  <div class="col-sm-4 col-md-4">
+                    <div class="thumbnail">
+                      <div class="caption text-center">
+                        <h3>Skaitītāju dati</h3>
+                        <p>Iesniegto skaitītāja rādījumu apstrāde</p>
+                        <p><a href="/darbinieks/skaititaji/radijumi" class="btn btn-default" role="button">Ieiet</a></p>
+                      </div>
                     </div>
-                    <div class="col-md-3">
-                        <a href="#" class="btn btn-block btn-primary" title="Saņemtie pakalpojumi"><span class="glyphicon glyphicon-leaf"></span> Pakalpojumu pārvaldība</a>
+                  </div>
+                  
+                  <div class="col-sm-4 col-md-4">
+                    <div class="thumbnail">
+                      <div class="caption text-center">
+                        <h3>Sistēmas pārvaldība</h3>
+                        <p>Jautājumi, atbildes, avārijas, jaunumi</p>
+                        <p><a href="#" class="btn btn-default" role="button">Ieiet</a></p>
+                      </div>
                     </div>
-                    <div class="col-md-3">
-                        <a href="#" class="btn btn-block btn-primary" title="Uzdot jautājumu"><span class="glyphicon glyphicon-question-sign"></span> Kaut kas cits</a>
-                    </div>
+                  </div>
                 </div>
-                <div class="row" style="margin-top:20px">
-
-                </div>
+            </div>  
+              
