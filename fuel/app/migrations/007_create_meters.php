@@ -8,7 +8,7 @@ class Create_meters
 	{
 		\DBUtil::create_table('meters', array(
 			'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true, 'unsigned' => true),
-			'object_id' => array('constraint' => 11, 'type' => 'int'),
+			'service_id' => array('constraint' => 11, 'type' => 'int'),
 			'date_from' => array('type' => 'date'),
 			'date_to' => array('type' => 'date'),
 			'meter_type' => array('constraint' => 1, 'type' => 'varchar'),
