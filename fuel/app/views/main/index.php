@@ -60,7 +60,7 @@
                   <div class="caption">
                         <h3>Kas mēs esam?</h3>
                         <p>IS Pilsētas ūdens galvenais mērķis ir ūdens apgāde un notekūdeņu attīrīšana.</p>
-                        <p><a href="/par-uznemumu/darbiba" class="btn btn-primary" role="button">Uzzināt vairāk</a></p>
+                        <p><a href="/par-uznemumu/rekviziti" class="btn btn-primary" role="button">Uzzināt vairāk</a></p>
                   </div>
                 </div>
               </div>
@@ -81,8 +81,8 @@
                   <div class="caption">
                         <h3>Mūsu klienti</h3>
                         <p>Mūsu klienti iegūst daudz vairāk brīvā laika, lietojot šo sistēmu. Pievienojies viņiem arī tu!</p>
-                        <a href="/user/login" class="hidden-xs hidden-sm btn btn-primary btn-block" role="button">Ieiet sistēmā</a>
-                        <a href="/user/login" class="hidden-lg hidden-md btn btn-primary" role="button">Ieiet sistēmā</a>
+                        <a href="/abonents/pieslegties" class="hidden-xs hidden-sm btn btn-primary btn-block" role="button">Ieiet sistēmā</a>
+                        <a href="/abonents/pieslegties" class="hidden-lg hidden-md btn btn-primary" role="button">Ieiet sistēmā</a>
                   </div>
                 </div>
               </div>
