@@ -127,6 +127,7 @@ class Controller_Client extends Controller_Template
                         $new_object -> address_id = $new_address->id;
                         $new_object -> name = Input::post('name');
                         $new_object -> notes = Input::post('notes');
+                        $new_object -> is_deleted = 'N';
                         
                         if($new_object -> save())
                         {
@@ -185,7 +186,8 @@ class Controller_Client extends Controller_Template
                             -> join('cities')
                             -> on('cities.id','=','addresses.city_id')
                             -> where('objects.client_id',Auth::get('id'))
-                            -> and_where('addresses.addr_type','=','O');
+                            -> and_where('addresses.addr_type','=','O')
+                            -> and_where('objects.is_deleted','=','N');
                 
                 $result = $query -> as_object() -> execute() -> as_array();
                 
@@ -425,6 +427,7 @@ class Controller_Client extends Controller_Template
                                         $existing_reading -> lead = Input::post('reading');
                                         $existing_reading -> date_taken = Date::forge()->format('%Y-%m-%d');
                                         $existing_reading -> status = 'Iesniegts';
+                                        $existing_reading -> notes = 'Tiek izskatīts abonentu daļā';
 
                                         $saved = $existing_reading -> save();
                                     }
@@ -458,6 +461,7 @@ class Controller_Client extends Controller_Template
                                         $new_reading -> date_taken = Date::forge()->format('%Y-%m-%d');
                                         $new_reading -> period = 'Mēnesis';
                                         $new_reading -> status = 'Iesniegts';
+                                        $new_reading -> notes = 'Tiek izskatīts abonentu daļā';
 
                                         $saved = $new_reading -> save();
                                     }
@@ -481,7 +485,7 @@ class Controller_Client extends Controller_Template
                                     //Saglabā vēsturi
                                     Controller_Client::cre_cln_history(Auth::get('id'), 'Iesniegts skaitītāja rādījums');
                                     
-                                    Session::set_flash('success','Skaitītaja rādījums pievienots! Skatiet rādījumu vēsturi, lai iesniegtu.');
+                                    Session::set_flash('success','Skaitītaja rādījums iesniegts!');
                                     Response::redirect('/abonents/objekti/radijumi/' . Input::post('meter_id'));
                                 }
                                 else 
@@ -499,6 +503,7 @@ class Controller_Client extends Controller_Template
                                     $existing_reading -> lead = Input::post('reading');
                                     $existing_reading -> date_taken = Input::post('date_taken');
                                     $existing_reading -> status = 'Labošanā';
+                                    $existing_reading -> notes = 'Rādījums tiek labots';
                                     
                                     $saved = $existing_reading -> save();
                                     
@@ -509,7 +514,7 @@ class Controller_Client extends Controller_Template
                                     //tāpēc pārbauda, vai ir kāds neiesniegts
                                     $last_rdn = Model_Reading::find('last');
 
-                                    if($last_rdn->status != 'Iesniegts') 
+                                    if($last_rdn->status == 'Labošanā') 
                                     {
                                         Session::set_flash('error','Skaitītaja rādījums nav iesniegts, jo jums ir neiesniegti rādījumi!');
                                         Response::redirect('/abonents/objekti/radijumi/' . Input::post('meter_id'));
@@ -522,6 +527,7 @@ class Controller_Client extends Controller_Template
                                     $new_reading -> date_taken = Date::forge()->format('%Y-%m-%d');
                                     $new_reading -> period = 'Mēnesis';
                                     $new_reading -> status = 'Labošanā';
+                                    $new_reading -> notes = 'Rādījums tiek labots';
 
                                     $saved = $new_reading -> save();
                                     
@@ -545,7 +551,7 @@ class Controller_Client extends Controller_Template
                                 }
                                 else
                                 {
-                                    Session::set_flash('error','Skaitītaja rādījums nav iesniegts!');
+                                    Session::set_flash('error','Skaitītaja rādījums nav pievienots!');
                                     Response::redirect('/abonents/objekti/radijumi/' . Input::post('meter_id'));
                                 }
                             }
@@ -555,6 +561,11 @@ class Controller_Client extends Controller_Template
                                 Session::set_flash('error','Skaitītaja rādījums nav iesniegts, jo netika iesniegti nekādi dati!');
                                 Response::redirect_back();   
                         }
+                    }
+                    else
+                    {
+                        Session::set_flash('error','Skaitītaja rādījums nav iesniegts, jo netika iesniegti nekādi dati!');
+                        Response::redirect_back();   
                     }
                     
                 
@@ -716,6 +727,72 @@ class Controller_Client extends Controller_Template
             {
                 Response::redirect('/');
             }
+        }
+        
+        public function action_request_service()
+        {
+            $data = array();
+            
+            if(Auth::check())
+            {
+                //Visi pakalpojumi
+                $query_services = DB::select('*')->from('services');
+                $services = $query_services -> as_object() -> execute() -> as_array();
+                
+                //Visi klienta objekti
+                $query_objects = DB::select('*')->from('client_objects')->where('client_id','=',Auth::get('id'));
+                $objects = $query_objects -> as_object() -> execute() -> as_array();
+                
+                $data['services'] = $services;
+                $data['objects'] = $objects;
+                
+                if(Input::method() == 'POST' && Security::check_token())
+                {
+                    //Pārbauda, vai objektam jau nav tāds pakalpojums
+                    $query = DB::select('*')->
+                                from('user_services')->
+                                where('obj_id','=',Input::post('object'))->
+                                and_where('srv_id','=',Input::post('service'))->
+                                limit(1)->
+                                execute();
+                    $exists = DB::count_last_query();
+                    
+                    //Objektam ir piesaistīts tāds pakalpojums
+                    if($exists)
+                    {
+                        Session::set_flash('error','Izvēlētajam objektam jau ir piesaistīts izvēlētais pakalpojums!');
+                        Response::redirect('/abonents/pakalpojumi/pasutit');
+                    }
+                    
+                    $new_request = new Model_Usr_Service_Request();
+                    $new_request -> client_id = Auth::get('id');
+                    $new_request -> object_id = Input::post('object');
+                    $new_request -> service_id = Input::post('service');
+                    $new_request -> date_from = Input::post('date_from');
+                    $new_request -> date_to = Input::post('date_to');
+                    $new_request -> notes = Input::post('notes');
+                    
+                    if($new_request -> save())
+                    {
+                        Controller_Client::cre_cln_history(Auth::get('id'),'Pasūtīts pakalpojums');
+                        Session::set_flash('success','Izvēlētajam objektam pasūtīts izvēlētais pakalpojums!');
+                        Response::redirect('/abonents/pakalpojumi/pasutit');
+                    }
+                    else
+                    {
+                        Session::set_flash('error','Notikusi kļūda! Pakalpojums objektam netika pasūtīts.');
+                        Response::redirect('/abonents/pakalpojumi/pasutit');
+                    }
+                }
+                else
+                {
+                    $this -> template -> content = View::forge('client/request_service',$data);
+                }
+                
+            }
+            else Response::redirect('/');
+            
+            $this -> template -> title = "Pasūtīt pakalpojumu - Pilsētas ūdens";
         }
        
 }

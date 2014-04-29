@@ -4,18 +4,57 @@
         <h3><?php echo $data -> name . ' ' . $data -> surname . ' - ' . $data -> username; ?></h3>
             <!-- Nav tabs -->
             <ul class="nav nav-tabs" id="mytab">
+              <li><a href="#klients" data-toggle="tab">Klients</a></li>
               <li><a href="#objekti" data-toggle="tab">Objekti</a></li>
               <li><a href="#vesture" data-toggle="tab">Abonenta vēsture</a></li>
             </ul>
             <br/>
             <!-- Tab panes -->
             <div class="tab-content">
+                
+                <div class="tab-pane fade" id="klients">
+                    <?php if(!empty($client_data)) { ?>
+                        <?php foreach($client_data as $client) { ?>
+                            <p><strong>Klienta numurs:</strong> <a href="#" data-pk='<?php echo $client->user_id; ?>' title="Labot klienta numuru" class="client_number editable editable-click"><?php echo $client->username; ?></a></p>
+                            <p><strong>Personas tips:</strong> <a href="#" data-pk='<?php echo $client->user_id; ?>' title="Mainīt personas tipu" class="person_type editable editable-click" data-type="select"  data-source="[{value:'F', text:'Fiziska persona'},{value:'J', text:'Juridiska persona'}]" data-emptytext='nav ievadīts' data-original-title="Izvēlies personas tipu"><?php if($client->person_type == 'F') echo 'Fiziska persona'; else echo 'Juridiska persona'; ?></a></p>
+                            <p><strong>Vārds, Uzvārds:</strong> <a href="#" data-pk='<?php echo $client->user_id; ?>' title="Labot klienta vārdu" class="client_name editable editable-click"><?php echo $client->name; ?></a> <a href="#" data-pk='<?php echo $client->user_id; ?>' title="Labot klienta uzvārdu" class="client_surname editable editable-click"><?php echo $client->surname; ?></a></p>
+                            <p><strong>Personas kods:</strong> <a href="#" data-pk='<?php echo $client->user_id; ?>' title="Labot klienta personas kodu" class="client_pk editable editable-click"><?php echo $client->person_code; ?></a></p>
+                            <p><strong>Telefona numurs:</strong> <a href="#" data-pk='<?php echo $client->user_id; ?>' title="Labot klienta telefona numuru" class="client_phone editable editable-click"><?php echo $client->mobile_phone; ?></a></p>
+                            <p><strong>E-pasta adrese:</strong> <a href="#" data-pk='<?php echo $client->user_id; ?>' title="Labot klienta e-pasta adresi" class="client_email editable editable-click"><?php echo $client->email; ?></a></p>
+                            <p><strong>Aktīvs:</strong> <?php if($client->is_active == 'Y') echo 'Jā'; else echo 'Nē'; ?></p>
+                            <p><strong>Izveidots:</strong> <?php echo Date::forge($client->created_at)->format('%d.%m.%Y %H:%M'); ?></p>
+                            <p><strong>Pēdējoreiz pieslēdzies:</strong> <?php echo Date::forge($client->last_login)->format('%d.%m.%Y %H:%M'); ?></p>
+                            <?php if($client->is_active == 'Y') { ?>
+                                <p><a href="#" data-pk='<?php echo $client->user_id;?>' class="btn btn-sm btn-danger btn-deactivate" title="Slēgt lietotāja kontu">Slēgt lietotāja kontu</a></p>
+                            <?php } else { ?>
+                                <p><a href="#" data-pk='<?php echo $client->user_id;?>' class="btn btn-sm btn-success btn-activate" title="Atvērt lietotāja kontu">Atvērt lietotāja kontu</a></p>
+                            <?php } ?>
+                        <?php } ?>
+                    <?php } else { ?>
+                        <p>Nav klienta informācijas</p>
+                    <?php } ?>
+                </div>
+                
                 <div class="tab-pane fade" id="objekti">
+                    
+                    <?php if(Session::get_flash('success')) { ?>
+                            <div class="alert alert-success">
+                                <p class="text-success"><?php echo Session::get_flash('success'); ?></p>
+                            </div>
+
+                    <?php } elseif(Session::get_flash('error')) { ?>
+                            <div class="alert alert-danger">
+                                <p class="text-danger"><?php echo Session::get_flash('error'); ?></p>
+                            </div>
+                    <?php } ?>
+                    
                     <button style="margin-bottom: 15px" data-toggle="modal" data-target="#pievienot_objektu" class="btn btn-default btn-large"><span class="glyphicon glyphicon-plus-sign"></span> Pievienot</button>
                     <?php if(!empty($client_objects)) { ?>
                         <ul id='client_objects' class='list-unstyled'>
                             <?php foreach ($client_objects as $nr => $object) { ?>
-                            <li><?php echo $nr + 1 . '. ' . $object -> object_name . ' - ' . $object -> object_addr; ?> <a href='/ieladet-objekta-datus/<?php echo $object->object_id; ?>' data-toggle="modal" data-target="#obj_info"><span class='glyphicon glyphicon-eye-open'></span> Pakalpojumi</a></li>
+                            <li style="margin:5px"><?php echo $nr + 1 . '. ' . $object -> object_name . ' - ' . $object -> object_addr; ?> 
+                                                   <a href='/ieladet-objekta-datus/<?php echo $object->object_id; ?>' class="btn btn-sm btn-default" data-toggle="modal" data-target="#obj_info">Pakalpojumi</a> 
+                                                   <a href='/darbinieks/abonenti/dzest-objektu/<?php echo $object->object_id; ?>' onclick="return confirm('Vai tiešām vēlaties dzēst objektu?')" class="btn-delete btn btn-sm btn-danger">Dzēst</a></li>
                             <?php } ?>
                         </ul>
                     <?php } else { ?>
@@ -40,15 +79,6 @@
         <p>Klientam pašlaik nav nekādas papildus informācijas</p>
 <?php } ?>
         
-<script>
-    $(document).ready(function() {
-        $('#mytab a:first').tab('show');
-    });
-</script>
-
-
-
-
 <!-- Pievienot objektu-->
 <div class="modal fade" id="pievienot_objektu" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -128,6 +158,108 @@
 <script>
     $(document).ready(function() {
         
+    $('#mytab a:first').tab('show');
+        
+    $('.client_number').editable({
+        type: 'text',
+        name: 'cln_number',
+        url: '/darbinieks/abonenti/labot-datus',
+        title: 'Labot klienta numuru',
+        validate: function(value) {
+           if($.trim(value) == '') return 'Šis ir obligāts lauks!';
+           else if(value.length != 8) return 'Klienta numurs sastāv no 8 simboliem!';
+        }
+    });    
+    
+    $('.person_type').editable({
+        name:'person_type',
+        url: '/darbinieks/abonenti/labot-datus',
+        validate: function(value) {
+           if($.trim(value) == '') return 'Šis ir obligāts lauks!';
+        }
+    });    
+    
+    $('.client_name').editable({
+        name: 'cln_name',
+        type: 'text',
+        url: '/darbinieks/abonenti/labot-datus',
+        title: 'Labot klienta vārdu',
+        validate: function(value) {
+           if($.trim(value) == '') return 'Šis ir obligāts lauks!';
+        }
+    }); 
+    
+    $('.client_surname').editable({
+        name: 'cln_surname',
+        type: 'text',
+        url: '/darbinieks/abonenti/labot-datus',
+        title: 'Labot klienta uzvārdu',
+        validate: function(value) {
+           if($.trim(value) == '') return 'Šis ir obligāts lauks!';
+        }
+    }); 
+    
+    $('.client_pk').editable({
+        name: 'client_pk',
+        type: 'text',
+        url: '/darbinieks/abonenti/labot-datus',
+        title: 'Labot klienta personas kodu',
+        validate: function(value) {            
+           if($.trim(value) == '') return 'Šis ir obligāts lauks!';
+           else if(value.length != 12) return 'Personas kodam jāsatur 12 simboli!';
+           //else if(!value.match('\d{6}-\d{5}')) return 'Nepareizs personas koda formāts!';
+        }
+    }); 
+    
+    $('.client_phone').editable({
+        name: 'client_phone',
+        type: 'text',
+        url: '/darbinieks/abonenti/labot-datus',
+        title: 'Labot klienta telefona numuru',
+        validate: function(value) {            
+           if($.trim(value) == '') return 'Šis ir obligāts lauks!';
+        }
+    }); 
+    
+    $('.client_email').editable({
+        name: 'client_email',
+        type: 'email',
+        url: '/darbinieks/abonenti/labot-datus',
+        title: 'Labot klienta e-pasta adresi',
+        validate: function(value) {            
+           if($.trim(value) == '') return 'Šis ir obligāts lauks!';
+        }
+    }); 
+    
+    $('.btn-activate').click(function(e) {
+        e.preventDefault();
+        $.post( "/darbinieks/abonenti/labot-datus", { 
+            name: 'activate', 
+            pk: $(this).attr('data-pk'),
+            value: 'Y'
+        },function(data) {
+            if(data)
+            {
+                $( "#client_data" ).load("/ieladet-datus/" + $.parseJSON(data).user_id);
+            }
+        });
+    });
+    
+    $('.btn-deactivate').click(function(e) {
+        e.preventDefault();
+        $.post( "/darbinieks/abonenti/labot-datus", { 
+            name: 'deactivate', 
+            pk: $(this).attr('data-pk'),
+            value: 'N'
+        },function(data) {
+            if(data)
+            {
+                $( "#client_data" ).load("/ieladet-datus/" + $.parseJSON(data).user_id);
+            }
+        });
+
+    });
+
     $('#add_object').validate({
                 rules: {
                     name: {

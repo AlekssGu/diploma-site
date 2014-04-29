@@ -825,4 +825,83 @@ class Controller_Connection extends Controller_Template
             $this->template->title = "Paroles maiņa - Pilsētas ūdens";
             $this->template->content = View::forge('connection/change');
         }
+        
+        public function action_change_data()
+        {
+            // Lietotājam jābūt autorizētam
+            if(!Auth::check())
+            {
+                Response::redirect('/');
+            }
+            
+            //Padod datus no formā iebūvētās labošanas
+            if(Input::method()=='POST' && Input::post('action') == 'email')
+            {
+                    try {
+                            $changed = Auth::update_user(
+                                                array(
+                                                        'email' => Input::post('value')
+                                                     )
+                                                );
+                            if($changed) 
+                            {
+                                Controller_Client::cre_cln_history(Auth::get('id'),'Mainīta e-pasta adrese');
+                                return true;
+                            }
+                            else return false;
+
+                    } catch (\SimpleUserUpdateException $e)
+                    {
+                        $response = new Response();
+                        $response -> set_status(304);
+                        return $response;
+                    }
+            }
+                
+            if(Input::method()=='POST' && Input::post('action') == 'phone')
+                {
+                            $user_object = Model_User::find(Auth::get('id'));
+                            $person_object = Model_Person::find($user_object->person_id);
+                            
+                            $person_object -> mobile_phone = Input::post('value');
+                            
+                            
+                            if($person_object -> save()) 
+                            {
+                                Controller_Client::cre_cln_history(Auth::get('id'),'Mainīts telefona numurs');
+                                return true;
+                            }
+                            else 
+                            {
+                                $response = new Response();
+                                $response -> set_status(304);
+                                return $response;
+                            }
+                }
+            
+            if(Input::method()=='POST' && Security::check_token())
+            {                
+                if(Input::post('new_password') != Input::post('new_secpassword'))
+                {
+                    Session::set_flash('error','Jaunājām parolēm jāsakrīt!');
+                }
+                elseif(Input::post('old_password') == Input::post('new_password'))
+                {
+                    Session::set_flash('error','Parole netika nomainīta! Vecā parole sakrīt ar jauno paroli.');
+                }
+                else
+                {
+                    $changed = Auth::change_password(Input::post('old_password'),Input::post('new_password'));
+                        if($changed) 
+                        {
+                            Session::set_flash('success','Parole mainīta!');
+                            Controller_Client::cre_cln_history(Auth::get('id'),'Mainīta parole');
+                        }
+                        else Session::set_flash('error','Parole netika nomainīta! Ievadīta nepareiza vecā parole.');
+                }
+            }
+            
+            $this->template->title = "Paroles maiņa - Pilsētas ūdens";
+            $this->template->content = View::forge('connection/change-data');
+        }
 }

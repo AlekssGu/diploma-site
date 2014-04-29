@@ -15,6 +15,7 @@ return array(
         'abonents/aizmirsta-parole' => 'connection/forgot',           // Aizmirsta parole
         'abonents/izsutit/:id' => 'connection/resend/$1',    // Paroles atjaunošana
         'abonents/mainit/:code' => 'connection/change/$1',  // Paroles maiņa (GET)
+        'abonents/mainit-datus' => 'connection/change_data', // Lietotājs maina paroli
         //--
 
         // navigācijas lapas (ar statisko saturu):
@@ -44,16 +45,23 @@ return array(
         'klients/objekti/apskatit/:id' => 'client/all_objects_show/$1',
         'abonents/objekti/radijumi/:id' => 'client/readings_history/$1',
         'abonents/pakalpojumi/apskatit/:object_id/:service_id' => 'client/show_service',
+        'abonents/pakalpojumi/pasutit' => 'client/request_service',
     
         'darbinieks' => 'worker/worker',
         'darbinieks/abonenti' => 'worker/clients',
+        'darbinieks/abonenti/labot-datus' => 'worker/change_client_data',
         'darbinieks/abonenti/labot-pakalpojumu' => 'worker/modify_service',
         'darbinieks/abonenti/pievienot-pakalpojumu' => 'worker/add_service',
         'darbinieks/abonenti/atslegt-pakalpojumu' => 'worker/deactivate_service',
         'darbinieks/abonenti/apskatit-pakalpojumu/:object_id/:service_id' => 'client/show_service',
         'darbinieks/abonenti/skaititaji/nonemt/:service_id' => 'worker/remove_meter/$1',
-        'darbinieks/skaititaji/radijumi' => 'worker/all_readings',
+        'darbinieks/iesniegtie/dati' => 'worker/all_entered_data',
+        'darbinieks/abonenti/dzest-objektu/:object_id' => 'worker/delete_object/$1',
+        'darbinieks/abonenti/skaititaji/labot' => 'worker/edit_meter',
+    
+        //Sadaļa: Skaitītāju dati (darbinieks)
         'darbinieks/skaititaji/radijumi/atgriezt' => 'worker/return_reading',
+        'darbinieks/skaititaji/radijumi/apstiprinat/:reading_id/:client_id' => 'worker/accept_reading',
     
         //ajax izsaukumiem
         'ieladet-datus/:id' => 'worker/load_client/$1',

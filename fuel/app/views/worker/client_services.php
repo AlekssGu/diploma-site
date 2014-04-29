@@ -1,3 +1,5 @@
+<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
 <?php echo Asset::js('bootstrap-datepicker.js'); ?>
 <?php echo Asset::css('datepicker3.css'); ?>
 <style>
@@ -37,8 +39,9 @@
             <?php foreach ($meters as $meter) { ?>
             
             <ul class='list-group'>
-                <li class="list-group-item"><strong>Skaitītāja numurs:</strong> <?php echo $meter->meter_number; ?></li>
-                <li class="list-group-item">Termiņš: no <?php echo date_format(date_create($meter->date_from), 'd.m.Y') . ' līdz ' . date_format(date_create($meter->date_to), 'd.m.Y'); ?></li>
+                <li class="list-group-item"><strong>Skaitītāja numurs:</strong> <a href="#" data-pk="<?php echo $meter->id; ?>" class="meter_number editable editable-click editable-empty" data-emptytext='nav ievadīts' data-original-title="Labot skaitītāja numuru"><?php echo $meter->meter_number; ?></a></li>
+                <li class="list-group-item">Termiņš: no <a href="#" data-datepicker='{weekStart:1}' data-type="date" data-placement="bottom" data-name="date_from" data-viewformat="dd.mm.yyyy" data-emptytext='nav ievadīts' data-original-title="Izvēlies datumu" data-pk="<?php echo $meter->id; ?>" class="date_from editable editable-click editable-empty" data-emptytext='nav ievadīts' data-original-title="Labot skaitītāja termiņu"><?php echo date_format(date_create($meter->date_from), 'd.m.Y'); ?></a> līdz 
+                                                        <a href="#" data-datepicker='{weekStart:1}' data-type="date" data-placement="bottom" data-name="date_from" data-viewformat="dd.mm.yyyy" data-emptytext='nav ievadīts' data-original-title="Izvēlies datumu" data-pk="<?php echo $meter->id; ?>" class="date_to editable editable-click editable-empty" data-emptytext='nav ievadīts' data-original-title="Labot skaitītāja termiņu"><?php echo date_format(date_create($meter->date_to), 'd.m.Y'); ?></a></li>
                 <li class="list-group-item">Rādījums uzstādīšanas brīdī: <?php echo $meter->meter_lead; ?></li>
                 <li class='list-group-item'><a href='/darbinieks/abonenti/skaititaji/nonemt/<?php echo $meter->service_id; ?>'>Noņemt skaitītāju</a></li>
             </ul>
@@ -126,15 +129,73 @@
 <script>
     $(document).ready(function() {
         
-$('.date-pick .input-group.date').datepicker({
-    weekStart: 1,
-    format: "dd.mm.yyyy",
-    autoclose: true,
-    todayBtn: "linked",
-    language: "lv",
-    orientation: "top auto",
-    todayHighlight: true
-});
+    //Labo e-pastu ar ajax un x-editable palīdzību
+    $('.meter_number').editable({
+        type: 'text',
+        url: '/darbinieks/abonenti/skaititaji/labot/',
+        params: {
+            action: 'meter_number',
+        },
+        success: function(response) {
+            if(!response) {
+                return "Skaitītājs ar šādu numuru jau eksistē!";
+            } 
+        }  
+    }); 
+    
+    //Labo datums no ar ajax un x-editable palīdzību
+    $('.date_from').editable({
+        type: 'text',
+        url: '/darbinieks/abonenti/skaititaji/labot/',
+        params: {
+            action: 'date_from',
+        },
+        success: function(response) {
+            if(!response) {
+                return "Notikusi kļūda! Datums nav nomainīts.";
+            } 
+        }  
+    }); 
+    
+    //Labo datums līdz ar ajax un x-editable palīdzību
+    $('.date_to').editable({
+        type: 'text',
+        url: '/darbinieks/abonenti/skaititaji/labot/',
+        params: {
+            action: 'date_to',
+        },
+        success: function(response) {
+            if(!response) {
+                return "Notikusi kļūda! Datums nav nomainīts.";
+            } 
+        }  
+    }); 
+    
+        //Obligāts lauks
+        $('.meter_number').editable('option', 'validate', function(v) {
+            if(!v) return 'Obligāts lauks!';
+        });
+    
+        //Obligāts lauks
+        $('.date_from').editable('option', 'validate', function(v) {
+            if(!v) return 'Obligāts lauks!';
+        });
+        
+        //Obligāts lauks
+        $('.date_to').editable('option', 'validate', function(v) {
+            if(!v) return 'Obligāts lauks!';
+        });
+    
+        
+    $('.date-pick .input-group.date').datepicker({
+        weekStart: 1,
+        format: "dd.mm.yyyy",
+        autoclose: true,
+        todayBtn: "linked",
+        language: "lv",
+        orientation: "top auto",
+        todayHighlight: true
+    });
         
     $('#add_meter').validate({
                 rules: {

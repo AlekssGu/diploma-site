@@ -15,9 +15,9 @@
                   <div class="col-sm-4 col-md-4">
                     <div class="thumbnail">
                       <div class="caption text-center">
-                        <h3>Skaitītāju dati</h3>
-                        <p>Iesniegto skaitītāja rādījumu apstrāde</p>
-                        <p><a href="/darbinieks/skaititaji/radijumi" class="btn btn-default" role="button">Ieiet</a></p>
+                        <h3>Iesniegtie dati</h3>
+                        <p>Abonentu jaunie, iesniegtie dati</p>
+                        <p><a href="/darbinieks/iesniegtie/dati" class="btn btn-default" role="button">Ieiet</a></p>
                       </div>
                     </div>
                   </div>
@@ -26,8 +26,8 @@
                     <div class="thumbnail">
                       <div class="caption text-center">
                         <h3>Sistēmas pārvaldība</h3>
-                        <p>Jautājumi, atbildes, avārijas, jaunumi</p>
-                        <p><a href="#" class="btn btn-default" role="button">Ieiet</a></p>
+                        <p>Jautājumi, atbildes, jaunumi</p>
+                        <p><a href="#" class="btn-default btn disabled" role="button">Ieiet</a></p>
                       </div>
                     </div>
                   </div>

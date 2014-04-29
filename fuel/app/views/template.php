@@ -56,9 +56,9 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Aktuālā informācija">Jaunumi <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href="/aktuali/jaunumi">Ziņas</a></li>
-            <li><a href="/aktuali/darbi">Plānotie darbi</a></li>
-            <li><a href="/aktuali/medijiem">Medijiem</a></li>
-            <li><a href="/aktuali/fakti">Interesanti fakti</a></li>
+            <li class='disabled'><a href="/aktuali/darbi">Plānotie darbi</a></li>
+            <li class='disabled'><a href="/aktuali/medijiem">Medijiem</a></li>
+            <li class='disabled'><a href="/aktuali/fakti">Interesanti fakti</a></li>
           </ul>
         </li>
         
@@ -82,14 +82,14 @@
             <li><a href="/abonents/registreties" title="Uzņēmuma rekvizīti">Reģistrēties</a></li>
             <li class='divider'></li>
             <?php } ?>
-            <li><a href="/par-uznemumu/dokumenti" title="Uzņēmuma sertifikāti">Aktuālā informācija</a></li>
-            <li><a href="/par-uznemumu/parvalde" title="Organizatoriskā struktūra">Cenas un tarifi</a></li>
-            <li><a href="/par-uznemumu/projekti" title="Uzņēmuma nozares">Skaitītāju maiņa</a></li>
+            <li class='disabled'><a href="/par-uznemumu/dokumenti" title="Uzņēmuma sertifikāti">Aktuālā informācija</a></li>
+            <li class='disabled'><a href="/par-uznemumu/parvalde" title="Organizatoriskā struktūra">Cenas un tarifi</a></li>
+            <li class='disabled'><a href="/par-uznemumu/projekti" title="Uzņēmuma nozares">Skaitītāju maiņa</a></li>
           </ul>
         </li>
         
         <li <?php if(Uri::string()=='pakalpojumi') echo 'class="active"'; ?>><a href="/pakalpojumi" title="Doties uz pakalpojumu lapu">Pakalpojumi</a></li>
-        <li <?php if(Uri::string()=='projekti') echo 'class="active"'; ?>><a href="/projekti" title="Doties uz projektu lapu">Projekti</a></li>
+        <li class='disabled'<?php if(Uri::string()=='projekti') echo 'class="active"'; ?>><a href="/projekti" title="Doties uz projektu lapu">Projekti</a></li>
 
         
         
@@ -108,9 +108,9 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Palīdzība <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li class='hidden-lg'><a href='#'>Meklēt</a></li>
-            <li><a href="#">Pieslēgšanās sistēmai</a></li>
-            <li><a href="#">Patēriņa datu ievade</a></li>
-            <li><a href="/palidziba/buj">Biežāk uzdotie jautājumi</a></li>
+            <li class='disabled'><a href="#">Pieslēgšanās sistēmai</a></li>
+            <li class='disabled'><a href="#">Patēriņa datu ievade</a></li>
+            <li class='disabled'><a href="/palidziba/buj">Biežāk uzdotie jautājumi</a></li>
             <li class="divider"></li>
             <li><a href="/palidziba/sazinaties">Sazināties ar uzņēmumu</a></li>
             <?php if(Auth::get('group')==100) { ?>
@@ -129,9 +129,9 @@
         <li class="<?php if(Uri::segment(1)=='palidziba') echo "active"; ?> dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Palīdzība <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Pieslēgšanās sistēmai</a></li>
-            <li><a href="#">Patēriņa datu ievade</a></li>
-            <li><a href="/palidziba/buj">Biežāk uzdotie jautājumi</a></li>
+            <li class='disabled'><a href="#">Pieslēgšanās sistēmai</a></li>
+            <li class='disabled'><a href="#">Patēriņa datu ievade</a></li>
+            <li class='disabled'><a href="/palidziba/buj">Biežāk uzdotie jautājumi</a></li>
             <li class="divider"></li>
             <li><a href="/palidziba/sazinaties">Sazināties ar uzņēmumu</a></li>
           </ul>

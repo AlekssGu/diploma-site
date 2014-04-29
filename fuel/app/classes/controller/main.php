@@ -25,8 +25,30 @@ class Controller_Main extends Controller_Template
 	 */
 	public function action_index()
 	{          
+            //Skatam padodamie dati
+            $data = array();
+            
             if(Auth::member(1))
-                $this -> template -> content = View::forge('main/user_index');
+            {
+                $last_reading_query = DB::select('*')
+                                    ->from('last_readings')
+                                    ->where('client_id','=',Auth::get('id'));
+                $last_reading = $last_reading_query -> as_object() -> execute() -> as_array();
+                
+                if(!empty($last_reading))
+                {
+                    $pre_last_rdn_query = DB::select('*')
+                                        ->from('readings')
+                                        ->where('meter_id','=',$last_reading[0]->id);
+                    $pre_last_reading = $pre_last_rdn_query -> as_object() -> execute() -> as_array();
+
+                    $last_reading[0] -> amount_since_last = round((int)$last_reading[0]->lead - (int)$pre_last_reading[0]->lead);    
+                }
+                
+                $data['last_reading'] = $last_reading;
+                
+                $this -> template -> content = View::forge('main/user_index', $data);
+            }
             else if(Auth::member(50)) 
                 $this -> template -> content = View::forge('main/worker_index');
             else

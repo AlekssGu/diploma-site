@@ -37,7 +37,7 @@
 
             <ul class='list-group'>
                 <li class="list-group-item"><strong>Skaitītāja numurs:</strong> <?php echo $meter->meter_number; ?></li>
-                <li class="list-group-item">Termiņš: no <?php echo $meter->date_from . ' līdz ' . $meter->date_to; ?></li>
+                <li class="list-group-item">Termiņš: no <?php echo date_format(date_create($meter->date_from), 'd.m.Y') . ' līdz ' . date_format(date_create($meter->date_to), 'd.m.Y'); ?></li>
                 <li class="list-group-item">Rādījums uzstādīšanas brīdī: <?php echo $meter->meter_lead; ?></li>
             </ul>
 

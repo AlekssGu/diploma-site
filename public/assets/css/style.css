@@ -16,7 +16,9 @@ html, body {
     background-color:#fff;
 }
 
-
+#client_objects ul li {
+    margin:5px;
+}
 
 /*============================= PAPILDUS =======================================*/
 /* Slīdrādis */

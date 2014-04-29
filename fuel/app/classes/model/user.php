@@ -31,5 +31,15 @@ class Model_User extends \Orm\Model
 		),
 	);
 	protected static $_table_name = 'users';
+        
+        protected static $_has_one = array(
+            'person' => array(
+                'key_from' => 'person_id',
+                'model_to' => 'Model_Person',
+                'key_to' => 'id',
+                'cascade_save' => false,
+                'cascade_delete' => true,
+            ),
+        );
 
 }

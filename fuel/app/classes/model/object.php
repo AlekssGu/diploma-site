@@ -8,6 +8,7 @@ class Model_Object extends \Orm\Model
 		'address_id', 
 		'name',
 		'notes',
+                'is_deleted',
 		'created_at',
 		'updated_at',
 	);

@@ -38,20 +38,21 @@
                 </thead>
             <?php foreach ($readings as $key => $reading) { ?>           
                 <tr <?php if(html_entity_decode($reading->status) == 'Labošanā') echo 'class="info"'; 
-                            else if(html_entity_decode($reading->status) == 'Atgriezts') echo 'class="danger"'?>>
+                            else if(html_entity_decode($reading->status) == 'Atgriezts') echo 'class="danger"';
+                            else if(html_entity_decode($reading->status) == 'Apstiprināts') echo 'class="success"'; ?>>
                     <td><?php echo $key + 1; ?></td>
                     <td><?php echo $reading->lead; ?></td>
                     <td><?php echo $reading->status; ?></td>
-                    <td>Kaut kāds sūds</td>
+                    <td><?php echo $reading->notes; ?></td>
                     <td><?php echo $reading->date_taken; ?></td>
-                    <td><a href='#' data='rdn<?php echo $reading->id;?>' class='rdn-edit-btn btn btn-sm btn-default <?php if($reading->status == 'Iesniegts' || html_entity_decode($reading->status) == 'Sākotnējais') echo 'disabled'; ?>'>Labot</a></td>
+                    <td><a href='#' data='rdn<?php echo $reading->id;?>' class='rdn-edit-btn btn btn-sm btn-default <?php if(in_array(html_entity_decode($reading->status), array('Iesniegts', 'Sākotnējais', 'Apstiprināts'))) echo 'disabled';?>'>Labot</a></td>
                     <form method="POST" action="/abonents/iesniegt-merijumu">
                         <input type="hidden" name="reading_id" value="<?php echo $reading->id;?>"/>
                         <input type="hidden" name="reading" value="<?php echo $reading->lead;?>"/>
                         <input type="hidden" name="<?php echo \Config::get('security.csrf_token_key');?>" value="<?php echo \Security::fetch_token();?>" />
                         <input type="hidden" name="meter_id" value="<?php echo $meter_id;?>"/>
                         <input type='hidden' class='input-action' name="action" />
-                    <td><button class='submit-rdn btn btn-sm btn-default <?php if($reading->status == 'Iesniegts' || html_entity_decode($reading->status) == 'Sākotnējais') echo 'disabled'; ?>'>Iesniegt</button></td>
+                    <td><button class='submit-rdn btn btn-sm btn-default <?php if(in_array(html_entity_decode($reading->status), array('Iesniegts', 'Sākotnējais', 'Atgriezts', 'Apstiprināts'))) echo 'disabled'; ?>'>Iesniegt</button></td>
                     </form>
                 </tr>
                 <?php if(html_entity_decode($reading->status) == 'Labošanā' || $reading->status == 'Atgriezts') { ?>

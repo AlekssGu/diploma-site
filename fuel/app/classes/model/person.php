@@ -27,5 +27,32 @@ class Model_Person extends \Orm\Model
 		),
 	);
 	protected static $_table_name = 'persons';
+        
+        protected static $_belongs_to = array(
+            'user' => array(
+                'key_from' => 'id',
+                'model_to' => 'Model_User',
+                'key_to' => 'person_id',
+                'cascade_save' => false,
+                'cascade_delete' => true,
+            ),
+        );
+        
+        protected static $_has_one = array(
+            'address' => array(
+                'key_from' => 'address_id',
+                'model_to' => 'Model_Address',
+                'key_to' => 'id',
+                'cascade_save' => false,
+                'cascade_delete' => true,
+            ),
+            'address' => array(
+                'key_from' => 'secondary_addr_id',
+                'model_to' => 'Model_Address',
+                'key_to' => 'id',
+                'cascade_save' => false,
+                'cascade_delete' => true,
+            ),
+        );
 
 }

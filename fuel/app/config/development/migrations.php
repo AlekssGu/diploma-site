@@ -17,6 +17,9 @@ return array(
 				8 => '010_create_user_services',
 				9 => '011_create_client_histories',
 				10 => '012_create_codificators',
+				11 => '013_add_notes_to_readings',
+				12 => '014_create_usr_service_requests',
+				13 => '015_add_is_deleted_to_objects',
 			),
 		),
 		'module' => 

@@ -69,7 +69,8 @@ class Controller_Worker extends Controller_Template
                 //Izmanto skatu, atrod klienta objektus
                 $query_objects = DB::select('*')
                                 ->from('client_objects')
-                                ->where('client_objects.client_id','=',$id); //Abonents
+                                ->where('client_objects.client_id','=',$id)
+                                ->and_where('client_objects.is_deleted','=','N'); //Abonents
                 
                 //Atrod klienta vēsturi un sakārto dilstoši
                 $query_cln_history = DB::select('*')
@@ -130,6 +131,44 @@ class Controller_Worker extends Controller_Template
                 return View::forge('worker/object_data', $data);
             }
             
+        }
+    }
+    
+    public function action_delete_object($object_id = null)
+    {
+        //Tikai pieslēgušies darbinieku drīkst piekļūt šai lapai
+        if(!Auth::check() || !Auth::member(50))
+        {
+            Response::redirect('/');
+        }
+        
+        if($object_id != '')
+        {           
+            //Atrod objektu, kuru dzēst
+            $object = Model_Object::find($object_id);
+            $object -> is_deleted = 'Y';
+            
+            $query_service_id = DB::select('*')
+                               -> from ('user_services')
+                               -> where('obj_id','=',$object_id);
+            $service_id = $query_service_id -> as_object() -> execute() -> as_array();
+            
+            $service = Model_User_Service::find($service_id);
+            $service -> is_active = 'N';
+            
+            Controller_Client::cre_cln_history($object->client_id, 'Dzēsts pakalpojums');
+            Controller_Client::cre_cln_history($object->client_id, 'Dzēsts objekts');
+            
+            $saved_srv = $service -> save();
+            $saved_obj = $object -> save();
+            
+            Response::redirect_back(); 
+        }
+        else
+        {
+            $header = new Response();
+            $header -> set_status(301);
+            Response::redirect_back();
         }
     }
     
@@ -247,11 +286,53 @@ class Controller_Worker extends Controller_Template
                 //Ja izdevies atslēgt, tad saglabājam to abonenta vēsturē
                 if($service->save())
                 {
+                    $meter_object = Model_Meter::find_by('service_id',Input::post('service_id'));
+                    foreach($meter_object as $meter)
+                    {
+                        $meter_id = $meter -> id;
+                    }
+                    $delete_this = Model_Meter::find($meter_id);
+                    $delete_this -> delete();
+                    
                     $user_id = Model_Object::find(Input::post('object_id'))->client_id;
                     Controller_Client::cre_cln_history($user_id,'Atslēgts pakalpojums');
                     return true;
                 }
                 else return false;
+    }
+    
+    public function action_edit_meter()
+    {
+        //Tikai pieslēgušies darbinieki drīkst piekļūt šai lapai
+        if(!Auth::check() || !Auth::member(50))
+        {
+            Response::redirect('/');
+        }
+        
+        if(Input::method() == 'POST')
+        {
+            $meter_id = Input::post('pk');
+            $meter = Model_Meter::find($meter_id);
+            
+            if(Input::post('action') == 'meter_number')
+            {
+                $meter -> meter_number = Input::post('value');
+            }
+            else if(Input::post('action') == 'date_from')
+            {
+                $meter -> date_from = Input::post('value');
+            }
+            else if(Input::post('action') == 'date_to')
+            {
+                $meter -> date_to = Input::post('value');
+            }
+            else return false;
+            
+            if($meter -> save()) return true;
+            else return false;
+        }
+        else return false;
+        
     }
     
     public function action_remove_meter($service_id = null)
@@ -286,19 +367,28 @@ class Controller_Worker extends Controller_Template
         
     }
     
-    public function action_all_readings()
+    public function action_all_entered_data()
     {
         //Datu masīvs skatam
         $data = array();
         
-        $query_last_readings = DB::select('*')->from('last_readings')->where('status','=','Iesniegts');
+        //Visi iesniegtie rādījumi
+        $query_last_readings = DB::select('*')->from('last_readings');
         $last_readings = $query_last_readings -> as_object() -> execute() -> as_array();
 
+        //Iesniegtie pakalpojumi
+        $query_usr_srv_req = DB::select('*')->from('usr_service_requests');
+        $service_requests = $query_usr_srv_req -> as_object() -> execute() -> as_array();       
+        
+        //Iesniegtās avārijas
+        
         //Sagatavo datus skatam
         $data['readings'] = $last_readings;
+        $data['services'] = $service_requests;
+        $data['emergencies'] = NULL;
         
-        $this -> template -> title = 'Iesniegtie rādījumi - IS Pilsētas ūdens';
-        $this -> template -> content = View::forge('worker/all_readings', $data);
+        $this -> template -> title = 'Iesniegtie dati - IS Pilsētas ūdens';
+        $this -> template -> content = View::forge('worker/all_entered_data', $data);
     }
     
     public function action_return_reading()
@@ -319,8 +409,15 @@ class Controller_Worker extends Controller_Template
             }
             else
             {
+                if(Input::post('notes')=='')
+                {
+                    Session::set_flash('error','Nav norādīts pamatojums, kādēļ tiek atgriezts rādījums!');
+                    Response::redirect_back();
+                }
+                
                 $reading = Model_Reading::find(Input::post('reading_id'));
                 $reading -> status = 'Atgriezts';
+                $reading -> notes = Input::post('notes');
                 
                 if($reading -> save())
                 {
@@ -339,6 +436,147 @@ class Controller_Worker extends Controller_Template
             
         }
         
+    }
+    
+    public function action_accept_reading()
+    {
+        //Tikai pieslēgušies darbinieki drīkst piekļūt šai lapai
+        if(!Auth::check() || !Auth::member(50))
+        {
+            Response::redirect('/');
+        }
+        
+        $reading_id = $this -> param('reading_id');
+        $client_id = $this -> param('client_id');
+        
+        //Ja ir GET metode
+        if(Input::method())
+        {
+            if($reading_id == '')
+            {
+                Session::set_flash('error','Skaitītāja rādījums netika apstiprināts!');
+                Response::redirect_back();
+            }
+            else
+            {
+                
+                $reading = Model_Reading::find($reading_id);
+                $reading -> status = 'Apstiprināts';
+                $reading -> notes = 'Apstiprināts abonentu daļā';
+                
+                if($reading -> save())
+                {
+                    Controller_Client::cre_cln_history($client_id,'Apstiprināts skaitītāja rādījums!');
+                    Session::set_flash('success','Skaitītāja rādījums apstiprināts!');
+                    Response::redirect_back();
+                }
+                else
+                {
+                    Session::set_flash('error','Skaitītāja rādījums netika apstiprināts!');
+                    Response::redirect_back();
+                }
+            }
+            
+            
+            
+        }
+        
+    }
+    
+    public function action_change_client_data() 
+    {
+        //Tikai pieslēgušies darbinieki drīkst piekļūt šai lapai
+        if(!Auth::check() || !Auth::member(50))
+        {
+            Response::redirect('/');
+        }
+        
+        $saved = false;
+        
+        if(Input::method()=='POST')
+        {
+            
+            if(Input::post('name') == 'cln_number')
+            {
+                $client = Model_User::find(Input::post('pk'));
+                $client -> username = Input::post('value');
+                $saved = $client -> save();
+            }
+            else if(Input::post('name') == 'person_type')
+            {
+                $client = Model_User::find(Input::post('pk'));
+                $person = Model_Person::find($client -> person_id);
+                $person -> person_type = Input::post('value');
+                $saved = $person -> save();
+            }
+            else if(Input::post('name') == 'cln_name')
+            {
+                $client = Model_User::find(Input::post('pk'));
+                $person = Model_Person::find($client -> person_id);
+                $person -> name = Input::post('value');
+                $saved = $person -> save();
+            }
+            else if(Input::post('name') == 'cln_surname')
+            {
+                $client = Model_User::find(Input::post('pk'));
+                $person = Model_Person::find($client -> person_id);
+                $person -> surname = Input::post('value');
+                $saved = $person -> save();
+            }
+            else if(Input::post('name') == 'client_pk')
+            {
+                $client = Model_User::find(Input::post('pk'));
+                $person = Model_Person::find($client -> person_id);
+                $person -> person_code = Input::post('value');
+                $saved = $person -> save();
+            }
+            else if(Input::post('name') == 'client_phone')
+            {
+                $client = Model_User::find(Input::post('pk'));
+                $person = Model_Person::find($client -> person_id);
+                $person -> mobile_phone = Input::post('value');
+                $saved = $person -> save();
+            }
+            else if(Input::post('name') == 'client_email')
+            {
+                $client = Model_User::find(Input::post('pk'));
+                $client -> email = Input::post('value');
+                $saved = $client -> save();
+            }
+            else if(Input::post('name') == 'activate')
+            {
+                $client = Model_User::find(Input::post('pk'));
+                $client -> is_active = Input::post('value');
+                $saved = $client -> save();
+                
+                if($saved) 
+                {
+                    $json_string = '{"user_id":' . Input::post('pk') .',"saved":"true"}';
+                    return $json_string;
+                }
+                else return false;
+                
+            }
+            else if(Input::post('name') == 'deactivate')
+            {
+                $client = Model_User::find(Input::post('pk'));
+                $client -> is_active = Input::post('value');
+                $saved = $client -> save();
+                
+                if($saved) 
+                {
+                    $json_string = '{"user_id":' . Input::post('pk') .',"saved":"true"}';
+                    return $json_string;
+                }
+                else return false;
+                
+            }
+            else return false;
+        } 
+        else return false;
+        
+        if($saved) return true;
+        else return true;
     }
     
 }

@@ -70,18 +70,18 @@ $(function () {
                             <div class="panel-body">
                                 <h3 class="text-center">Mana pēdējā aktivitāte</h3>
                                 <hr/>
+                                <?php if(!empty($last_reading)) { ?>
                                 <h4>Iesniegtais mērījums:</h4>
-                                <p>Pēdējais mērījums: 00041345 (15m<span style="vertical-align:super; font-size:0.7em;">3</span>)</p>
-                                <h4>Veiktie maksājumi:</h4>
-                                <p>Pēdējais maksājums: 13.03.2014</p>
+                                <p>Pēdējais mērījums: <?php echo $last_reading[0]->lead; ?> (<?php echo $last_reading[0]->amount_since_last; ?>m<span style="vertical-align:super; font-size:0.7em;">3</span>)</p>
+                                <?php } ?>
                                 <h4>Saņemtie pakalpojumi:</h4>
                                 <p>Pēdējais pakalpojums: Nosēdbedres likvidācija</p>
                             </div>
                         </div>
                         <div class='text-center'>
-                        <a href="/klients/iesniegt-merijumu" class="btn btn-info">Ievadīt mērījumu</a>
+                        <a href="#" class="btn btn-info">Ievadīt mērījumu</a>
                         <a href="#" class="btn btn-info">Paziņot par bojājumu</a>
-                        <a href="#" class="btn btn-info">Pasūtīt pakalpojumus</a>
+                        <a href="/abonents/pakalpojumi/pasutit" class="btn btn-info">Pasūtīt pakalpojumu</a>
                         </div>
                     </div>
                     <div class="col-md-6">
