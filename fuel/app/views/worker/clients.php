@@ -9,7 +9,11 @@
         </div>
     </div>
 
-    <div class="row main-block">
+    <div class='row main-block'>
+        <a href='/darbinieks/pakalpojumi' class='btn btn-lg btn-default'>Pakalpojumu pārvaldība</a>
+    </div>
+    
+    <div class="row">        
         <div class="col-sm-12 col-xs-12 col-md-3 sidebar-offcanvas" id="sidebar" role="navigation" style="float:left">
         <h4>Abonentu saraksts</h4>
             <div class="sidebar-nav">

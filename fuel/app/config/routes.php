@@ -63,6 +63,11 @@ return array(
         'darbinieks/skaititaji/radijumi/atgriezt' => 'worker/return_reading',
         'darbinieks/skaititaji/radijumi/apstiprinat/:reading_id/:client_id' => 'worker/accept_reading',
     
+        //Sadaļa: Pieejamie pakalpojumi (darbinieks)
+        'darbinieks/pakalpojumi' => 'worker/services',
+        'darbinieks/pakalpojumi/pievienot' => 'worker/create_service',
+        'darbinieks/pakalpojumi/dzest/:service_id' => 'worker/delete_service/$1',
+    
         //ajax izsaukumiem
         'ieladet-datus/:id' => 'worker/load_client/$1',
         'ieladet-objekta-datus/:id' => 'worker/load_object_data/$1',

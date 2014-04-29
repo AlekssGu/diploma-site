@@ -501,6 +501,8 @@ class Controller_Worker extends Controller_Template
                 $client = Model_User::find(Input::post('pk'));
                 $client -> username = Input::post('value');
                 $saved = $client -> save();
+                
+                Controller_Client::cre_cln_history(Input::post('pk'), 'Labots klienta numurs');
             }
             else if(Input::post('name') == 'person_type')
             {
@@ -508,6 +510,8 @@ class Controller_Worker extends Controller_Template
                 $person = Model_Person::find($client -> person_id);
                 $person -> person_type = Input::post('value');
                 $saved = $person -> save();
+                
+                Controller_Client::cre_cln_history(Input::post('pk'), 'Labots personas tips');
             }
             else if(Input::post('name') == 'cln_name')
             {
@@ -515,6 +519,8 @@ class Controller_Worker extends Controller_Template
                 $person = Model_Person::find($client -> person_id);
                 $person -> name = Input::post('value');
                 $saved = $person -> save();
+                
+                Controller_Client::cre_cln_history(Input::post('pk'), 'Labots klienta vārds');
             }
             else if(Input::post('name') == 'cln_surname')
             {
@@ -522,6 +528,8 @@ class Controller_Worker extends Controller_Template
                 $person = Model_Person::find($client -> person_id);
                 $person -> surname = Input::post('value');
                 $saved = $person -> save();
+                
+                Controller_Client::cre_cln_history(Input::post('pk'), 'Labots klienta uzvārds');
             }
             else if(Input::post('name') == 'client_pk')
             {
@@ -529,6 +537,8 @@ class Controller_Worker extends Controller_Template
                 $person = Model_Person::find($client -> person_id);
                 $person -> person_code = Input::post('value');
                 $saved = $person -> save();
+                
+                Controller_Client::cre_cln_history(Input::post('pk'), 'Labots klienta personas kods');
             }
             else if(Input::post('name') == 'client_phone')
             {
@@ -536,6 +546,8 @@ class Controller_Worker extends Controller_Template
                 $person = Model_Person::find($client -> person_id);
                 $person -> mobile_phone = Input::post('value');
                 $saved = $person -> save();
+                
+                Controller_Client::cre_cln_history(Input::post('pk'), 'Labots klienta telefona numurs');
             }
             else if(Input::post('name') == 'client_email')
             {
@@ -551,6 +563,8 @@ class Controller_Worker extends Controller_Template
                 
                 if($saved) 
                 {
+                    Controller_Client::cre_cln_history(Input::post('pk'), 'Atvērts lietotāja konts');
+                    
                     $json_string = '{"user_id":' . Input::post('pk') .',"saved":"true"}';
                     return $json_string;
                 }
@@ -565,6 +579,8 @@ class Controller_Worker extends Controller_Template
                 
                 if($saved) 
                 {
+                    Controller_Client::cre_cln_history(Input::post('pk'), 'Slēgts lietotāja konts');
+                    
                     $json_string = '{"user_id":' . Input::post('pk') .',"saved":"true"}';
                     return $json_string;
                 }
@@ -577,6 +593,134 @@ class Controller_Worker extends Controller_Template
         
         if($saved) return true;
         else return true;
+    }
+    
+    public function action_services()
+    {
+        //Tikai pieslēgušies darbinieki drīkst piekļūt šai lapai
+        if(!Auth::check() || !Auth::member(50))
+        {
+            Response::redirect('/');
+        }
+        
+        $data = array();
+        
+        $query_services = DB::select(
+                    array('services.id', 'srv_id'),
+                    array('codificators.id','cdf_id'),
+                    'services.*',
+                    'codificators.*')
+                ->from('services')
+                ->join('codificators')->on('codificators.id','=','services.code_id');
+        $services = $query_services -> as_object() -> execute() -> as_array();
+        
+        $data['services'] = $services;
+        
+        $this -> template -> title = "Pieejamie pakalpojumi - IS Pilsētas ūdens";
+        $this -> template -> content = View::forge('worker/services', $data);
+        
+    }
+    
+    public function action_create_service()
+    {
+        //Tikai pieslēgušies darbinieki drīkst piekļūt šai lapai
+        if(!Auth::check() || !Auth::member(50))
+        {
+            Response::redirect('/');
+        }
+        
+        if(Input::method() == 'POST' && Security::check_token())
+        {
+            $query_existing_codes = DB::select('*')
+                    ->from('codificators')
+                    ->where('codificators.code','=',Input::post('code'));
+            $exists_code = $query_existing_codes -> as_object() -> execute() -> as_array();
+            
+            if(!empty($exists_code))
+            {
+                Session::set_flash('error','Pakalpojuma kods jau eksistē datubāzē');
+                Response::redirect_back();
+            }
+            
+            $new_code = new Model_Codificator();
+            $new_code -> code = Input::post('code');
+            $new_code -> used_in = 'Abonentu daļa';
+            $new_code -> comments = Input::post('code_notes');
+            
+            $saved_code = $new_code -> save();
+            
+            if($saved_code)
+            {
+                $new_service = new Model_Service();
+                $new_service -> code_id = $new_code->id;
+                $new_service -> name = Input::post('service_name');
+                $new_service -> description = Input::post('service_notes');
+                
+                if($new_service -> save())
+                {
+                    Session::set_flash('success','Pakalpojums veiksmīgi pievienots');
+                    Response::redirect_back();
+                }
+                else
+                {
+                    $delete_code = Model_Codificator::find($new_code->id);
+                    $delete_code -> delete();
+                    
+                    Session::set_flash('error','Pakalpojums netika pievienots');
+                    Response::redirect_back();
+                }
+            }
+            else
+            {
+                Session::set_flash('error','Pakalpojums netika pievienots');
+                Response::redirect_back();
+            }
+        }
+        else
+        {
+            Session::set_flash('error','Netika saņemti korekti dati');
+            Response::redirect_back();
+        }
+    }
+    
+    public function action_delete_service($service_id = null)
+    {
+        //Tikai pieslēgušies darbinieki drīkst piekļūt šai lapai
+        if(!Auth::check() || !Auth::member(50))
+        {
+            Response::redirect('/');
+        }
+        
+        if($service_id != '')
+        {
+            $delete_service = Model_Service::find($service_id);
+            $delete_code = Model_Codificator::find($delete_service->code_id);
+            
+            //Pārbauda, vai pakalpojums ir piesaistīts un aktīvs kādam klientam
+            $query_existing_srv = DB::select('*')
+                    ->from('user_services')
+                    ->where('user_services.srv_id','=',$service_id)
+                    ->and_where('user_services.is_active','=','Y');
+            $exists_srv = $query_existing_srv -> as_object() -> execute() -> as_array();
+            
+            // Ir piesaistīts
+            if(!empty($exists_srv))
+            {
+                Session::set_flash('error','Pakalpojumu nedrīkst dzēst, jo tas ir piesaistīts klientam!');
+                Response::redirect_back();
+            }
+            
+            if($delete_code -> delete() && $delete_service -> delete())
+            {
+                Session::set_flash('success','Pakalpojums veiksmīgi izdzēsts');
+                Response::redirect_back();
+            }
+            else
+            {
+                Session::set_flash('error','Pakalpojums netika izdzēsts');
+                Response::redirect_back();
+            }
+        }
     }
     
 }
