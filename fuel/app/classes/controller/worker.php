@@ -148,12 +148,12 @@ class Controller_Worker extends Controller_Template
             $object = Model_Object::find($object_id);
             $object -> is_deleted = 'Y';
             
-            $query_service_id = DB::select('*')
+            $query_service_id = DB::select('user_services.id')
                                -> from ('user_services')
                                -> where('obj_id','=',$object_id);
             $service_id = $query_service_id -> as_object() -> execute() -> as_array();
             
-            $service = Model_User_Service::find($service_id);
+            $service = Model_User_Service::find($service_id[0]);
             $service -> is_active = 'N';
             
             Controller_Client::cre_cln_history($object->client_id, 'Dzēsts pakalpojums');

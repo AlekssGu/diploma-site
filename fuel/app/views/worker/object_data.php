@@ -9,6 +9,7 @@
             <div class="row">
                 <div class="col-md-5">
                     <h3>Pievienot jaunu pakalpojumu</h3>
+                        <?php if(!empty($services)) { ?>
                         <table id="new_service" class=" table table-bordered table-striped">
                             <tbody> 
                                 <tr>         
@@ -28,6 +29,11 @@
                         </table>
                     
                     <a href='#' id='btn_save' class="btn btn-default">Pievienot pakalpojumu</a>
+                    
+                        <?php } else { ?>
+                    <p>Sistēmā šobrīd nav neviena pakalpojuma! Pakalpojumus var izveidot <a href='/darbinieks/pakalpojumi' title='Pievienot pakalpojumu'>šeit</a>.</p>
+                        <?php } ?>
+
                 </div>
             </div>
 
