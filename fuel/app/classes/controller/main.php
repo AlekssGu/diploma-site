@@ -68,4 +68,9 @@ class Controller_Main extends Controller_Template
 		$this -> template -> title = "Lapa nav atrasta - Pilsētas ūdens";
                 $this -> template -> content = View::forge('main/404');
 	}
+        
+        public function action_redmine()
+        {
+            Response::redirect('http://udens.agusevs.com:8080');
+        }
 }
