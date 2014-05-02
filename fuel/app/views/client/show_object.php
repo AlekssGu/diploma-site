@@ -4,7 +4,7 @@
             <h1><?php echo $objects[0]->name;?> </h1>
             <p><?php echo $objects[0]->address; ?></p>
             <hr/>
-            <a href="/klients" alt="atpakaļ">Doties atpakaļ</a>
+            <a href="/abonents" alt="atpakaļ">Doties atpakaļ</a>
         </div>
     </div>
     

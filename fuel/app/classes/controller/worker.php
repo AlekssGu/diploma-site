@@ -13,11 +13,21 @@
  */
 class Controller_Worker extends Controller_Template
 {
+    /*
+     * Ja kāds nevēlams cilvēks vēlas lauzt sistēmu ievadot nepareizu adresi, sūtam uz galveno lapu
+     */
     public function action_worker() 
     {
         Response::redirect('/');
     }
     
+    /**
+     * Nodaļa: 3.3.3.2.	Klientu saraksta apskatīšana (darbinieks)
+     * Identifikators: CLN_SHOW_INFO
+     *
+     * Ļauj darbiniekam apskatīt klientu sarakstu
+     * 
+     */
     public function action_clients() 
     {
         //Tikai pieslēgušies darbinieku drīkst piekļūt šai lapai
@@ -26,8 +36,10 @@ class Controller_Worker extends Controller_Template
             Response::redirect('/');
         }
             
+        //Padodamie dati skatam
         $data = array();
 
+        //Klientu un to datu saraksts
         $query_clients = DB::select(array('users.id','user_id'),
                                     'users.*',
                                     'persons.*')
@@ -41,6 +53,13 @@ class Controller_Worker extends Controller_Template
         $this -> template -> content = View::forge('worker/clients',$data);        
     }
     
+    /**
+     * Nodaļa: 3.3.3.1.	Klienta informācijas apskatīšana (klients)
+     * Identifikators: CLN_SHOW_ALL
+     *
+     * Ļauj darbiniekam apskatīt klienta informāciju
+     * 
+     */
     public function action_load_client($id = null) 
     {
         //Tikai pieslēgušies darbinieku drīkst piekļūt šai lapai
@@ -93,6 +112,13 @@ class Controller_Worker extends Controller_Template
         else return \NULL;
     }
     
+    /**
+     * Nodaļa: 3.3.3.6.	Klienta objekta datu ielāde (darbinieks)
+     * Identifikators: CLN_LOAD_OBJ_DATA
+     *
+     * Ļauj darbiniekam ielādēt informāciju par izvēlētā klienta objektu
+     * 
+     */
     public function action_load_object_data($id = null) 
     {
         //Tikai pieslēgušies darbinieku drīkst piekļūt šai lapai
@@ -134,6 +160,13 @@ class Controller_Worker extends Controller_Template
         }
     }
     
+    /**
+     * Nodaļa: 3.3.3.7.	Klienta objekta dzēšana (darbinieks)
+     * Identifikators: CLN_DELETE_OBJECT
+     *
+     * Ļauj darbiniekam dzēst klienta objektu
+     * 
+     */
     public function action_delete_object($object_id = null)
     {
         //Tikai pieslēgušies darbinieku drīkst piekļūt šai lapai
@@ -162,17 +195,98 @@ class Controller_Worker extends Controller_Template
             $saved_srv = $service -> save();
             $saved_obj = $object -> save();
             
+            Session::set_flash('success','Objekts ir izdzēsts!');
+            
             Response::redirect_back(); 
         }
         else
         {
+            Session::set_flash('error','Objekts nav izdzēsts!');
+            
             $header = new Response();
             $header -> set_status(301);
             Response::redirect_back();
         }
     }
     
+        /**
+         * Nodaļa: 3.3.3.10.	Klienta objekta pievienošana (darbinieks)
+         * Identifikators: CLN_CREATE_OBJECT
+         *
+         * Darbinieks var pievienot klientam jaunu objektu
+         * 
+         */
+        public function action_add_object()
+        {
+            //Ja ir autorizējies un lietotājs ir darbinieks
+            if(Auth::check() && Auth::member(50))
+            {
+                if(Input::method()=='POST' && Security::check_token())
+                {
+                    //Izveido jaunu adresi 
+                    $new_address = new Model_Address();
+                    $new_address -> client_id = Input::post('client_id');
+                    $new_address -> city_id = Input::post('city_id');
+                    $new_address -> street = Input::post('street');
+                    $new_address -> house = Input::post('house');
+                    $new_address -> flat = Input::post('flat');
+                    $new_address -> district = Input::post('district');
+                    $new_address -> post_code = Input::post('post_code');
+                    $new_address -> addr_type = 'O';
+                    
+                    if($new_address -> save())
+                    {
+                        //Ja adrese izveidota, tad izveido jaunu objektu un piesaista izveidoto adresi
+                        $new_object = new Model_Object();
+                        $new_object -> client_id = Input::post('client_id');
+                        $new_object -> address_id = $new_address->id;
+                        $new_object -> name = Input::post('name');
+                        $new_object -> notes = Input::post('notes');
+                        $new_object -> is_deleted = 'N';
+                        
+                        if($new_object -> save())
+                        {
+                            //Ja objekts izveidots, tad saglabā to abonenta vēsturē un paziņo par to lietotājam
+                            Controller_Client::cre_cln_history(Input::post('client_id'),'Piesaistīts objekts');
+                            
+                            Session::set_flash('success','Objekts pievienots!');
+                            Response::redirect('/darbinieks/abonenti');
+                        }
+                        else
+                        {
+                            //Ja netika izveidots objekts, tad dzēš iepriekš izveidoto adresi
+                            $rollback = Model_Address::find($new_address->id);
+                            $rollback->delete();
+                            
+                            Session::set_flash('error','Neveiksme! Nebija iespējams izveidot jaunu objektu.');
+                            Response::redirect('/darbinieks/abonenti');
+                        }
+                    }
+                    else
+                    {
+                        Session::set_flash('error','Neveiksme! Nebija iespējams izveidot jaunu adresi.');
+                        Response::redirect('/darbinieks/abonenti');
+                    }
+                    
+                }
+                else //Nav POST dati vai CSRF tokens
+                {
+                    Response::redirect('/');
+                }
+            }
+            else //Nav autorizējies/tiesību
+            {
+                Response::redirect('/');
+            }
+        }
     
+    /**
+     * Nodaļa: 3.3.4.6.	Objektam piesaistītā pakalpojuma rediģēšana (darbinieks)
+     * Identifikators: SRV_EDIT_SERVICE
+     *
+     * Darbinieks var rediģēt klientam piesaistītā objekta pakalpojumus.
+     * 
+     */
     public function action_modify_service() 
     {
         //Tikai pieslēgušies darbinieku drīkst piekļūt šai lapai
@@ -232,7 +346,13 @@ class Controller_Worker extends Controller_Template
         else return false;
     }
     
-    //piesaista pakalpojumu objektam
+    /**
+     * Nodaļa: 3.3.4.10.	Pakalpojuma piesaistīšana klientam (darbinieks)
+     * Identifikators: SRV_ADD_CLIENT
+     *
+     * Uzņēmuma darbinieks var piesaistīt pakalpojumu klienta objektam.
+     * 
+     */
     public function action_add_service()
     {
         //Tikai pieslēgušies darbinieku drīkst piekļūt šai lapai
@@ -259,6 +379,13 @@ class Controller_Worker extends Controller_Template
         return Format::forge(array('id',$new_obj_srv->id))->to_json();
     }
     
+    /**
+     * Nodaļa: 3.3.4.10.	Pakalpojuma piesaistīšana klientam (darbinieks)
+     * Identifikators: SRV_ADD_CLIENT
+     *
+     * Uzņēmuma darbinieks var piesaistīt pakalpojumu klienta objektam.
+     * 
+     */
     public function action_deactivate_service()
     {
         //Tikai pieslēgušies darbinieki drīkst piekļūt šai lapai
@@ -301,6 +428,81 @@ class Controller_Worker extends Controller_Template
                 else return false;
     }
     
+        /**
+         * Nodaļa: 3.3.2.7.	Skaitītāja piesaistīšana objektam (darbinieks)
+         * Identifikators: MTR_ADD_SERVICE
+         *
+         * Darbinieks var piesaistīt skaitītāju klienta pakalpojumam.
+         * 
+         */
+        public function action_add_meter()
+        {
+            if(Auth::check() && Auth::member(50))
+            {
+                if(Input::method()=='POST' && Security::check_token())
+                {
+                    
+                    $new_meter = new Model_Meter();
+                    $new_meter -> service_id = Input::post('service_id');
+                    $new_meter -> date_from = Date::forge(strtotime(Input::post('date_from')))->format('%Y-%m-%d');
+                    $new_meter -> date_to = Date::forge(strtotime(Input::post('date_to')))->format('%Y-%m-%d');
+                    $new_meter -> meter_type = Input::post('meter_type');
+                    $new_meter -> water_type = Input::post('water_type');
+                    $new_meter -> worker_id = 1;
+                    $new_meter -> meter_number = Input::post('number');
+                    $new_meter -> meter_model = 'dummy';
+                    $new_meter -> meter_lead = Input::post('lead');
+                    
+                    if($new_meter -> save())
+                    {
+                        $new_last_reading = new Model_Reading();
+                        $new_last_reading -> meter_id = $new_meter->id;
+                        $new_last_reading -> lead = Input::post('lead');
+                        $new_last_reading -> date_taken = Date::forge(strtotime(Input::post('date_from')))->format('%Y-%m-%d');
+                        $new_last_reading -> period = 'Sākotnējais';
+                        $new_last_reading -> status = 'Sākotnējais';
+                        
+                        if($new_last_reading -> save())
+                        {
+                            $user_id = Model_Object::find(Input::post('object_id'))->client_id;
+                            Controller_Client::cre_cln_history($user_id, 'Pievienots jauns skaitītājs');
+                            
+                            Session::set_flash('success','Skaitītājs pievienots!');
+                            Response::redirect('/darbinieks/abonenti/apskatit-pakalpojumu/'.Input::post('object_id').'/'.Input::post('service_id'));   
+                        }
+                        else
+                        {
+                            $delete = Model_Meter::find($new_meter->id);
+                            $delete -> delete();
+                            
+                            Session::set_flash('error','Neizdevās pievienot skaitītāju!');
+                            Response::redirect('/darbinieks/abonenti/apskatit-pakalpojumu/'.Input::post('object_id').'/'.Input::post('service_id'));
+                        }
+                    }
+                    else
+                    {
+                        Session::set_flash('error','Neveiksme! Neizdevās pievienot skaitītāju!');
+                        Response::redirect('/darbinieks/abonenti/apskatit-pakalpojumu/'.Input::post('object_id').'/'.Input::post('service_id'));
+                    }
+                }
+                else
+                {
+                    Response::redirect('/darbinieks/abonenti/apskatit-pakalpojumu/'.Input::post('object_id').'/'.Input::post('service_id'));
+                }
+            }
+            else
+            {
+                Response::redirect('/');
+            }
+        }
+    
+    /**
+     * Nodaļa: 3.3.2.8.	Skaitītāja labošana (darbinieks)
+     * Identifikators: MTR_EDIT_INFO
+     *
+     * Darbinieks var labot klienta objekta skaitītāja informāciju
+     * 
+     */
     public function action_edit_meter()
     {
         //Tikai pieslēgušies darbinieki drīkst piekļūt šai lapai
@@ -335,6 +537,13 @@ class Controller_Worker extends Controller_Template
         
     }
     
+    /**
+     * Nodaļa: 3.3.2.9.	Skaitītāja dzēšana (darbinieks)
+     * Identifikators: MTR_DELETE
+     *
+     * Darbinieks var izdzēst klienta objekta skaitītāju.
+     * 
+     */
     public function action_remove_meter($service_id = null)
     {
         //Tikai pieslēgušies darbinieki drīkst piekļūt šai lapai
@@ -364,9 +573,21 @@ class Controller_Worker extends Controller_Template
             Session::set_flash('success','Skaitītājs veiksmīgi noņemts!');
             Response::redirect_back();
         }
+        else
+        {
+            Session::set_flash('error','Kļūda! Skaitītājs nav noņemts.');
+            Response::redirect_back();
+        }
         
     }
     
+    /**
+     * Nodaļa: 3.3.3.10.	Visu klientu ievadīto datu apskatīšana (darbinieks)
+     * Identifikators: CLN_ENTERED_DATA_LIST
+     *
+     * Darbinieks var apskatīt klientu ievadītos datus saraksta veidā
+     * 
+     */
     public function action_all_entered_data()
     {
         //Datu masīvs skatam
@@ -391,6 +612,15 @@ class Controller_Worker extends Controller_Template
         $this -> template -> content = View::forge('worker/all_entered_data', $data);
     }
     
+    /**
+     * Nodaļa: 3.3.2.11.	Skaitītāja rādījuma atgriešana (darbinieks)
+     * Identifikators: MTR_REJECT_RDN
+     *
+     * Darbinieks var apstiprināt iesniegto skaitītāja rādījumu. 
+     * Kad tiek apstiprināts skaitītāja rādījums, tam uzstādās statuss „Atgriezts” 
+     * un klients to redz kā pēdējo iesniegto rādījumu.
+     * 
+     */
     public function action_return_reading()
     {
         //Tikai pieslēgušies darbinieki drīkst piekļūt šai lapai
@@ -431,13 +661,18 @@ class Controller_Worker extends Controller_Template
                     Response::redirect_back();
                 }
             }
-            
-            
-            
         }
-        
     }
     
+    /**
+     * Nodaļa: 3.3.2.10.	Skaitītāja rādījuma apstiprināšana (darbinieks)
+     * Identifikators: MTR_ACCEPT_RDN
+     *
+     * Darbinieks var apstiprināt iesniegto skaitītāja rādījumu. 
+     * Kad tiek apstiprināts skaitītāja rādījums, tam uzstādās statuss „Apstiprināts” 
+     * un klients to redz kā pēdējo iesniegto rādījumu.
+     * 
+     */
     public function action_accept_reading()
     {
         //Tikai pieslēgušies darbinieki drīkst piekļūt šai lapai
@@ -476,13 +711,16 @@ class Controller_Worker extends Controller_Template
                     Response::redirect_back();
                 }
             }
-            
-            
-            
         }
-        
     }
     
+    /**
+     * Nodaļa: 3.3.3.6.	Klienta informācijas rediģēšana (darbinieks)
+     * Identifikators: CLN_EDIT_ALL_INFO
+     *
+     * Sistēmas darbinieki, administratori var rediģēt esoša klienta informāciju.
+     * 
+     */
     public function action_change_client_data() 
     {
         //Tikai pieslēgušies darbinieki drīkst piekļūt šai lapai
@@ -493,9 +731,10 @@ class Controller_Worker extends Controller_Template
         
         $saved = false;
         
+        //Ja ir saņemti dati
         if(Input::method()=='POST')
         {
-            
+            //Ja maina klienta numuru
             if(Input::post('name') == 'cln_number')
             {
                 $client = Model_User::find(Input::post('pk'));
@@ -504,6 +743,7 @@ class Controller_Worker extends Controller_Template
                 
                 Controller_Client::cre_cln_history(Input::post('pk'), 'Labots klienta numurs');
             }
+            //Ja maina personas tipu
             else if(Input::post('name') == 'person_type')
             {
                 $client = Model_User::find(Input::post('pk'));
@@ -513,6 +753,7 @@ class Controller_Worker extends Controller_Template
                 
                 Controller_Client::cre_cln_history(Input::post('pk'), 'Labots personas tips');
             }
+            //Ja maina klienta vārdu
             else if(Input::post('name') == 'cln_name')
             {
                 $client = Model_User::find(Input::post('pk'));
@@ -522,6 +763,7 @@ class Controller_Worker extends Controller_Template
                 
                 Controller_Client::cre_cln_history(Input::post('pk'), 'Labots klienta vārds');
             }
+            //Ja maina klienta uzvārdu
             else if(Input::post('name') == 'cln_surname')
             {
                 $client = Model_User::find(Input::post('pk'));
@@ -531,6 +773,7 @@ class Controller_Worker extends Controller_Template
                 
                 Controller_Client::cre_cln_history(Input::post('pk'), 'Labots klienta uzvārds');
             }
+            //Ja maina klienta personas kodu
             else if(Input::post('name') == 'client_pk')
             {
                 $client = Model_User::find(Input::post('pk'));
@@ -540,6 +783,7 @@ class Controller_Worker extends Controller_Template
                 
                 Controller_Client::cre_cln_history(Input::post('pk'), 'Labots klienta personas kods');
             }
+            //Ja maina klienta telefona numuru
             else if(Input::post('name') == 'client_phone')
             {
                 $client = Model_User::find(Input::post('pk'));
@@ -549,12 +793,18 @@ class Controller_Worker extends Controller_Template
                 
                 Controller_Client::cre_cln_history(Input::post('pk'), 'Labots klienta telefona numurs');
             }
+            //Ja maina klienta e-pastu
             else if(Input::post('name') == 'client_email')
             {
+                //E-pastam jābūt unikālam
+                $check_existing = Model_User::find_by_email(Input::post('value'));
+                if(!empty($check_existing)) return false;
+                
                 $client = Model_User::find(Input::post('pk'));
                 $client -> email = Input::post('value');
                 $saved = $client -> save();
             }
+            //Ja atver klienta kontu
             else if(Input::post('name') == 'activate')
             {
                 $client = Model_User::find(Input::post('pk'));
@@ -565,12 +815,14 @@ class Controller_Worker extends Controller_Template
                 {
                     Controller_Client::cre_cln_history(Input::post('pk'), 'Atvērts lietotāja konts');
                     
+                    //Atgriež json, ka ir saglabāts
                     $json_string = '{"user_id":' . Input::post('pk') .',"saved":"true"}';
                     return $json_string;
                 }
                 else return false;
                 
             }
+            //Ja slēdz lietotāja kontu
             else if(Input::post('name') == 'deactivate')
             {
                 $client = Model_User::find(Input::post('pk'));
@@ -584,8 +836,7 @@ class Controller_Worker extends Controller_Template
                     $json_string = '{"user_id":' . Input::post('pk') .',"saved":"true"}';
                     return $json_string;
                 }
-                else return false;
-                
+                else return false;   
             }
             else return false;
         } 
@@ -595,6 +846,13 @@ class Controller_Worker extends Controller_Template
         else return true;
     }
     
+    /**
+     * Nodaļa: 3.3.4.2.	Pakalpojumu saraksta apskatīšana (darbinieks)
+     * Identifikators: SRV_LIST_ALL
+     *
+     * Uzņēmuma darbinieki var apskatīt piedāvājamo pakalpojumu sarakstu
+     * 
+     */
     public function action_services()
     {
         //Tikai pieslēgušies darbinieki drīkst piekļūt šai lapai
@@ -621,6 +879,13 @@ class Controller_Worker extends Controller_Template
         
     }
     
+    /**
+     * Nodaļa: 3.3.4.1.	Pakalpojuma izveidošana (darbinieks)
+     * Identifikators: SRV_CREATE
+     *
+     * Uzņēmuma darbinieks var izveidot jaunu pakalpojumu
+     * 
+     */
     public function action_create_service()
     {
         //Tikai pieslēgušies darbinieki drīkst piekļūt šai lapai
@@ -683,6 +948,13 @@ class Controller_Worker extends Controller_Template
         }
     }
     
+    /**
+     * Nodaļa: 3.3.4.4.	Pakalpojuma dzēšana (darbinieks)
+     * Identifikators: SRV_DELETE
+     *
+     * Uzņēmuma darbinieks var dzēst pakalpojumu
+     * 
+     */
     public function action_delete_service($service_id = null)
     {
         //Tikai pieslēgušies darbinieki drīkst piekļūt šai lapai
@@ -722,5 +994,4 @@ class Controller_Worker extends Controller_Template
             }
         }
     }
-    
 }

@@ -16,17 +16,18 @@
  */
 class Controller_Static extends Controller_Template
 {
-
+        // Ja kāds nevēlams cilvēks vēlas salauzt sistēmu, ievadot nepareizu adresi, sūtam viņu uz sākumlapu
 	public function action_recent()
 	{
                 Response::redirect('/');
 	}
         
         /**
-	 * Galvenā lapas (index) funkcija
+	 * Funkcija: 3.3.5.3.	Ziņu lapas attēlošana (viesis, klients, darbinieks)
+         * Identifikators: IS_STC_NEWS
 	 *
-	 * Uzstāda: lapas nosaukums, saturs
-         * 
+         * Visi lietotāji var skatīt ziņu lapu, kur ir jaunākās ziņas un aprakstītas aktualitātes sakarā ar uzņēmuma darbību. 
+         * TODO: dinamiski pievienot/attēlot ziņas
 	 */
 	public function action_recent_news()
 	{
@@ -35,24 +36,26 @@ class Controller_Static extends Controller_Template
 	}
         
         /**
-	 * Aktuālo bojājumu karte
+	 * Funkcija: 3.3.5.8.	Pakalpojumu lapas attēlošana (viesis, klients, darbinieks)
+         * Identifikators: IS_STC_SERVICES
 	 *
-	 * Uzstāda: lapas nosaukums, saturs
+         * Lietotāji var skatīt pieejamos pakalpojumus.
+         * TODO: ierakstīt datubāzē pakalpojumus un izvadīt dinamiski
          * 
 	 */
-	public function action_recent_map()
-	{
-                $this -> template -> title = "Karte - Pilsētas ūdens";
-                $this -> template -> content = View::forge('static/recent/map');
-	}
-        
 	public function action_services()
 	{
                 $this -> template -> title = "Pakalpojumi - Pilsētas ūdens";
                 $this -> template -> content = View::forge('static/services');
 	}
         
-        // Par mums sadaļas:        
+        /**
+	 * Funkcija: 3.3.5.10.	Par mums lapu attēlošana (viesis, klients, darbinieks)
+         * Identifikators: IS_STC_ABOUT
+	 *
+         * Lietotāji var skatīt informāciju par uzņēmumu
+         * 
+	 */    
 	public function action_about($page_name = null)
 	{
             $data = array();

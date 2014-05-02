@@ -17,12 +17,13 @@
 class Controller_Client extends Controller_Template
 {
 
-	/**
-	 * Galvenā lapas (index) funkcija
-	 *
-	 * Uzstāda: lapas nosaukums, saturs
+        /**
+         * Nodaļa: 3.3.3.1.	Klienta informācijas apskatīšana (klients)
+         * Identifikators: CLN_SHOW_INFO
+         *
+         * Ļauj klientam apskatīt informāciju par sevi 
          * 
-	 */
+         */
 	public function action_client()
 	{
             if(Auth::check())
@@ -98,75 +99,112 @@ class Controller_Client extends Controller_Template
             }
 	}
         
-	/**
-         *   Darbinieks var pievienot objektu
+        /**
+	 * Funkcija: 3.3.3.2.	Lietotāja paroles izsūtīšana (klients)
+         * Identifikators: CLN_EDIT_INFO
+	 *
+	 * Ļauj lietotājam mainīt e-pastu, telefona numuru un paroli
+         * Dati tiek sūtīti ar jQuery AJAX palīdzību
+         * 
 	 */
-        public function action_add_object()
+        public function action_change_data()
         {
-            //Ja ir autorizējies un lietotājs ir darbinieks
-            if(Auth::check() && Auth::member(50))
-            {
-                if(Input::method()=='POST' && Security::check_token())
-                {
-                    //Izveido jaunu adresi 
-                    $new_address = new Model_Address();
-                    $new_address -> client_id = Input::post('client_id');
-                    $new_address -> city_id = Input::post('city_id');
-                    $new_address -> street = Input::post('street');
-                    $new_address -> house = Input::post('house');
-                    $new_address -> flat = Input::post('flat');
-                    $new_address -> district = Input::post('district');
-                    $new_address -> post_code = Input::post('post_code');
-                    $new_address -> addr_type = 'O';
-                    
-                    if($new_address -> save())
-                    {
-                        //Ja adrese izveidota, tad izveido jaunu objektu un piesaista izveidoto adresi
-                        $new_object = new Model_Object();
-                        $new_object -> client_id = Input::post('client_id');
-                        $new_object -> address_id = $new_address->id;
-                        $new_object -> name = Input::post('name');
-                        $new_object -> notes = Input::post('notes');
-                        $new_object -> is_deleted = 'N';
-                        
-                        if($new_object -> save())
-                        {
-                            //Ja objekts izveidots, tad saglabā to abonenta vēsturē un paziņo par to lietotājam
-                            Controller_Client::cre_cln_history(Input::post('client_id'),'Piesaistīts objekts');
-                            
-                            Session::set_flash('success','Objekts pievienots!');
-                            Response::redirect('/darbinieks/abonenti');
-                        }
-                        else
-                        {
-                            //Ja netika izveidots objekts, tad dzēš iepriekš izveidoto adresi
-                            $rollback = Model_Address::find($new_address->id);
-                            $rollback->delete();
-                            
-                            Session::set_flash('error','Neveiksme! Nebija iespējams izveidot jaunu objektu.');
-                            Response::redirect('/darbinieks/abonenti');
-                        }
-                    }
-                    else
-                    {
-                        Session::set_flash('error','Neveiksme! Nebija iespējams izveidot jaunu adresi.');
-                        Response::redirect('/darbinieks/abonenti');
-                    }
-                    
-                }
-                else //Nav POST dati vai CSRF tokens
-                {
-                    Response::redirect('/');
-                }
-            }
-            else //Nav autorizējies/tiesību
+            // Lietotājam jābūt autorizētam
+            if(!Auth::check())
             {
                 Response::redirect('/');
             }
+            
+            //Padod datus no formā iebūvētās labošanas
+            //Mainam e-pastu
+            if(Input::method()=='POST' && Input::post('action') == 'email')
+            {
+                    try {
+                            //Mēģinam mainīt e-pastu
+                            $changed = Auth::update_user(
+                                                array(
+                                                        'email' => Input::post('value')
+                                                     )
+                                                );
+                            //Ja mainīts, tad saglabā to pie abonenta vēstures
+                            if($changed) 
+                            {
+                                Controller_Client::cre_cln_history(Auth::get('id'),'Mainīta e-pasta adrese');
+                                return true;
+                            }
+                            //Nav izdevies mainīt
+                            else return false;
+
+                    //Nav izdevies mainīt
+                    } catch (\SimpleUserUpdateException $e)
+                    {
+                        $response = new Response();
+                        $response -> set_status(304); //Not modified
+                        return $response;
+                    }
+            }
+            //Padod datus no formā iebūvētās labošanas
+            //Mainam telefona numuru
+            if(Input::method()=='POST' && Input::post('action') == 'phone')
+                {
+                            //Meklējam lietotāja un personas objektus
+                            $user_object = Model_User::find(Auth::get('id'));
+                            $person_object = Model_Person::find($user_object->person_id);
+                            
+                            //Mainam telefona numuru
+                            $person_object -> mobile_phone = Input::post('value');
+                            
+                            //Ja mainīts, tad saglabā to pie abonenta vēstures
+                            if($person_object -> save()) 
+                            {
+                                Controller_Client::cre_cln_history(Auth::get('id'),'Mainīts telefona numurs');
+                                return true;
+                            }
+                            //Uzstāda "Not modified" statusu
+                            else 
+                            {
+                                $response = new Response();
+                                $response -> set_status(304);
+                                return $response;
+                            }
+                }
+            
+            //Ja ir POST dati, tad tas nozīmē, ka maina paroli
+            if(Input::method()=='POST' && Security::check_token())
+            {                
+                //Parolēm jāsakrīt
+                if(Input::post('new_password') != Input::post('new_secpassword'))
+                {
+                    Session::set_flash('error','Jaunājām parolēm jāsakrīt!');
+                }
+                //Varbūt paroli nemaina?
+                elseif(Input::post('old_password') == Input::post('new_password'))
+                {
+                    Session::set_flash('error','Parole netika nomainīta! Vecā parole sakrīt ar jauno paroli.');
+                }
+                else
+                {
+                    //Mainam paroli
+                    $changed = Auth::change_password(Input::post('old_password'),Input::post('new_password'));
+                        if($changed) 
+                        {
+                            Session::set_flash('success','Parole mainīta!');
+                            Controller_Client::cre_cln_history(Auth::get('id'),'Mainīta parole');
+                        }
+                        else Session::set_flash('error','Parole netika nomainīta! Ievadīta nepareiza vecā parole.');
+                }
+            }
+            
+            $this->template->title = "Paroles maiņa - Pilsētas ūdens";
+            $this->template->content = View::forge('connection/change-data');
         }
         
-	/**
-         *  Klients var apskatīt visus objektus
+        /**
+	 * Funkcija: 3.3.3.3.	Klienta objektu saraksta apskatīšana (klients)
+         * Identifikators: CLN_SHOW_ALL_OBJ
+	 *
+	 * Ļauj lietotājam apskatīt visus savus objektus saraksta veidā
+         * 
 	 */
         public function action_all_objects()
         {
@@ -218,42 +256,20 @@ class Controller_Client extends Controller_Template
                 Response::redirect('/');
             }
         }
-        
-        public function action_all_objects_delete($id = null)
-        {
-            if(Auth::check())
-            {
-                if(isset($id))
-                {
-                    $object = Model_Object::find($id);
-                    
-                    if($object && $object->client_id = Auth::get('id'))
-                    {
-                        $object->delete();
-                        Response::redirect_back();
-                    }
-                    else
-                    {
-                        Session::set_flash('error','Neveiksme! Nebija iespējams dzēst objektu.');
-                        Response::redirect('/klients');
-                    }
-                }
-                else
-                {
-                    Session::set_flash('error','Neveiksme! Šāds objekts nepastāv!');
-                    Response::redirect('/klients');
-                }
-            }
-            else
-            {
-                Response::redirect('/');
-            }
-        }
-        
+
+        /**
+	 * Funkcija: 3.3.3.4.	Klientam piesaistītā objekta apskatīšana (klients)
+         * Identifikators: CLN_SHOW_OBJ
+	 *
+	 * Ļauj lietotājam apskatīt sava objekta informāciju
+         * 
+	 */
         public function action_all_objects_show($id = null)
         {
+            //Ja ir autorizējies
             if(Auth::check())
             {
+                //Ja ir padots objekta id, kuru apskatīt
                 if(isset($id))
                 {
                     $object = Model_Object::find($id);
@@ -337,73 +353,22 @@ class Controller_Client extends Controller_Template
             }
         }
         
-        public function action_add_meter()
-        {
-            if(Auth::check() && Auth::member(50))
-            {
-                if(Input::method()=='POST' && Security::check_token())
-                {
-                    
-                    $new_meter = new Model_Meter();
-                    $new_meter -> service_id = Input::post('service_id');
-                    $new_meter -> date_from = Date::forge(strtotime(Input::post('date_from')))->format('%Y-%m-%d');
-                    $new_meter -> date_to = Date::forge(strtotime(Input::post('date_to')))->format('%Y-%m-%d');
-                    $new_meter -> meter_type = Input::post('meter_type');
-                    $new_meter -> water_type = Input::post('water_type');
-                    $new_meter -> worker_id = 1;
-                    $new_meter -> meter_number = Input::post('number');
-                    $new_meter -> meter_model = 'dummy';
-                    $new_meter -> meter_lead = Input::post('lead');
-                    
-                    if($new_meter -> save())
-                    {
-                        $new_last_reading = new Model_Reading();
-                        $new_last_reading -> meter_id = $new_meter->id;
-                        $new_last_reading -> lead = Input::post('lead');
-                        $new_last_reading -> date_taken = Date::forge(strtotime(Input::post('date_from')))->format('%Y-%m-%d');
-                        $new_last_reading -> period = 'Sākotnējais';
-                        $new_last_reading -> status = 'Sākotnējais';
-                        
-                        if($new_last_reading -> save())
-                        {
-                            $user_id = Model_Object::find(Input::post('object_id'))->client_id;
-                            Controller_Client::cre_cln_history($user_id, 'Pievienots jauns skaitītājs');
-                            
-                            Session::set_flash('success','Skaitītājs pievienots!');
-                            Response::redirect('/darbinieks/abonenti/apskatit-pakalpojumu/'.Input::post('object_id').'/'.Input::post('service_id'));   
-                        }
-                        else
-                        {
-                            $delete = Model_Meter::find($new_meter->id);
-                            $delete -> delete();
-                            
-                            Session::set_flash('error','Neizdevās pievienot skaitītāju!');
-                            Response::redirect('/darbinieks/abonenti/apskatit-pakalpojumu/'.Input::post('object_id').'/'.Input::post('service_id'));
-                        }
-                    }
-                    else
-                    {
-                        Session::set_flash('error','Neveiksme! Neizdevās pievienot skaitītāju!');
-                        Response::redirect('/darbinieks/abonenti/apskatit-pakalpojumu/'.Input::post('object_id').'/'.Input::post('service_id'));
-                    }
-                }
-                else
-                {
-                    Response::redirect('/darbinieks/abonenti/apskatit-pakalpojumu/'.Input::post('object_id').'/'.Input::post('service_id'));
-                }
-            }
-            else
-            {
-                Response::redirect('/');
-            }
-        }
-        
+        /**
+	 * Funkcija: 3.3.2.2.	Skaitītāja rādījuma pievienošana (klients)
+         * Identifikators: MTR_ADD_READING
+	 *
+	 * Klients var ievadīt skaitītāja rādījumus par kārtējo periodu
+         * 
+	 */
         public function action_add_reading()
         {
+            //Ir autorizējies
             if(Auth::check())
             {
+                //Ir padoti dati un CSRF žetons (token)
                 if(Input::method() == 'POST' && Security::check_token()) 
                     {
+                        //Ir padots rādījums un skaitītāja id
                         if((Input::post('reading') != '') && (Input::post('meter_id') != ''))
                         {
                             //Ja nospiesta poga "Iesniegt"
@@ -431,12 +396,14 @@ class Controller_Client extends Controller_Template
 
                                         $saved = $existing_reading -> save();
                                     }
+                                    //Jaunais rādījums ir mazāks par iepriekšējo
                                     else
                                     {
                                         Session::set_flash('error','Skaitītaja rādījumam ir jābūt lielākam par iepriekšējo!');
                                         Response::redirect('/abonents/objekti/radijumi/' . Input::post('meter_id'));
                                     }
                                 }
+                                //Rādījums tiek iesniegts no visu skaitītāju saraksta
                                 else 
                                 {
                                     //Pārbauda iepriekšējo rādījumu, lai jaunais rādījums ir lielāks
@@ -453,6 +420,7 @@ class Controller_Client extends Controller_Template
                                         Response::redirect('/abonents/objekti/radijumi/' . Input::post('meter_id'));
                                     }
                                     
+                                    //Ir lielāks
                                     if(Input::post('reading') > $last_rdn->lead)
                                     {
                                         $new_reading = new Model_Reading();
@@ -465,6 +433,7 @@ class Controller_Client extends Controller_Template
 
                                         $saved = $new_reading -> save();
                                     }
+                                    //Nav lielāks
                                     else
                                     {
                                         Session::set_flash('error','Skaitītaja rādījumam ir jābūt lielākam par iepriekšējo!');
@@ -494,6 +463,7 @@ class Controller_Client extends Controller_Template
                                     Response::redirect('/abonents/objekti/radijumi/' . Input::post('meter_id'));
                                 }
                             }
+                            //Nospiesta poga "Pievienot"
                             else if(Input::post('action') == 2)
                             {
                                 //ir padots reading_id, kas nozīmē, ka tiek iesniegts no 
@@ -508,6 +478,7 @@ class Controller_Client extends Controller_Template
                                     $saved = $existing_reading -> save();
                                     
                                 }
+                                //Pievienots jauns rādījums
                                 else 
                                 {
                                     //Ir pievienots un uzreiz iesniegts jauns rādījums
@@ -516,7 +487,7 @@ class Controller_Client extends Controller_Template
 
                                     if($last_rdn->status == 'Labošanā') 
                                     {
-                                        Session::set_flash('error','Skaitītaja rādījums nav iesniegts, jo jums ir neiesniegti rādījumi!');
+                                        Session::set_flash('error','Skaitītaja rādījums nav pievienots, jo jums ir neiesniegti rādījumi!');
                                         Response::redirect('/abonents/objekti/radijumi/' . Input::post('meter_id'));
                                     }
 
@@ -568,7 +539,6 @@ class Controller_Client extends Controller_Template
                         Response::redirect_back();   
                     }
                     
-                
                 $this -> template -> title = "Skaitītāju rādījumi - Pilsētas ūdens";
                 //$this -> template -> content = View::forge('client/show_object/' . Input::post('meter_id'));
             }
@@ -578,35 +548,49 @@ class Controller_Client extends Controller_Template
             }
         }
         
+        /**
+	 * Funkcija: 3.3.2.5.	Skaitītāja rādījumu vēstures apskate (klients)
+         * Identifikators: MTR_HISTORY
+	 *
+	 * Klients var apskatīt savu skaitītāja rādījumu vēsturi (gan vēl neiesniegto, gan iesniegto rādījumu informāciju).
+         * TODO: pārbaudīt vai klientam ir tāds skaitītājs, lai jebkurš nevarētu apskatīt cita klienta datus
+	 */
         public function action_readings_history($id = null)
         {
+            //Vai ir autorizējies
             if(Auth::check())
-            {
+            {   
+                //Vai ir padoti dati ar GET
                 if(Input::method()) 
+                {
+                    if($id != '')
                     {
-                        if($id != '')
-                        {
-                            $data = array();
-                            
-                            $query_meter = DB::select('*')->from('meters')->where('meters.id','=',$id);
-                            $mtr_data = $query_meter -> as_object() -> execute() -> as_array();
-                            
-                            $query_object = DB::select('*')->from('user_services')->where('user_services.id','=',$mtr_data[0]->service_id);
-                            $object_data = $query_object -> as_object() -> execute() -> as_array();
-                            
-                            $query_readings = DB::select('*')
-                                            -> from('readings')
-                                            -> where('readings.meter_id','=',$id)
-                                            -> order_by('readings.id', 'desc');
+                        $data = array();
 
-                            $data['readings'] = $query_readings -> as_object() -> execute() -> as_array();
-                            $data['object_id'] = $object_data[0]-> obj_id;
-                            $data['meter_number'] = $mtr_data[0]->meter_number;
-                            $data['meter_id'] = $mtr_data[0]->id;
-                        }
+                        $query_meter = DB::select('*')->from('meters')->where('meters.id','=',$id);
+                        $mtr_data = $query_meter -> as_object() -> execute() -> as_array();
+
+                        $query_object = DB::select('*')->from('user_services')->where('user_services.id','=',$mtr_data[0]->service_id);
+                        $object_data = $query_object -> as_object() -> execute() -> as_array();
+
+                        $query_readings = DB::select('*')
+                                        -> from('readings')
+                                        -> where('readings.meter_id','=',$id)
+                                        -> order_by('readings.id', 'desc');
+
+                        $data['readings'] = $query_readings -> as_object() -> execute() -> as_array();
+                        $data['object_id'] = $object_data[0] -> obj_id;
+                        $data['meter_number'] = $mtr_data[0] -> meter_number;
+                        $data['meter_id'] = $mtr_data[0] -> id;
                     }
+                }
+                else
+                {
+                    Session::set_flash('error','Sistēmas kļūda! Netika padoti dati!');
+                    Response::redirect_back();
+                }
+                  
                     
-                
                 $this -> template -> title = "Skaitītāju rādījumi - Pilsētas ūdens";
                 $this -> template -> content = View::forge('client/show_readings',$data);
             }
@@ -616,6 +600,16 @@ class Controller_Client extends Controller_Template
             }
         }
         
+        /**
+	 * Funkcija: 3.3.2.6.	Klienta vēstures veidošana (sistēma)
+         * Identifikators: GLOBAL_CLN_CRE_HISTORY
+	 *
+         * Veido klienta vēsturi
+         * Parametri:
+         * p_cln_id = Klienta identifikators
+         * p_notes = Vēstures teksts/komentārs
+         * 
+	 */
         static function cre_cln_history(
             $p_cln_id = null,
             $p_notes = null)
@@ -631,6 +625,13 @@ class Controller_Client extends Controller_Template
             }
         }
         
+        /**
+	 * Funkcija: 3.3.4.8.	Objektam piesaistītā pakalpojuma apskatīšana (klients, darbinieks)
+         * Identifikators: SRV_SHOW_SERVICE
+	 *
+         * Klients var apskatīties viena pakalpojuma informāciju
+         * 
+	 */
         public function action_show_service()
         {
             $object_id = $this -> param('object_id');
@@ -729,6 +730,13 @@ class Controller_Client extends Controller_Template
             }
         }
         
+        /**
+	 * Funkcija: 3.3.4.5.	Pakalpojuma pieteikšana (klients)
+         * Identifikators: SRV_ADD_SERVICE
+	 *
+         * Klients var pieteikt jaunu pakalpojumu saviem objektiem.
+         * 
+	 */
         public function action_request_service()
         {
             $data = array();

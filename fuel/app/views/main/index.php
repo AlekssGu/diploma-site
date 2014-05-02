@@ -107,7 +107,7 @@
                     </div>
 
                     <!-- galvenās lapas forma -->
-                    <form id="registration_form" action="/user/register" method="POST" role="form">
+                    <form id="registration_form" action="/abonents/registreties" method="POST" role="form">
                     <div class="form-group">
                         <label for="client_number">Klienta numurs</label>
                         <input type="text" name="client_number" class="form-control" id="client_number" placeholder="Ieraksti savu klienta numuru">

@@ -64,7 +64,7 @@
         <h4 class="modal-title" id="myModalLabel">Pievienot skaitītāju</h4>
       </div>
 
-    <form id="add_meter" action="/klients/pievienot-skaititaju" method="POST" role="form">
+    <form id="add_meter" action="/darbinieks/abonenti/skaititaji/pievienot" method="POST" role="form">
       <input type="hidden" name="<?php echo \Config::get('security.csrf_token_key');?>" value="<?php echo \Security::fetch_token();?>" />
       <input type="hidden" name="service_id" value="<?php echo $service[0]->usr_srv_id; ?>" />
       <input type='hidden' name='object_id' value='<?php echo $object[0]->object_id; ?>' />

@@ -254,6 +254,7 @@ class Controller_Connection extends Controller_Template
       {
           $user_confirmed = false;
           
+            //Atrod lietotāju esošajā sistēmā, kuram ir padotais klienta numurs
             $query_ext_user = DB::select() 
                         -> from('external_users')
                         -> where('external_users.client_number','=',$data->username)
@@ -261,6 +262,7 @@ class Controller_Connection extends Controller_Template
             
             $ext_data = $query_ext_user -> as_object() -> execute() -> as_array();
 
+            //Atrod lietotāju jaunajā sistēmā, kuram ir padotais klienta numurs
             $query_local_user = DB::select() 
                         -> from('users')
                         -> where('users.username','=',$data->username)
@@ -268,6 +270,7 @@ class Controller_Connection extends Controller_Template
             
             $local_user = $query_local_user -> as_object() -> execute() -> as_array();
             
+            //Ja abi atrasti, tad atrod nepieciešamos datus
             if($ext_data && $local_user)
             {
                 // deklarētā pilsēta
@@ -310,6 +313,7 @@ class Controller_Connection extends Controller_Template
                 $sec_addr -> post_code = $ext_data[0] -> sec_postcode;
                 $sec_addr -> addr_type = 'F';
 
+                //Ja abas adreses ir izveidotas
                 if($pri_addr->save() && $sec_addr->save())
                 {
                     // Klienta dati
@@ -323,12 +327,14 @@ class Controller_Connection extends Controller_Template
                     $person_data -> mobile_phone = $ext_data[0] -> mobile_phone;
                     $person_data -> person_type = 'F';
 
+                    //Ja izdevies saglabāt personas datus
                     if($person_data->save())
                     {
                         $data -> person_id = $person_data->id;
                         $data -> is_active = 'Y';
                         $data -> is_confirmed = 'Y';
-
+                        
+                        //Ja izdevies saglabāt lietotāja datus
                         if($data -> save())
                         {
                             $user_confirmed = true;                        
@@ -824,84 +830,5 @@ class Controller_Connection extends Controller_Template
 
             $this->template->title = "Paroles maiņa - Pilsētas ūdens";
             $this->template->content = View::forge('connection/change');
-        }
-        
-        public function action_change_data()
-        {
-            // Lietotājam jābūt autorizētam
-            if(!Auth::check())
-            {
-                Response::redirect('/');
-            }
-            
-            //Padod datus no formā iebūvētās labošanas
-            if(Input::method()=='POST' && Input::post('action') == 'email')
-            {
-                    try {
-                            $changed = Auth::update_user(
-                                                array(
-                                                        'email' => Input::post('value')
-                                                     )
-                                                );
-                            if($changed) 
-                            {
-                                Controller_Client::cre_cln_history(Auth::get('id'),'Mainīta e-pasta adrese');
-                                return true;
-                            }
-                            else return false;
-
-                    } catch (\SimpleUserUpdateException $e)
-                    {
-                        $response = new Response();
-                        $response -> set_status(304);
-                        return $response;
-                    }
-            }
-                
-            if(Input::method()=='POST' && Input::post('action') == 'phone')
-                {
-                            $user_object = Model_User::find(Auth::get('id'));
-                            $person_object = Model_Person::find($user_object->person_id);
-                            
-                            $person_object -> mobile_phone = Input::post('value');
-                            
-                            
-                            if($person_object -> save()) 
-                            {
-                                Controller_Client::cre_cln_history(Auth::get('id'),'Mainīts telefona numurs');
-                                return true;
-                            }
-                            else 
-                            {
-                                $response = new Response();
-                                $response -> set_status(304);
-                                return $response;
-                            }
-                }
-            
-            if(Input::method()=='POST' && Security::check_token())
-            {                
-                if(Input::post('new_password') != Input::post('new_secpassword'))
-                {
-                    Session::set_flash('error','Jaunājām parolēm jāsakrīt!');
-                }
-                elseif(Input::post('old_password') == Input::post('new_password'))
-                {
-                    Session::set_flash('error','Parole netika nomainīta! Vecā parole sakrīt ar jauno paroli.');
-                }
-                else
-                {
-                    $changed = Auth::change_password(Input::post('old_password'),Input::post('new_password'));
-                        if($changed) 
-                        {
-                            Session::set_flash('success','Parole mainīta!');
-                            Controller_Client::cre_cln_history(Auth::get('id'),'Mainīta parole');
-                        }
-                        else Session::set_flash('error','Parole netika nomainīta! Ievadīta nepareiza vecā parole.');
-                }
-            }
-            
-            $this->template->title = "Paroles maiņa - Pilsētas ūdens";
-            $this->template->content = View::forge('connection/change-data');
         }
 }

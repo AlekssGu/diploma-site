@@ -37,10 +37,10 @@
             <?php if(!empty($objects)) { ?>
             <ul class="list-group">
                 <?php foreach ($objects as $object) { ?>
-                <a href="/klients/objekti/apskatit/<?php echo $object->object_id; ?>" title="Spied šeit, lai apskatītu sīkāku informāciju" class="list-group-item"><?php echo $object->name; ?></a>
+                <a href="/abonents/objekti/apskatit/<?php echo $object->object_id; ?>" title="Spied šeit, lai apskatītu sīkāku informāciju" class="list-group-item"><?php echo $object->name; ?></a>
                 <?php } ?>
             </ul>
-            <a href="/klients/objekti" class="btn btn-default btn-large" title="Skatīt visus objektus"><span class="glyphicon glyphicon-list"></span> Skatīt visus objektus</a>
+            <a href="/abonents/objekti" class="btn btn-default btn-large" title="Skatīt visus objektus"><span class="glyphicon glyphicon-list"></span> Skatīt visus objektus</a>
             <?php } else { ?>
                 <p>Nav piesaistīts neviens objekts</p>
             <?php } ?>

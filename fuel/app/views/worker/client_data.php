@@ -88,7 +88,7 @@
         <h4 class="modal-title" id="myModalLabel">Pievienot objektu</h4>
       </div>
 
-    <form id="add_object" action="/klients/pievienot-objektu" method="POST" role="form">
+    <form id="add_object" action="/darbinieks/abonenti/pievienot-objektu" method="POST" role="form">
       <input type="hidden" name="<?php echo \Config::get('security.csrf_token_key');?>" value="<?php echo \Security::fetch_token();?>" />
       <input type="hidden" name="client_id" value="<?php echo $data->user_id; ?>"/>
       <div class="modal-body">
