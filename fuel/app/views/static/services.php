@@ -40,8 +40,8 @@ Vivamus at ligula eget quam scelerisque sodales. Donec sit amet consectetur lore
 Maecenas varius ipsum sed sagittis aliquam. Donec faucibus eros sit amet tortor volutpat sagittis. Nulla porta id sem lobortis ornare. In rutrum, arcu a varius dapibus, ligula nisl porttitor libero, ac aliquet sem nunc vitae nibh. Aenean eleifend augue volutpat, elementum velit eu, feugiat ipsum. Morbi non lacinia nulla. Vestibulum metus risus, pharetra vitae commodo quis, blandit et est. Donec sed est eget lorem laoreet placerat eu quis sem. Suspendisse non velit vitae dui gravida molestie in quis eros. Vivamus vestibulum, augue vel molestie ullamcorper, arcu odio posuere massa, a semper purus nunc eget ante. Vestibulum eu justo ut dui facilisis commodo. Vivamus quis auctor felis, et condimentum lacus. Duis in eros quis odio pharetra pulvinar sit amet a orci. Mauris condimentum tellus ipsum, ut sodales leo hendrerit nec. Proin sit amet odio erat. Vestibulum urna turpis, cursus vel arcu non, elementum aliquam mi.</p>
 
             </div>
-            <div id="nai" class="page">
-                <h2>Notekūdeņu attīrīšanas iekārtas (NAI)</h2>
+            <div id="tech" class="page">
+                <h2>Tehniskā daļa</h2>
                 <hr/>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ut mauris et ipsum auctor dictum in nec mauris. Donec imperdiet et lectus ac bibendum. Proin id purus ultricies, laoreet metus vitae, laoreet arcu. Phasellus convallis urna non quam laoreet ullamcorper quis nec felis. In lobortis arcu quis libero sollicitudin, ornare auctor nibh tempor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean massa tellus, tristique rhoncus tristique non, sagittis sed felis. In eu tortor at urna pharetra congue a nec nibh.
 
@@ -54,8 +54,8 @@ Vivamus at ligula eget quam scelerisque sodales. Donec sit amet consectetur lore
 Maecenas varius ipsum sed sagittis aliquam. Donec faucibus eros sit amet tortor volutpat sagittis. Nulla porta id sem lobortis ornare. In rutrum, arcu a varius dapibus, ligula nisl porttitor libero, ac aliquet sem nunc vitae nibh. Aenean eleifend augue volutpat, elementum velit eu, feugiat ipsum. Morbi non lacinia nulla. Vestibulum metus risus, pharetra vitae commodo quis, blandit et est. Donec sed est eget lorem laoreet placerat eu quis sem. Suspendisse non velit vitae dui gravida molestie in quis eros. Vivamus vestibulum, augue vel molestie ullamcorper, arcu odio posuere massa, a semper purus nunc eget ante. Vestibulum eu justo ut dui facilisis commodo. Vivamus quis auctor felis, et condimentum lacus. Duis in eros quis odio pharetra pulvinar sit amet a orci. Mauris condimentum tellus ipsum, ut sodales leo hendrerit nec. Proin sit amet odio erat. Vestibulum urna turpis, cursus vel arcu non, elementum aliquam mi.</p>
 
             </div>
-            <div id="tech" class="page">
-                <h2>Tehniskā daļa</h2>
+            <div id="nai" class="page">
+                <h2>Notekūdeņu attīrīšanas iekārtas (NAI)</h2>
                 <hr/>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ut mauris et ipsum auctor dictum in nec mauris. Donec imperdiet et lectus ac bibendum. Proin id purus ultricies, laoreet metus vitae, laoreet arcu. Phasellus convallis urna non quam laoreet ullamcorper quis nec felis. In lobortis arcu quis libero sollicitudin, ornare auctor nibh tempor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean massa tellus, tristique rhoncus tristique non, sagittis sed felis. In eu tortor at urna pharetra congue a nec nibh.
 
