@@ -183,7 +183,8 @@ class Controller_Worker extends Controller_Template
             
             $query_service_id = DB::select('user_services.id')
                                -> from ('user_services')
-                               -> where('obj_id','=',$object_id);
+                               -> where('obj_id','=',$object_id)
+                               -> and_where('is_active','=','Y');
             $service_id = $query_service_id -> as_object() -> execute() -> as_array();
             
             $service = Model_User_Service::find($service_id[0]);
