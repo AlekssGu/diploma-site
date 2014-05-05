@@ -11,17 +11,13 @@
             <form role="form">
               <div class="form-group">
                 <label for="reason">Tēma</label>
-                <input type="text" class="form-control" id="reason" placeholder="Ievadiet ziņas tēmu">
-              </div>
-              <div class="form-group">
-                <label for="department">Nodaļa</label>
                 <select class="form-control">
-                    <option value='false'>Izvēlēties nodaļu</option>
-                    <option>Ūdensapgāde</option>
-                    <option>Kanalizācija</option>
-                    <option>Ūdens attīrīšanas iekārtas</option>
-                    <option>Abonentu daļa</option>
-                    <option>Cits</option>
+                    <option value='false'>Izvēlēties tēmu</option>
+                    <option>Tēma1</option>
+                    <option>Tēma2</option>
+                    <option>Tēma3</option>
+                    <option>Tēma4</option>
+                    <option>Tēma5</option>
                 </select>
               </div>
               <div class="form-group">

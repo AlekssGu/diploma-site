@@ -39,11 +39,8 @@ $(function () {
                 borderWidth: 0
             },
             series: [{
-                name: 'Ūdensapgāde',
+                name: 'Ūdens daudzums',
                 data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-            }, {
-                name: 'Notekūdeņi',
-                data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
             }]
         });
     });
@@ -52,39 +49,67 @@ $(function () {
             <div class="container">
                 <div class="main-block row">
                     <div class="col-md-3">
-                        <a href="/klients" class="btn btn-block btn-primary" title="Apskatīt klienta datus"><span class="glyphicon glyphicon-user"></span> Klienta informācija</a>
+                        <a href="/abonents" class="btn btn-block btn-primary" title="Apskatīt klienta datus"><span class="glyphicon glyphicon-user"></span> Klienta informācija</a>
                     </div>
                     <div class="col-md-3">
-                        <a href="#" class="btn btn-block btn-primary" title="Dati par patērētajiem resursiem"><span class="glyphicon glyphicon-tint"></span> Patēriņa dati</a>
+                        <a href="/abonents/pazinot-par-bojajumu" class="btn btn-block btn-primary" title="Paziņot par bojājumu"><span class="glyphicon glyphicon-earphone"></span> Paziņot par bojājumu</a>
                     </div>
                     <div class="col-md-3">
-                        <a href="#" class="btn btn-block btn-primary" title="Saņemtie pakalpojumi"><span class="glyphicon glyphicon-leaf"></span> Pakalpojumi</a>
+                        <a href="/abonents/pakalpojumi/pasutit" class="btn btn-block btn-primary" title="Pasūtīt pakalpojumu"><span class="glyphicon glyphicon-leaf"></span> Pasūtīt pakalpojumu</a>
                     </div>
                     <div class="col-md-3">
-                        <a href="#" class="btn btn-block btn-primary" title="Uzdot jautājumu"><span class="glyphicon glyphicon-question-sign"></span> Uzdot jautājumu</a>
+                        <a href="/palidziba/sazinaties" class="btn btn-block btn-primary" title="Uzdot jautājumu"><span class="glyphicon glyphicon-question-sign"></span> Uzdot jautājumu</a>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
+                
+                <div class="row main-block">
+                    <div class="col-md-12">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <h3 class="text-center">Mana pēdējā aktivitāte</h3>
-                                <hr/>
-                                <?php if(!empty($last_reading)) { ?>
-                                <h4>Iesniegtais mērījums:</h4>
-                                <p>Pēdējais mērījums: <?php echo $last_reading[0]->lead; ?> (<?php echo $last_reading[0]->amount_since_last; ?>m<span style="vertical-align:super; font-size:0.7em;">3</span>)</p>
-                                <?php } ?>
-                                <h4>Saņemtie pakalpojumi:</h4>
-                                <p>Pēdējais pakalpojums: Nosēdbedres likvidācija</p>
+                                <div class='col-md-6'>
+                                    <h3 class="text-center">Mana pēdējā aktivitāte</h3>
+                                    <hr/>
+                                    <?php if(!empty($last_reading)) { ?>
+                                    <h4>Iesniegtais mērījums:</h4>
+                                    <p>Pēdējais mērījums: <?php echo $last_reading[0]->lead; ?> (<?php echo $last_reading[0]->amount_since_last; ?>m<span style="vertical-align:super; font-size:0.7em;">3</span>)</p>
+                                    <?php } ?>
+                                    <h4>Saņemtie pakalpojumi:</h4>
+                                    <p>Pēdējais pakalpojums: Nosēdbedres likvidācija</p>
+                                </div>
+                                <div class='col-md-6'>
+                                    <h3 class='text-center'>Remontdarbi un avārijas</h3>
+                                    <hr/>
+                                    <div style="height:200px; width:500px" id="map_canvas"></div>
+                                </div>
                             </div>
                         </div>
                         <div class='text-center'>
-                        <a href="#" class="btn btn-info">Ievadīt mērījumu</a>
-                        <a href="#" class="btn btn-info">Paziņot par bojājumu</a>
-                        <a href="/abonents/pakalpojumi/pasutit" class="btn btn-info">Pasūtīt pakalpojumu</a>
+                        <a href="/abonents/ievadit-merijumus" class="btn btn-success btn-lg btn-block">Ievadīt mērījumus</a>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                </div>
+                
+                <div class='row main-block'>
+                    <div class="col-md-12">
                         <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                     </div>
                 </div>
+                
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script>
+        $(document).ready(function(){
+            
+      var map;
+      function initialize() {
+        var map_canvas = document.getElementById('map_canvas');
+        var map_options = {
+          center: new google.maps.LatLng(56.5369455, 21.0384852),
+          zoom: 12,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        map = new google.maps.Map(map_canvas, map_options);
+      }
+      google.maps.event.addDomListener(window, 'load', initialize);
+      
+        });
+    </script>

@@ -441,6 +441,26 @@ class Controller_Worker extends Controller_Template
             {
                 if(Input::method()=='POST' && Security::check_token())
                 {
+                    $exists_qnumber = DB::select('*')
+                            ->from('meters')
+                            ->join('user_services')->on('user_services.id','=','meters.service_id')
+                            ->where('meter_number','=',Input::post('number'))
+                            ->and_where('user_services.is_active','=','Y')
+                            ->limit(1)
+                            ->execute();
+                    //Ja eksistē skaitītājs ar ievadīto numuru - neļaujam to pievienot.
+                    if(count($exists_qnumber) > 0)
+                    {
+                        Session::set_flash('error','Neveiksme! Skaitītājs ar šādu numuru jau eksistē!');
+                        Response::redirect('/darbinieks/abonenti/apskatit-pakalpojumu/'.Input::post('object_id').'/'.Input::post('service_id'));
+                    }
+                    
+                    //Vai "datums no" ir lielāks par "datums līdz"
+                    if(Date::forge(strtotime(Input::post('date_from')))->format('%Y-%m-%d') > Date::forge(strtotime(Input::post('date_to')))->format('%Y-%m-%d'))
+                    {
+                        Session::set_flash('error','Neveiksme! Laukam "Datums no" jābūt mazākam par lauku "Datums līdz"!');
+                        Response::redirect('/darbinieks/abonenti/apskatit-pakalpojumu/'.Input::post('object_id').'/'.Input::post('service_id'));
+                    }
                     
                     $new_meter = new Model_Meter();
                     $new_meter -> service_id = Input::post('service_id');
@@ -450,7 +470,7 @@ class Controller_Worker extends Controller_Template
                     $new_meter -> water_type = Input::post('water_type');
                     $new_meter -> worker_id = 1;
                     $new_meter -> meter_number = Input::post('number');
-                    $new_meter -> meter_model = 'dummy';
+                    $new_meter -> meter_model = 'nav zināms';
                     $new_meter -> meter_lead = Input::post('lead');
                     
                     if($new_meter -> save())
@@ -593,12 +613,17 @@ class Controller_Worker extends Controller_Template
         //Datu masīvs skatam
         $data = array();
         
-        //Visi iesniegtie rādījumi
-        $query_last_readings = DB::select('*')->from('last_readings');
+        //Visi iesniegtie rādījumi izņemot sākotnējos
+        $query_last_readings = DB::select('*')
+                            ->from('last_readings')
+                            ->where('status','!=','Sākotnējais');
         $last_readings = $query_last_readings -> as_object() -> execute() -> as_array();
 
         //Iesniegtie pakalpojumi
-        $query_usr_srv_req = DB::select('*')->from('usr_service_requests');
+        $query_usr_srv_req = DB::select('*')
+                            ->from('all_usr_requests')
+                            ->where('status','!=','Atteikts')
+                            ->and_where('status','!=','Apstiprināts');
         $service_requests = $query_usr_srv_req -> as_object() -> execute() -> as_array();       
         
         //Iesniegtās avārijas
@@ -976,7 +1001,7 @@ class Controller_Worker extends Controller_Template
             $exists_srv = $query_existing_srv -> as_object() -> execute() -> as_array();
             
             // Ir piesaistīts
-            if(!empty($exists_srv))
+            if(count($exists_srv) > 0)
             {
                 Session::set_flash('error','Pakalpojumu nedrīkst dzēst, jo tas ir piesaistīts klientam!');
                 Response::redirect_back();
@@ -992,6 +1017,148 @@ class Controller_Worker extends Controller_Template
                 Session::set_flash('error','Pakalpojums netika izdzēsts');
                 Response::redirect_back();
             }
+        }
+    }
+    
+    /**
+     * Nodaļa: 3.3.4.3.	Pakalpojuma rediģēšana (darbinieks)
+     * Identifikators: SRV_EDIT
+     *
+     * Uzņēmuma darbinieki var rediģēt pakalpojumu.
+     * 
+     */
+    public function action_edit_service()
+    {
+        //Tikai pieslēgušies darbinieki drīkst piekļūt šai lapai
+        if(!Auth::check() || !Auth::member(50))
+        {
+            Response::redirect('/');
+        }
+        
+        if(Input::method() == 'POST')
+        {
+            //Ja maina kodu
+            if(Input::post('action') == 'code')
+            {
+                $check_existing = DB::select('*')
+                                    ->from('codificators')
+                                    ->where('codificators.code','=',Input::post('value'))
+                                    ->execute();
+                if(count($check_existing) > 0 )
+                {
+                    return false;
+                }
+                
+                $codificator = Model_Codificator::find(Input::post('pk'));
+                $codificator -> code = Input::post('value');
+                
+                if($codificator->save()) return true;
+                else return false;
+            }
+            //Ja maina pakalpojuma nosaukumu
+            else if(Input::post('action') == 'srv_name')
+            {
+                $service = Model_Service::find(Input::post('pk'));
+                $service -> name = Input::post('value');
+                
+                if($service->save()) return true;
+                else return false;
+            }
+           //Ja maina pakalpojuma aprakstu
+            else if(Input::post('action') == 'srv_desc')
+            {
+                $service = Model_Service::find(Input::post('pk'));
+                $service -> name = Input::post('value');
+                
+                if($service->save()) return true;
+                else return false;
+            }
+            else return false;
+        }
+        else return false;
+    }
+    
+    /**
+     * Nodaļa: 3.3.4.12.	Pakalpojuma pieprasījuma atteikšana (darbinieks)
+     * Identifikators: SRV_REJECT_REQUEST
+     *
+     * Uzņēmuma darbinieks var atteikt pasūtīto abonenta pakalpojumu
+     * 
+     */
+    public function action_reject_service_request()
+    {
+        //Tikai pieslēgušies darbinieki drīkst piekļūt šai lapai
+        if(!Auth::check() || !Auth::member(50))
+        {
+            Response::redirect('/');
+        }
+        
+        if(Input::method() == 'POST' && Security::check_token())
+        {
+            //Atrod pieprasījuma objektu un uzstāda statusu
+            $request = Model_Usr_Service_Request::find(Input::post('pk'));
+            $request -> status = 'Atteikts';
+            $request -> status_notes = Input::post('status_notes');
+            
+            //Ja izdevies atteikt, tad parāda paziņojumu par to
+            if($request -> save())
+            {
+                Session::set_flash('success','Pakalpojums atteikts!');
+                Response::redirect_back();
+            }
+            //Nav izdevies atteikt
+            else
+            {
+                Session::set_flash('error','Neveiksme! Pakalpojums netika atteikts!');
+                Response::redirect_back();
+            }
+        }
+        //Padoti nepareizi dati - pāradresējam uz sākumlapu
+        else
+        {
+            Response::redirect('/');
+        }
+    }
+    
+    /**
+     * Nodaļa: 3.3.4.9.	Pakalpojuma pieprasījuma apstiprināšana (darbinieks)
+     * Identifikators: SRV_ACCEPT_REQUEST
+     *
+     * Uzņēmuma darbinieks var apstiprināt pakalpojuma pieprasījumu.
+     * 
+     */
+    public function action_accept_service_request($req_id = null)
+    {
+        //Tikai pieslēgušies darbinieki drīkst piekļūt šai lapai
+        if(!Auth::check() || !Auth::member(50))
+        {
+            Response::redirect('/');
+        }
+        
+        if(Input::method())
+        {
+            //Atrod pieprasījuma objektu un uzstāda statusu
+            $request = Model_Usr_Service_Request::find($req_id);
+            $request -> status = 'Apstiprināts';
+            $request -> status_notes = 'Darbinieks ir apstiprinājis pakalpojuma pieprasījumu';
+            
+            //Ja izdevies atteikt, tad parāda paziņojumu par to
+            if($request -> save())
+            {
+                Session::set_flash('success','Pakalpojums apstiprināts!');
+                Response::redirect_back();
+            }
+            //Nav izdevies atteikt
+            else
+            {
+                Session::set_flash('error','Neveiksme! Pakalpojums netika apstiprināts!');
+                Response::redirect_back();
+            }
+        }
+        //Padoti nepareizi dati - pāradresējam uz sākumlapu
+        else
+        {
+            Response::redirect('/');
         }
     }
 }

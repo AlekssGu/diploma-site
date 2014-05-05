@@ -12,26 +12,20 @@
     
 
     <div class="row main-block">
-        
-                <?php if(Session::get_flash('success')) { ?>
-                    <div class="col-md-8">
-                        <div class="alert alert-success">
-                            <p class="text-success"><?php echo Session::get_flash('success'); ?></p>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-
-                <?php } elseif(Session::get_flash('error')) { ?>
-                    <div class="col-md-8">
-                        <div class="alert alert-danger">
-                            <p class="text-danger"><?php echo Session::get_flash('error'); ?></p>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                <?php } ?>
-                    
 
                     <div class="col-md-offset-3 col-md-6">
+                        <?php if(Session::get_flash('success')) { ?>
+                                <div class="alert alert-success">
+                                    <p class="text-success"><?php echo Session::get_flash('success'); ?></p>
+                                </div>
+                            <div class="clearfix"></div>
+
+                        <?php } elseif(Session::get_flash('error')) { ?>
+                                <div class="alert alert-danger">
+                                    <p class="text-danger"><?php echo Session::get_flash('error'); ?></p>
+                                </div>
+                            <div class="clearfix"></div>
+                        <?php } ?>
                         
                         <!-- galvenās lapas forma -->
                         <form id="request_form" action="/abonents/pakalpojumi/pasutit" method="POST" role="form">

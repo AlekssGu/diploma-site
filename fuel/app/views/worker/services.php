@@ -31,9 +31,9 @@
                 <?php foreach($services as $service) { ?>
                     <div class='well well-sm'>
                         <a href='/darbinieks/pakalpojumi/dzest/<?php echo $service->srv_id; ?>' onclick='return confirm("Vai tiešām vēlaties dzēst pakalpojumu?")' class="close">&times;</a>
-                        <p><strong>Kods:</strong> <?php echo $service -> code; ?></p>
-                        <p><strong>Nosaukums:</strong> <?php echo $service -> name; ?></p>
-                        <p><strong>Apraksts:</strong> <?php echo $service -> description; ?></p>
+                        <p><strong>Kods:</strong> <a href="#" data-pk="<?php echo $service->code_id;?>" class="code editable editable-click"><?php echo $service -> code; ?></a></p>
+                        <p><strong>Nosaukums:</strong> <a href="#" data-pk="<?php echo $service->srv_id; ?>" class="srv_name editable editable-click"><?php echo $service -> name; ?></a></p>
+                        <p><strong>Apraksts:</strong> <a href="#" data-pk="<?php echo $service->srv_id; ?>" class="srv_desc editable editable-click"><?php echo $service -> description; ?></a></p>
                     </div>
                 <?php } ?>
             <?php } else { ?>
@@ -82,6 +82,49 @@
 
 <script>
     $(document).ready(function() {
+        
+    //Labo pakalpojuma kodu ar ajax un x-editable palīdzību
+    $('.code').editable({
+        type: 'text',
+        url: '/darbinieks/pakalpojumi/labot',
+        params: {
+            action: 'code',
+        },
+        success: function(response) {
+            if(!response) {
+                return "Kļūda! Šāds kods jau pastāv datubāzē.";
+            } 
+        }  
+    }); 
+    
+    //Labo pakalpojuma nosaukumu ar ajax un x-editable palīdzību
+    $('.srv_name').editable({
+        type: 'text',
+        url: '/darbinieks/pakalpojumi/labot',
+        params: {
+            action: 'srv_name',
+        },
+        success: function(response) {
+            if(!response) {
+                return "Kļūda! Apraksts netika labots. Mēģini vēlreiz vai sazinies ar administratoru.";
+            } 
+        }  
+    }); 
+    
+    //Labo pakalpojuma aprakstu ar ajax un x-editable palīdzību
+    $('.srv_desc').editable({
+        type: 'text',
+        url: '/darbinieks/pakalpojumi/labot',
+        params: {
+            action: 'srv_desc',
+        },
+        success: function(response) {
+            if(!response) {
+                return "Kļūda! Apraksts netika labots. Mēģini vēlreiz vai sazinies ar administratoru.";
+            } 
+        }  
+    }); 
+        
         $('[data-dismiss=modal]').on('click', function (e) {
             var $t = $(this),
                 target = $t[0].href || $t.data("target") || $t.parents('.modal') || [];

@@ -10,7 +10,7 @@
     </div>
 
     <div class='row main-block'>
-        <a href='/darbinieks/pakalpojumi' class='btn btn-lg btn-default'>Pakalpojumu pārvaldība</a>
+        <a href='/darbinieks/pakalpojumi' class='btn btn-primary'>Pakalpojumu pārvaldība</a>
     </div>
     
     <div class="row">        

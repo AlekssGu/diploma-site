@@ -13,8 +13,8 @@ SELECT obj.client_id                                    AS client_id,
        CONCAT(adr.street, ' ', adr.house, 
                 IF(adr.flat != 0, ' - ', ''), 
                 IF(adr.flat != 0, adr.flat, ''), ', ', 
-                adr.post_code, ', ',
                 adr.district, ', ',  
+                adr.post_code, ', ',
                 cty.city_name)                          AS object_addr
   FROM objects obj
   JOIN addresses adr ON adr.id = obj.address_id

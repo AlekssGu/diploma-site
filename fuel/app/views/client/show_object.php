@@ -1,3 +1,5 @@
+<?php echo Asset::js('bootstrap-datepicker.js'); ?>
+<?php echo Asset::css('datepicker3.css'); ?>
 <div class="container">
     <div class="row">
         <div class="col-md-5">
@@ -15,7 +17,6 @@
         <ul class="nav nav-tabs" id="mytab">
           <li><a href="#pakalpojumi" data-toggle="tab">Pakalpojumi</a></li>
           <li><a href="#skaititaji" data-toggle="tab">Visi skaitītāji</a></li>
-          <li><a href="#vesture" data-toggle="tab">Pakalpojumu vēsture</a></li>
         </ul>
         <br/>
         <!-- Tab panes -->
@@ -42,10 +43,10 @@
                 <?php if(!empty($services)) { 
                         foreach ($services as $service) { ?>
                 
-                <?php $days = date_diff(date_create($service->date_to),date_create(date('Y-m-d')))->format('%a'); ?>
-                    <p><strong>Pakalpojums:</strong> <a href='/abonents/pakalpojumi/apskatit/<?php echo $service->obj_id . '/' . $service->usr_srv_id; ?>'><?php echo $service->name; ?> - <em><?php echo $service -> description; ?></em></a></p>
-                <p><strong>Termiņš:</strong> <?php echo date_format(date_create($service->date_from), 'd.m.Y');?> - <?php echo date_format(date_create($service->date_to), 'd.m.Y');?> (<?php if($days==1) echo 'vēl atlikusi ' . $days . ' diena'; elseif($days>1) echo 'vēl atlikušas ' . $days . ' dienas'; else echo 'nav aktīvs';?>)</p>
-                <br/><br/>
+                <?php //$days = date_diff(date_create($service->date_to),date_create(date('Y-m-d')))->format('%d'); ?>
+                    <p><strong>Pakalpojums:</strong> <a href='/abonents/pakalpojumi/apskatit/<?php echo $service->obj_id . '/' . $service->usr_srv_id; ?>'><?php echo $service->name; ?> - <em><?php echo $service -> description; ?></em></a> (<a href="#" class='dismiss_service' data-pk='<?php echo $service -> usr_srv_id; ?>' data-toggle="modal" data-target="#dismiss_service"><span class="glyphicon glyphicon-remove"></span> Atteikties</a>)</p>
+                    <p><strong>Termiņš:</strong> <?php echo date_format(date_create($service->date_from), 'd.m.Y');?> - <?php echo date_format(date_create($service->date_to), 'd.m.Y');?> <!--(<?php //if($days == 1) echo 'vēl atlikusi ' . $days . ' diena'; elseif($days > 1) echo 'vēl atlikušas ' . $days . ' dienas'; else echo 'nav aktīvs';?>)--></p>
+                    <br/><br/>
                 <?php } ?>
                 <?php } else echo '<p>Objektam nav neviena pakalpojuma</p>'; ?>
 
@@ -88,20 +89,63 @@
                                 <?php } ?>
                             </table>
                 <?php } else echo '<p>Objektam nav neviena skaitītāja</p>'; ?>
-            </div>
-            
-            <div class="tab-pane fade active" id="vesture">
-                Pakalpojumu vēsture
-            </div>
-            
+            </div>            
         </div>
    </div>
 </div>
+
+<!-- Atteikties no pakalpojuma -->
+<div class="modal fade" id="dismiss_service" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Atteikties no pakalpojuma</h4>
+      </div>
+        <form method="POST" action="/abonents/pakalpojumi/atteikties">
+            <input id='object' type='hidden' name='object' value='<?php echo $objects[0]->object_id; ?>' />
+            <input id='service' type='hidden' name='service' />
+            
+            <div class="modal-body">
+                <div class="date-pick form-group">
+                   <label for="date_from">Datums, kurā vēlaties beigt saistības</label>       
+                    <div class="input-group date">
+                      <input name='date_from' type="text" class="form-control" placeholder='dd.mm.gggg'><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Paskaidrojums, kādēļ vēlaties atteikties</label>       
+                    <textarea id="notes" name="notes" type="text" class="form-control" placeholder=""></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="reset" class="btn btn-default" data-dismiss="modal">Atcelt</button>
+              <button type="submit" class="btn btn-primary">Atteikties</button>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+<!-- /Atteikties no pakalpojuma -->
 
 <script>
     $(document).ready(function() {
     
     $('#mytab a:first').tab('show');
+    
+    $('.dismiss_service').click(function(){
+        $('#service').attr('value',$(this).attr('data-pk'));
+    });
+    
+    $('.date-pick .input-group.date').datepicker({
+        weekStart: 1,
+        format: "dd.mm.yyyy",
+        autoclose: true,
+        todayBtn: "linked",
+        language: "lv",
+        orientation: "top auto",
+        todayHighlight: true
+    });
     
     //Darbības {saglabāt;iesniegt}
     $('.submit-rdn').click(function(){

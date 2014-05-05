@@ -30,7 +30,9 @@ class Controller_Main extends Controller_Template
                 //Atrod klienta pēdējo iesniegto mērījumu
                 $last_reading_query = DB::select('*')
                                     ->from('last_readings')
-                                    ->where('client_id','=',Auth::get('id'));
+                                    ->where('client_id','=',Auth::get('id'))
+                                    ->and_where('is_active','=','Y')
+                                    ->order_by('rdn_id','DESC');
                 $last_reading = $last_reading_query -> as_object() -> execute() -> as_array();
                 
                 //Ja tāds ir atrasts, tad atrod klienta pirmspēdējo rādījumu

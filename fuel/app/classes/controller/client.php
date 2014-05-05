@@ -60,7 +60,8 @@ class Controller_Client extends Controller_Template
                             -> join('addresses')
                             -> on('addresses.id', '=', 'objects.address_id')
                             -> where('objects.client_id',Auth::get('id'))
-                            -> and_where('addresses.addr_type','=','O');
+                            -> and_where('addresses.addr_type','=','O')
+                            -> and_where('objects.is_deleted','=','N');
                 
                 $objects = $query->as_object()->execute()->as_array();
                 
@@ -306,6 +307,7 @@ class Controller_Client extends Controller_Template
                             }
                         }
                 
+                        // Funkcija: MTR_SHOW_INFO
                         $query_meters = DB::select('*')
                                                 -> from('last_readings')
                                                 -> where('last_readings.client_id',Auth::get('id'))
@@ -338,13 +340,13 @@ class Controller_Client extends Controller_Template
                     else
                     {
                         Session::set_flash('error','Neveiksme! Nav iespējams apskatīt objektu.');
-                        Response::redirect('/klients');
+                        Response::redirect('/abonents');
                     }
                 }
                 else
                 {
                     Session::set_flash('error','Neveiksme! Šāds objekts nepastāv!');
-                    Response::redirect('/klients');
+                    Response::redirect('/abonents');
                 }
             }
             else
@@ -652,7 +654,8 @@ class Controller_Client extends Controller_Template
                                 $query_services = DB::select('*')
                                                 -> from('all_obj_services')
                                                 -> where('all_obj_services.object_id','=',$object_id)
-                                                -> and_where('all_obj_services.usr_srv_id','=',$service_id);
+                                                -> and_where('all_obj_services.usr_srv_id','=',$service_id)
+                                                -> and_where('all_obj_services.is_active','=','Y');
 
                                 //Atlasam objektus
                                 $query_object = DB::select('client_objects.object_name',
@@ -660,12 +663,15 @@ class Controller_Client extends Controller_Template
                                                            'client_objects.object_id')
                                                 -> from('client_objects')
                                                 -> where('client_objects.object_id','=',$object_id)
-                                                -> and_where('client_objects.client_id','=',Auth::get('id'));
+                                                -> and_where('client_objects.client_id','=',Auth::get('id'))
+                                                -> and_where('client_objects.is_deleted','=','N');;
 
                                 //Atlasam skaitītājus
                                 $query_meters = DB::select('*')
                                                 -> from('meters')
-                                                -> where('meters.service_id','=',$service_id);
+                                                -> join('user_services')->on('user_services.srv_id','=','meters.service_id')
+                                                -> where('meters.service_id','=',$service_id)
+                                                -> and_where('user_services.is_active','=','Y');
 
                                 $data['service'] = $query_services -> as_object() -> execute() -> as_array();
                                 $data['object'] = $query_object -> as_object() -> execute() -> as_array();
@@ -675,7 +681,7 @@ class Controller_Client extends Controller_Template
                                 if(count($data['object'])==0)
                                 {
                                     Session::set_flash('error','Nav iespējams apskatīties šī objekta datus!');
-                                    Response::redirect('/klients');   
+                                    Response::redirect('/abonents');   
                                 }
                                 
                                 $this -> template -> content = View::forge('client/show_services',$data);
@@ -690,19 +696,23 @@ class Controller_Client extends Controller_Template
                                                 -> from('all_obj_services')
                                                 -> where('all_obj_services.object_id','=',$object_id)
                                                 -> and_where('all_obj_services.usr_srv_id','=',$service_id)
-                                                -> and_where('all_obj_services.client_id','=',$user_id);
+                                                -> and_where('all_obj_services.client_id','=',$user_id)
+                                                -> and_where('all_obj_services.is_active','=','Y');
 
                                 //Atlasam objektus
                                 $query_object = DB::select('client_objects.object_name',
                                                            'client_objects.object_addr',
                                                            'client_objects.object_id')
                                                 -> from('client_objects')
-                                                -> where('client_objects.object_id','=',$object_id);
+                                                -> where('client_objects.object_id','=',$object_id)
+                                                -> and_where('client_objects.is_deleted','=','N');
 
                                 //Atlasam skaitītājus
                                 $query_meters = DB::select('*')
                                                 -> from('meters')
-                                                -> where('meters.service_id','=',$service_id);
+                                                -> join('user_services')->on('user_services.id','=','meters.service_id')
+                                                -> where('meters.service_id','=',$service_id)
+                                                -> and_where('user_services.is_active','=','Y');
 
                                 $data['service'] = $query_services -> as_object() -> execute() -> as_array();
                                 $data['object'] = $query_object -> as_object() -> execute() -> as_array();
@@ -748,7 +758,10 @@ class Controller_Client extends Controller_Template
                 $services = $query_services -> as_object() -> execute() -> as_array();
                 
                 //Visi klienta objekti
-                $query_objects = DB::select('*')->from('client_objects')->where('client_id','=',Auth::get('id'));
+                $query_objects = DB::select('*')
+                        ->from('client_objects')
+                        ->where('client_id','=',Auth::get('id'))
+                        ->and_where('is_deleted','=','N');
                 $objects = $query_objects -> as_object() -> execute() -> as_array();
                 
                 $data['services'] = $services;
@@ -757,20 +770,47 @@ class Controller_Client extends Controller_Template
                 if(Input::method() == 'POST' && Security::check_token())
                 {
                     //Pārbauda, vai objektam jau nav tāds pakalpojums
-                    $query = DB::select('*')->
+                    $check_services = DB::select('*')->
                                 from('user_services')->
                                 where('obj_id','=',Input::post('object'))->
                                 and_where('srv_id','=',Input::post('service'))->
                                 limit(1)->
                                 execute();
-                    $exists = DB::count_last_query();
+                    $exists_service = DB::count_last_query();
+                    
+                    $check_requests = DB::select('*')
+                                    ->from('usr_service_requests')
+                                    ->where('client_id','=',Auth::get('id'))
+                                    ->and_where('object_id','=',Input::post('object'))
+                                    ->and_where('service_id','=',Input::post('service'))
+                                    ->limit(1)
+                                    ->execute();
+                    $exists_request = DB::count_last_query();
                     
                     //Objektam ir piesaistīts tāds pakalpojums
-                    if($exists)
+                    if($exists_service)
                     {
                         Session::set_flash('error','Izvēlētajam objektam jau ir piesaistīts izvēlētais pakalpojums!');
                         Response::redirect('/abonents/pakalpojumi/pasutit');
                     }
+                    
+                    //Objektam ir pasūtīts tāds pakalpojums
+                    if($exists_request)
+                    {
+                        Session::set_flash('error','Izvēlētajam objektam jau ir pasūtīts izvēlētais pakalpojums!');
+                        Response::redirect('/abonents/pakalpojumi/pasutit');
+                    }
+                    
+                    if(     Input::post('object') == ''
+                            || Input::post('service') == ''
+                            || Input::post('date_from') == ''
+                            || Input::post('date_to') == ''
+                      )
+                    {
+                        Session::set_flash('error','Kļūda! Aizpildiet visus laukus!');
+                        Response::redirect('/abonents/pakalpojumi/pasutit');
+                    }
+                        
                     
                     $new_request = new Model_Usr_Service_Request();
                     $new_request -> client_id = Auth::get('id');
@@ -779,6 +819,7 @@ class Controller_Client extends Controller_Template
                     $new_request -> date_from = Input::post('date_from');
                     $new_request -> date_to = Input::post('date_to');
                     $new_request -> notes = Input::post('notes');
+                    $new_request -> status = 'Pieteikts';
                     
                     if($new_request -> save())
                     {
@@ -802,5 +843,143 @@ class Controller_Client extends Controller_Template
             
             $this -> template -> title = "Pasūtīt pakalpojumu - Pilsētas ūdens";
         }
-       
+        
+        /**
+	 * Funkcija: 3.3.4.8.	Atteikšanās no objektam piesaistītā pakalpojuma (klients)
+         * Identifikators: SRV_REMOVE_SERVICE
+	 *
+         * Klients var atteikties no piesaistītā pakalpojuma
+         * 
+	 */
+        public function action_dismiss_service()
+        {
+            if(Auth::check())
+            {
+                $check_exists = DB::select('*')
+                                ->from('usr_service_requests')
+                                ->where('client_id','=',Auth::get('id'))
+                                ->and_where('object_id','=',Input::post('object'))
+                                ->and_where('usr_srv_id','=',Input::post('service'))
+                                ->and_where('status','!=','Atteikts')
+                                ->execute();
+                $exists = DB::count_last_query();
+                
+                if($exists)
+                {
+                    Session::set_flash('error','Šāds pakalpojuma pieprasījums jau datubāzē pastāv!');
+                    Response::redirect_back();
+                }
+                
+                //Veido jaunu pieprasījumu
+                $new_request = new Model_Usr_Service_Request();
+                $new_request -> client_id = Auth::get('id');
+                $new_request -> object_id = Input::post('object');
+                $new_request -> usr_srv_id = Input::post('service');
+                $new_request -> date_from = Input::post('date_from');
+                $new_request -> notes = Input::post('notes');
+                $new_request -> status = 'Pieteikts';
+                //Ja izdevies saglabāt jauno pieprasījumu
+                if($new_request->save())
+                {
+                    Session::set_flash('success','Pakalpojuma atteikšanās pieprasījums izveidots!');
+                    Response::redirect_back();
+                }
+                else
+                {
+                    Session::set_flash('error','Pakalpojuma atteikšanās pieprasījumu nebija iespējams izveidot!');
+                    Response::redirect_back();
+                }
+            }
+            else
+            {
+                Response::redirect('/');
+            }
+        }
+        
+        /**
+	 * Funkcija:
+         * Identifikators: 
+	 *
+	 * //
+         * 
+	 */
+        public function action_all_readings()
+        {
+            //Ja ir autorizējies
+            if(Auth::check())
+            {
+                        $data = array();
+                        
+                        $query_objects = DB::select(array('objects.id', 'object_id'),
+                                            'objects.name',
+                                            'objects.notes',
+                                            'addresses.*',
+                                            'cities.city_name') 
+                                    -> from('objects')
+                                    -> join('addresses')
+                                    -> on('addresses.id', '=', 'objects.address_id')
+                                    -> join('cities')
+                                    -> on('cities.id','=','addresses.city_id')
+                                    -> where('objects.client_id',Auth::get('id'));
+
+                        $result_objects = $query_objects -> as_object() -> execute() -> as_array();
+                        
+                        foreach ($result_objects as $value => $key) {
+                            if($key->flat)
+                            {
+                                $key->address = $key -> street . ' ' . $key -> house . ' - ' . $key -> flat . ''
+                                    . ', ' . $key -> post_code . ', ' . $key -> district . ', ' . $key -> city_name;   
+                            }
+                            else 
+                            {
+                                $key->address = $key -> street . ' ' . $key -> house . ''
+                                    . ', ' . $key -> post_code . ', ' . $key -> district . ', ' . $key -> city_name; 
+                            }
+                        }
+                
+                        // Funkcija: MTR_SHOW_INFO
+                        $query_meters = DB::select('*')
+                                                -> from('last_readings')
+                                                -> where('last_readings.client_id',Auth::get('id'))
+                                                -> and_where('last_readings.is_active','=','Y')
+                                                -> order_by('last_readings.meter_number','ASC');
+                        
+                        $result_meters = $query_meters -> as_object() -> execute() -> as_array();
+                        
+                        $query_srv = DB::select(array('user_services.id', 'usr_srv_id'),
+                                                    'services.*',
+                                                    'user_services.*') 
+                                            -> from('user_services')
+                                            -> join('objects')
+                                            -> on('objects.id', '=', 'user_services.obj_id')
+                                            -> join('services')
+                                            -> on('services.id', '=', 'user_services.srv_id')
+                                            -> where('objects.client_id',Auth::get('id'));
+                        
+                        $result_srv = $query_srv -> as_object() -> execute() -> as_array();
+                        
+                        $data['objects'] = $result_objects;
+                        $data['services'] = $result_srv;
+                        $data['meters'] = $result_meters;
+                        
+                        $this -> template -> title = "Apskatīt objektu - Pilsētas ūdens";
+                        $this -> template -> content = View::forge('client/readings',$data);
+            }
+            else
+            {
+                Response::redirect('/');
+            }
+        }
+        
+        public function action_report_issue()
+        {
+            if(!Auth::check())
+            {
+                Response::redirect('/');
+            }
+            
+            $this -> template -> title = "Paziņot par bojājumu - Pilsētas ūdens";
+            $this -> template -> content = View::forge('client/report_issue');
+            
+        }
 }

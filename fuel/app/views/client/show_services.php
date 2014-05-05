@@ -12,7 +12,7 @@
             <h1><?php echo $object[0]->object_name;?> </h1>
             <p><?php echo $object[0]->object_addr; ?></p>
             <hr/>
-            <a href="/klients/objekti/apskatit/<?php echo $object[0]->object_id; ?>" alt="atpakaļ">Doties atpakaļ</a>
+            <a href="/abonents/objekti/apskatit/<?php echo $object[0]->object_id; ?>" alt="atpakaļ">Doties atpakaļ</a>
         </div>
     </div>
     

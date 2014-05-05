@@ -7,9 +7,12 @@ class Model_Usr_Service_Request extends \Orm\Model
 		'client_id',
 		'object_id',
 		'service_id',
+                'usr_srv_id',
 		'date_from',
 		'date_to',
 		'notes',
+                'status',
+                'status_notes',
 		'created_at',
 		'updated_at',
 	);

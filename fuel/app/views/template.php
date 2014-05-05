@@ -97,13 +97,6 @@
         
       </ul>
         
-      <form class="visible-lg navbar-form navbar-left" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="nevari kaut ko atrast?">
-        </div>
-        <button type="submit" class="btn btn-default" title="Ieraksti, ko gribi atrast un spied pogu">Meklēt</button>
-      </form>
-        
       <!-- mazais bloks -->
       <ul class="visible-md visible-sm nav navbar-nav navbar-right">
         <li class="dropdown">

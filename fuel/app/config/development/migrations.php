@@ -20,6 +20,9 @@ return array(
 				11 => '013_add_notes_to_readings',
 				12 => '014_create_usr_service_requests',
 				13 => '015_add_is_deleted_to_objects',
+				14 => '016_add_status_to_usr_service_requests',
+				15 => '017_add_status_notes_to_usr_service_requests',
+				16 => '018_add_usr_srv_id_to_usr_service_requests',
 			),
 		),
 		'module' => 

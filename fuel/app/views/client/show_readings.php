@@ -4,7 +4,7 @@
                 <h1>Rādījumu vēsture</h1>
                 <p>Skaitītājs nr. <?php echo $meter_number; ?></p>
                 <hr/>
-                <a href="/klients/objekti/apskatit/<?php echo $object_id; ?>" alt="atpakaļ">Doties atpakaļ</a>
+                <a href="/abonents/objekti/apskatit/<?php echo $object_id; ?>" alt="atpakaļ">Doties atpakaļ</a>
             </div>
         </div>
         <div class="row main-block">

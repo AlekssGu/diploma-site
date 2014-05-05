@@ -42,6 +42,9 @@ return array(
             'abonents/objekti/radijumi/:id' => 'client/readings_history/$1',
             'abonents/pakalpojumi/apskatit/:object_id/:service_id' => 'client/show_service',
             'abonents/pakalpojumi/pasutit' => 'client/request_service',
+            'abonents/pakalpojumi/atteikties' => 'client/dismiss_service',
+            'abonents/ievadit-merijumus' => 'client/all_readings',
+            'abonents/pazinot-par-bojajumu' => 'client/report_issue',
     
         // Darbinieka sadaļas: 
             'darbinieks' => 'worker/worker',
@@ -69,11 +72,14 @@ return array(
             //Sadaļa: Skaitītāju dati (darbinieks)
             'darbinieks/skaititaji/radijumi/atgriezt' => 'worker/return_reading',
             'darbinieks/skaititaji/radijumi/apstiprinat/:reading_id/:client_id' => 'worker/accept_reading',
+            'darbinieks/pakalpojumi/pieprasijumi/atteikt' => 'worker/reject_service_request',
+            'darbinieks/pakalpojumi/pieprasijumi/apstiprinat/:req_id' => 'worker/accept_service_request/$1',
 
             //Sadaļa: Pieejamie pakalpojumi (darbinieks)
             'darbinieks/pakalpojumi' => 'worker/services',
             'darbinieks/pakalpojumi/pievienot' => 'worker/create_service',
             'darbinieks/pakalpojumi/dzest/:service_id' => 'worker/delete_service/$1',
+            'darbinieks/pakalpojumi/labot' => 'worker/edit_service',
     
             //ajax izsaukumiem
             'ieladet-datus/:id' => 'worker/load_client/$1',

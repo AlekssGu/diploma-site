@@ -79,6 +79,17 @@
                     <div id="collapseTwo" class="panel-collapse collapse">
                       <div class="panel-body">
                           <?php if(!empty($services)) { ?>
+                            <?php foreach($services as $service) { ?>
+                                <div class="well well-sm">
+                                    <button type="button" data-toggle="modal" data-target="#reject_request" data-pk="<?php echo $service -> request_id; ?>" class="reject_request close" aria-hidden="true">&times;</button>
+                                    <p><strong>Abonents:</strong> <?php echo $service -> fullname . ' (' . $service -> client_number . ')'; ?></p>
+                                    <p><strong>Objekts:</strong> <?php echo $service -> object_address; ?></p>
+                                    <p><strong>Pieprasījums:</strong> <?php if($service->service_requested != '') echo 'pieslēgt pakalpojumu <b>' . $service -> service_requested . '</b>'; else echo 'atslēgt pakalpojumu <b>' . $service -> service_dismissed . '</b>'; ?> (<?php echo date_format(date_create($service -> date_from), 'd.m.Y'); ?> - <?php echo date_format(date_create($service -> date_to), 'd.m.Y'); ?>)</p>
+                                    <p><strong>Piezīmes:</strong> <?php echo $service -> request_notes; ?></p>
+                                    <p><strong>Statuss:</strong> <?php echo $service -> status; ?></p>
+                                    <a href='/darbinieks/pakalpojumi/pieprasijumi/apstiprinat/<?php echo $service -> request_id; ?>' class='btn btn-success btn-sm'>Apstiprināt pieprasījumu</a>
+                                </div>
+                            <?php } ?>
                           <?php } else { ?>
                           <p>Pašlaik nav iesniegts neviens pakalpojuma pieprasījums</p>
                           <?php } ?>
@@ -105,6 +116,33 @@
                 </div>
         </div>
 </div><!--/.container -->
+
+<!-- atteikt pieprasījumam -->
+<div class="modal fade" id="reject_request" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Pieprasījuma atteikums</h4>
+      </div>
+      <form id="return_reading" action="/darbinieks/pakalpojumi/pieprasijumi/atteikt" method="POST" role="form">
+            <div class="modal-body">
+                <input id="srv_pk" type="hidden" name="pk" /> 
+                <input type="hidden" name="<?php echo \Config::get('security.csrf_token_key');?>" value="<?php echo \Security::fetch_token();?>" />
+                  <div class="form-group">
+                      <label for="number">Paskaidrojums abonentam:</label>       
+                      <textarea name="status_notes" class="form-control" placeholder="Īss un skaidrs paskaidrojums abonentam, kādēļ pieprasījums tiek atteikts"></textarea>
+                  </div>
+            </div>
+            <div class="modal-footer">
+              <button type="reset" class="btn btn-default" data-dismiss="modal">Atcelt</button>
+              <button type="submit" class="btn btn-primary">Atteikt pieprasījumam</button>
+            </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- /atteikt pieprasījumam -->
 
 <!-- atgriezt rādījumu -->
 <div class="modal fade" id="atgriezt_radijumu" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -143,6 +181,11 @@
            $('#rdn_id').attr('value',$(this).attr('data-rdn')); 
            $('#cln_id').attr('value',$(this).attr('data-cln')); 
         });
+        
+        $('.reject_request').click(function() {
+            $('#srv_pk').attr('value',$(this).attr('data-pk'));
+        });
+        
     });
 </script>
 
