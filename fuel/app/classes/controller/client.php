@@ -696,7 +696,6 @@ class Controller_Client extends Controller_Template
                                                 -> from('all_obj_services')
                                                 -> where('all_obj_services.object_id','=',$object_id)
                                                 -> and_where('all_obj_services.usr_srv_id','=',$service_id)
-                                                -> and_where('all_obj_services.client_id','=',$user_id)
                                                 -> and_where('all_obj_services.is_active','=','Y');
 
                                 //Atlasam objektus
