@@ -417,10 +417,6 @@ class Controller_Worker extends Controller_Template
                     foreach($meter_object as $meter)
                     {
                         $meter_id = $meter -> id;
-                    }
-                    
-                    if($meter_id != '')
-                    {
                         $delete_this = Model_Meter::find($meter_id);
                         $delete_this -> delete();
                     }
