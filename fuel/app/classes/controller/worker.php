@@ -418,8 +418,12 @@ class Controller_Worker extends Controller_Template
                     {
                         $meter_id = $meter -> id;
                     }
-                    $delete_this = Model_Meter::find($meter_id);
-                    $delete_this -> delete();
+                    
+                    if($meter_id != '')
+                    {
+                        $delete_this = Model_Meter::find($meter_id);
+                        $delete_this -> delete();
+                    }
                     
                     $user_id = Model_Object::find(Input::post('object_id'))->client_id;
                     Controller_Client::cre_cln_history($user_id,'Atslēgts pakalpojums');
