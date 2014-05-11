@@ -1255,7 +1255,7 @@ class Controller_Worker extends Controller_Template
                         
                     //Konfigurācija
                     $config = array(
-                        'path' => DOCROOT.'/assets/img/news', //Kur saglabāt attēlu
+                        'path' => '/assets/img/news', //Kur saglabāt attēlu
                         'randomize' => true, //pārtaisa faila nosaukumu uz nejaušu simbolu virkni
                         'ext_whitelist' => array('img', 'jpg', 'jpeg', 'gif', 'png'), //Pieļaujamais attēla formāts
                     );
@@ -1343,7 +1343,7 @@ class Controller_Worker extends Controller_Template
                     
                     //Konfigurācija
                     $config = array(
-                        'path' => DOCROOT.'/assets/img/news', //kur saglabāt failu
+                        'path' => '/assets/img/news', //kur saglabāt failu
                         'randomize' => true, //pārtaisa attēla nosaukumu uz nejaušu simbolu virkni
                         'ext_whitelist' => array('img', 'jpg', 'jpeg', 'gif', 'png'), //pieļaujamie formāti
                     );
