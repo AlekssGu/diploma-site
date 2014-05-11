@@ -91,6 +91,8 @@ class Controller_Client extends Controller_Template
                 }
                 else $data['secondary_address'] = $useraddr2 -> street . ' ' . $useraddr2 -> house . ', ' . $useraddr2 -> district . ', ' . $city2->city_name . ', ' . $useraddr2 -> post_code;
                 
+                
+                
                 $this -> template -> title = "Klienta informācija - Pilsētas ūdens";
                 $this -> template -> content = View::forge('client/client',$data);
             }
@@ -298,7 +300,7 @@ class Controller_Client extends Controller_Template
                             if($key->flat)
                             {
                                 $key->address = $key -> street . ' ' . $key -> house . ' - ' . $key -> flat . ''
-                                    . ', ' . $key -> post_code . ', ' . $key -> district . ', ' . $key -> city_name;   
+                                    . ', ' . $key -> district . ', ' . $key -> post_code . ', ' . $key -> city_name;   
                             }
                             else 
                             {
@@ -421,6 +423,11 @@ class Controller_Client extends Controller_Template
                                         Session::set_flash('error','Skaitītaja rādījums nav iesniegts, jo jums ir neiesniegti rādījumi!');
                                         Response::redirect('/abonents/objekti/radijumi/' . Input::post('meter_id'));
                                     }
+                                    elseif($last_rdn->status == 'Iesniegts')
+                                    {
+                                        Session::set_flash('error','Skaitītaja rādījums nav iesniegts, jo iepriekšējais rādījums vēl nav akceptēts!');
+                                        Response::redirect('/abonents/objekti/radijumi/' . Input::post('meter_id'));
+                                    }
                                     
                                     //Ir lielāks
                                     if(Input::post('reading') > $last_rdn->lead)
@@ -490,6 +497,11 @@ class Controller_Client extends Controller_Template
                                     if($last_rdn->status == 'Labošanā') 
                                     {
                                         Session::set_flash('error','Skaitītaja rādījums nav pievienots, jo jums ir neiesniegti rādījumi!');
+                                        Response::redirect('/abonents/objekti/radijumi/' . Input::post('meter_id'));
+                                    }
+                                    elseif($last_rdn->status == 'Iesniegts')
+                                    {
+                                        Session::set_flash('error','Skaitītaja rādījums nav pievienots, jo iepriekšējais rādījums vēl nav akceptēts!');
                                         Response::redirect('/abonents/objekti/radijumi/' . Input::post('meter_id'));
                                     }
 
@@ -669,7 +681,7 @@ class Controller_Client extends Controller_Template
                                 //Atlasam skaitītājus
                                 $query_meters = DB::select('*')
                                                 -> from('meters')
-                                                -> join('user_services')->on('user_services.srv_id','=','meters.service_id')
+                                                -> join('user_services')->on('user_services.id','=','meters.service_id')
                                                 -> where('meters.service_id','=',$service_id)
                                                 -> and_where('user_services.is_active','=','Y');
 
@@ -863,7 +875,7 @@ class Controller_Client extends Controller_Template
                                 ->execute();
                 $exists = DB::count_last_query();
                 
-                if($exists)
+                if($exists > 0)
                 {
                     Session::set_flash('error','Šāds pakalpojuma pieprasījums jau datubāzē pastāv!');
                     Response::redirect_back();
@@ -874,7 +886,7 @@ class Controller_Client extends Controller_Template
                 $new_request -> client_id = Auth::get('id');
                 $new_request -> object_id = Input::post('object');
                 $new_request -> usr_srv_id = Input::post('service');
-                $new_request -> date_from = Input::post('date_from');
+                $new_request -> date_from = date_format(date_create(Input::post('date_from')), 'Y-m-d');
                 $new_request -> notes = Input::post('notes');
                 $new_request -> status = 'Pieteikts';
                 //Ja izdevies saglabāt jauno pieprasījumu
@@ -968,17 +980,5 @@ class Controller_Client extends Controller_Template
             {
                 Response::redirect('/');
             }
-        }
-        
-        public function action_report_issue()
-        {
-            if(!Auth::check())
-            {
-                Response::redirect('/');
-            }
-            
-            $this -> template -> title = "Paziņot par bojājumu - Pilsētas ūdens";
-            $this -> template -> content = View::forge('client/report_issue');
-            
         }
 }

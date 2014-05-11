@@ -13,19 +13,22 @@
                 <div class="item active">
                     <div class="slider-image" style="background-image:url(/assets/img/image1.jpg)"></div>
                     <div class="carousel-caption">
-                        <h1 class="text-default">Pilsētas ūdens</h1>
+                        <h1 class="text-default">LIEPĀJAS ŪDENS</h1>
+                        <p>Sabiedrība ar ierobežotu atbildību</p>
                     </div>
                 </div>
                 <div class="item">
                     <div class="slider-image" style="background-image:url(/assets/img/image2.jpg)"></div>
                     <div class="carousel-caption">
-                        <h1 class="text-default">Ūdens ir vitāla mūsu dzīves sastāvdaļa</h1>
+                        <h1 class="text-default">Komposta pārstrādes process</h1>
+                        <p>Interesē šāds pakalpojums? Dodies uz mūsu <a style='color:#fff' href='/pakalpojumi'>pakalpojumu sadaļu!</a></p>
                     </div>
                 </div>
                 <div class="item">
                     <div class="slider-image" style="background-image:url(/assets/img/image3.jpg)"></div>
                     <div class="carousel-caption">
                         <h1 class="text-default">Ūdens ir dzīvība</h1>
+                        <p>Vai tu zināji, ka, zaudējot 1% ķermeņa ūdens daudzuma, tev sākas slāpes?</p>
                     </div>
                 </div>
             </div>

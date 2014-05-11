@@ -1104,13 +1104,13 @@ class Controller_Worker extends Controller_Template
             //Ja izdevies atteikt, tad parāda paziņojumu par to
             if($request -> save())
             {
-                Session::set_flash('success','Pakalpojums atteikts!');
+                Session::set_flash('success','Pakalpojuma pieprasījums atteikts!');
                 Response::redirect_back();
             }
             //Nav izdevies atteikt
             else
             {
-                Session::set_flash('error','Neveiksme! Pakalpojums netika atteikts!');
+                Session::set_flash('error','Neveiksme! Pakalpojuma pieprasījums atteikts!');
                 Response::redirect_back();
             }
         }
@@ -1146,13 +1146,13 @@ class Controller_Worker extends Controller_Template
             //Ja izdevies atteikt, tad parāda paziņojumu par to
             if($request -> save())
             {
-                Session::set_flash('success','Pakalpojums apstiprināts!');
+                Session::set_flash('success','Pakalpojuma pieprasījums apstiprināts!');
                 Response::redirect_back();
             }
             //Nav izdevies atteikt
             else
             {
-                Session::set_flash('error','Neveiksme! Pakalpojums netika apstiprināts!');
+                Session::set_flash('error','Neveiksme! Pakalpojuma pieprasījums netika apstiprināts!');
                 Response::redirect_back();
             }
         }
@@ -1162,4 +1162,265 @@ class Controller_Worker extends Controller_Template
             Response::redirect('/');
         }
     }
+    
+        /**
+	 * Funkcija: 3.3.5.3.	Ziņu lapas attēlošana (viesis, klients, darbinieks)
+         * Identifikators: IS_STC_NEWS
+	 *
+         * Visi lietotāji var skatīt ziņu lapu, kur ir jaunākās ziņas un aprakstītas aktualitātes sakarā ar uzņēmuma darbību. 
+	 */
+	public function action_news()
+	{
+            if(Auth::check() && Auth::member(50))
+            {
+		$data['news'] = Model_News::find('all');
+		$this->template->title = "Jaunumi - IS Pilsētas ūdens";
+		$this->template->content = View::forge('news/index', $data);
+            }
+            else
+            {
+                $this -> template -> title = "Ziņas - Pilsētas ūdens";
+                $this -> template -> content = View::forge('static/recent/news',$data);
+            }
+
+	}
+        
+        /**
+	 * Funkcija: 3.3.5.4.	Vienas ziņas apskatīšana (darbinieks)
+         * Identifikators: IS_STC_NEWS_VIEW_ONE
+	 *
+         * Uzņēmuma darbinieks apskatīt vienas ziņas informāciju 
+	 */
+	public function action_view_news($id = null)
+	{
+            if(Auth::check() && Auth::member(50))
+            {
+		is_null($id) and Response::redirect('news');
+
+		if ( ! $data['news'] = Model_News::find($id))
+		{
+			Session::set_flash('error', 'Kļūda! Ziņa netika atrasta.');
+			Response::redirect('news');
+		}
+
+		$this->template->title = "Izveidotie jaunumi - IS Pilsētas ūdens";
+		$this->template->content = View::forge('news/view', $data);
+            }
+            else
+            {
+                Response::redirect('/aktuali/jaunumi');
+            }
+
+	}
+
+        /**
+	 * Funkcija: 3.3.5.5.	Ziņu pievienošana (darbinieks)
+         * Identifikators: IS_STC_ADD_NEWS
+	 *
+         * Uzņēmuma darbinieks var pievienot jaunas ziņas
+	 */
+	public function action_create_news()
+	{
+            $data = array();
+            $filename = '';
+            $filename_sys = '';
+            
+            if(Auth::check() && Auth::member(50))
+            {
+                //Ja ir padoti dati 
+		if (Input::method() == 'POST' && Security::check_token())
+		{
+                    $error_message = ""; // Kļūdas ziņojuma daļa
+                    $error_count = 0; // Kļūdu skaits
+                    $result_message = ""; // Gala paziņojums lietotājam
+
+                    // Ja nav ievadīts ziņas virsraksts
+                    if (Input::post('title')=='')
+                    {
+                        $error_count++;
+                        $error_message.='<li>Nav ievadīts ziņas virsraksts</li>'; 
+                    }
+                    // Ja nav ievadīts ziņas teksts
+                    if (Input::post('body')=='')
+                    {
+                        $error_count++;
+                        $error_message.='<li>Nav ievadīts ziņas teksts</li>'; 
+                    }
+                    // Ja kļūdu skaits ir lielāks par 0, tad izvada paziņojumu un neļauj izveidot ierakstu
+                    if($error_count > 0)
+                    {
+                        Session::set_flash('error','<ul>' . $error_message . '</ul>');
+                        Response::redirect('/darbinieks/jaunumi/izveidot');
+                    }
+                        
+                    //Konfigurācija
+                    $config = array(
+                        'path' => DOCROOT.'/assets/img/news', //Kur saglabāt attēlu
+                        'randomize' => true, //pārtaisa faila nosaukumu uz nejaušu simbolu virkni
+                        'ext_whitelist' => array('img', 'jpg', 'jpeg', 'gif', 'png'), //Pieļaujamais attēla formāts
+                    );
+
+                    //Augšupielādē attēlu
+                    Upload::process($config);
+                    //Ja ir izdevies
+                    if(Upload::is_valid())
+                    {
+                        //Saglabā to failsistēmā
+                        Upload::save();
+                        //Pieglabā failu nosaukumus
+                        foreach (Upload::get_files() as $file)
+                        {
+                            $filename = $file['name'];
+                            $filename_sys = $file['saved_as'];
+                        }
+                    }
+                            //Izveido jaunu ziņu
+                            $news = Model_News::forge(array(
+                                    'title' => Input::post('title'),
+                                    'body' => Input::post('body'),
+                                    'excerpt' => Input::post('excerpt'),
+                                    'status' => 'Publisks', //Saglabāt un publicēt
+                                    'lang' => 'lv', //Pagaidām tiek realizēta tikai latviešu valoda
+                                    'filename' => $filename,
+                                    'filename_sys' => $filename_sys,
+                                    'file_source' => Input::post('source')
+                            ));
+                            //Saglabā ziņu
+                            if ($news and $news->save())
+                            {
+                                    Session::set_flash('success', 'Pievienota ziņa "' . $news -> title . '"');
+                                    Response::redirect('/darbinieks/jaunumi');
+                            }
+                            else
+                            {
+                                    Session::set_flash('error', 'Kļūda! Ziņa netika pievienota!');
+                            }
+		}
+
+		$this->template->title = "Izveidot jaunu ziņu - IS Pilsētas ūdens";
+		$this->template->content = View::forge('news/create',$data);
+            }
+            else Response::redirect('/aktuali/jaunumi');
+	}
+
+         /**
+	 * Funkcija: 3.3.5.7.	Ziņu rediģēšana (darbinieks)
+         * Identifikators: IS_STC_EDIT_NEWS
+	 *
+         * Uzņēmuma darbinieks var labot ziņas
+	 */
+	public function action_edit_news($id = null)
+	{
+            if(Auth::check() && Auth::member(50))
+            {
+		is_null($id) and Response::redirect('/darbinieks/jaunumi');
+
+		if ( ! $news = Model_News::find($id))
+		{
+			Session::set_flash('error', 'Kļūda! Netika atrasta ziņa "' . $news -> title . '"');
+			Response::redirect('/darbinieks/jaunumi');
+		}
+                
+                if (Input::method() == 'POST' && Security::check_token())
+                {
+                    $data = array();
+                    
+                    $filename = $news -> filename;
+                    $filename_sys = $news -> filename_sys;
+                    
+                    //Ja netiek mainīts virsraksts, tad liek esošo, lai nebūtu tukšums
+                    if(Input::post('title') == '') $title = $news -> title;
+                    else $title = Input::post('title');
+                    //Ja netiek mainīts virsraksts, tad liek esošo, lai nebūtu tukšums
+                    if(Input::post('body') == '') $body = $news -> body;
+                    else $body = Input::post('body');
+                    //Ja netiek mainīts virsraksts, tad liek esošo, lai nebūtu tukšums
+                    if(Input::post('excerpt') == '') $excerpt = $news -> excerpt;
+                    else $excerpt = Input::post('excerpt');
+                    //Ja netiek mainīts virsraksts, tad liek esošo, lai nebūtu tukšums
+                    if(Input::post('source') == '') $source = $news -> file_source;
+                    else $source = Input::post('source');
+                    
+                    //Konfigurācija
+                    $config = array(
+                        'path' => DOCROOT.'/assets/img/news', //kur saglabāt failu
+                        'randomize' => true, //pārtaisa attēla nosaukumu uz nejaušu simbolu virkni
+                        'ext_whitelist' => array('img', 'jpg', 'jpeg', 'gif', 'png'), //pieļaujamie formāti
+                    );
+
+                    //Augšupielādē failus
+                    Upload::process($config);
+                    //Ja izdevies
+                    if(Upload::is_valid())
+                    {
+                        //Saglabā failus failsistēmā
+                        Upload::save();
+                        //Pieglabā failu informāciju
+                        foreach (Upload::get_files() as $file)
+                        {
+                            $filename = $file['name'];
+                            $filename_sys = $file['saved_as'];
+                        }
+                    }
+
+                    //Labo ziņu
+                    $news->title = $title;
+                    $news->body = $body;
+                    $news->excerpt = $excerpt;
+                    $news->status = 'Publisks';
+                    $news->filename = $filename;
+                    $news->filename_sys = $filename_sys;
+                    $news->file_source = $source;
+
+                    //Saglabā labojumus
+                    if($news -> save())
+                    {
+                        Session::set_flash('success','Ziņa veiksmīgi labota!');
+                        Response::redirect('/darbinieks/jaunumi/skatit/' . $id);
+                    }
+                }
+
+                $this->template->set_global('news', $news, false);
+
+		$this->template->title = "Labot ziņu - IS Pilsētas ūdens";
+		$this->template->content = View::forge('news/edit');
+            }
+            else
+            {
+                Response::redirect('/aktuali/jaunumi');
+            }
+
+	}
+
+         /**
+	 * Funkcija: 3.3.5.8.	Ziņu dzēšana (darbinieks)
+         * Identifikators: IS_STC_DEL_NEWS
+	 *
+         * Uzņēmuma darbinieks var dzēst ziņas
+	 */
+	public function action_delete_news($id = null)
+	{
+            if(Auth::check() && Auth::member(50))
+            {
+		is_null($id) and Response::redirect('/darbinieks/jaunumi');
+
+		if ($news = Model_News::find($id))
+		{
+			$news->delete();
+			Session::set_flash('success', 'Dzēsta ziņa "' . $news -> title . '"' );
+		}
+
+		else
+		{
+			Session::set_flash('error', 'Netika atrasta ziņa "' . $news -> title . '"');
+		}
+
+		Response::redirect('/darbinieks/jaunumi');
+            }
+            else
+            {
+                Response::redirect('/aktuali/jaunumi');
+            }
+
+	}
 }

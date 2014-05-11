@@ -52,7 +52,7 @@
                         <input type="hidden" name="<?php echo \Config::get('security.csrf_token_key');?>" value="<?php echo \Security::fetch_token();?>" />
                         <input type="hidden" name="meter_id" value="<?php echo $meter_id;?>"/>
                         <input type='hidden' class='input-action' name="action" />
-                    <td><button class='submit-rdn btn btn-sm btn-default <?php if(in_array(html_entity_decode($reading->status), array('Iesniegts', 'Sākotnējais', 'Atgriezts', 'Apstiprināts'))) echo 'disabled'; ?>'>Iesniegt</button></td>
+                    <td><button onclick='return confirm("Iesniegt bez iespējas vēlāk labot?")' class='submit-rdn btn btn-sm btn-default <?php if(in_array(html_entity_decode($reading->status), array('Iesniegts', 'Sākotnējais', 'Atgriezts', 'Apstiprināts'))) echo 'disabled'; ?>'>Iesniegt</button></td>
                     </form>
                 </tr>
                 <?php if(html_entity_decode($reading->status) == 'Labošanā' || $reading->status == 'Atgriezts') { ?>

@@ -23,6 +23,9 @@ return array(
 				14 => '016_add_status_to_usr_service_requests',
 				15 => '017_add_status_notes_to_usr_service_requests',
 				16 => '018_add_usr_srv_id_to_usr_service_requests',
+				17 => '019_create_news',
+				18 => '020_add_cols_to_news',
+				19 => '021_create_emergencies',
 			),
 		),
 		'module' => 

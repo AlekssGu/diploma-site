@@ -9,7 +9,7 @@
                 <div class='col-md-offset-3 col-md-6 alert alert-info'>
                     <ul class='list-inline'>
                         <li><a href='/' class='btn btn-primary'>Doties uz sākumu</a></li>
-                        <?php if(Auth::check()) { ?>
+                        <?php if(Auth::check() && Auth::member(1)) { ?>
                             <li><a href='/abonents' class='btn btn-primary'>Apskatīt abonenta informāciju</a></li>
                         <?php } ?>
                     </ul>

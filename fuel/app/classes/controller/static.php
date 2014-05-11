@@ -27,12 +27,18 @@ class Controller_Static extends Controller_Template
          * Identifikators: IS_STC_NEWS
 	 *
          * Visi lietotāji var skatīt ziņu lapu, kur ir jaunākās ziņas un aprakstītas aktualitātes sakarā ar uzņēmuma darbību. 
-         * TODO: dinamiski pievienot/attēlot ziņas
 	 */
 	public function action_recent_news()
 	{
+                $data['news'] = DB::select()
+                                ->from('news')
+                                ->where('status','=','Publisks')
+                                ->as_object()
+                                ->execute()
+                                ->as_array();
+            
                 $this -> template -> title = "Ziņas - Pilsētas ūdens";
-                $this -> template -> content = View::forge('static/recent/news');
+                $this -> template -> content = View::forge('static/recent/news',$data);
 	}
         
         /**

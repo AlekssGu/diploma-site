@@ -27,50 +27,56 @@
                             <div class="clearfix"></div>
                         <?php } ?>
                         
-                        <!-- galvenās lapas forma -->
-                        <form id="request_form" action="/abonents/pakalpojumi/pasutit" method="POST" role="form">
-                        <div class="form-group">
-                            <label for="service">Pakalpojums</label>
-                            <select name="service" class='form-control'>
-                                <option value='-1' selected='true' disabled='disabled'>Izvēlies pakalpojumu</option>
-                                <?php foreach($services as $service) { ?>
-                                <option value="<?php echo $service->id; ?>"><?php echo $service->name . ' - ' . $service->description; ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="object">Objekts</label>
-                            <select name="object" class='form-control'>
-                                <option value='-1' selected='true' disabled='disabled'>Izvēlies objektu</option>
-                                <?php foreach($objects as $object) { ?>
-                                <option value="<?php echo $object->object_id; ?>"><?php echo $object->object_name . ' - ' . $object->object_addr; ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                        <div class="date-pick form-group">
-                            <label for="date_from">Datums no</label>
-                            <div class="input-group date">
-                              <input name='date_from' type="text" class="form-control" placeholder='dd.mm.gggg'><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-                            </div>
-                        </div>
-                        <div class="date-pick form-group">
-                            <label for="date_to">Datums līdz</label>
-                            <div class="input-group date">
-                              <input name='date_to' type="text" class="form-control" placeholder='dd.mm.gggg'><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-                            </div>
-                        </div>    
                             
-                        <div class="form-group">
-                            <label for="notes">Piezīmes</label>
-                            <textarea name="notes" class="form-control" id="notes" placeholder="Papildus komentāri"></textarea>
-                        </div>    
-                            
-                        <input type="hidden" name="<?php echo \Config::get('security.csrf_token_key');?>" value="<?php echo \Security::fetch_token();?>" />
-                        
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-block btn-primary">Pasūtīt</button>
-                        </div>
-                      </form>
+                        <?php if(!empty($services)) { ?>
+                            <!-- galvenās lapas forma -->
+                            <form id="request_form" action="/abonents/pakalpojumi/pasutit" method="POST" role="form">
+                            <div class="form-group">
+                                <label for="service">Pakalpojums</label>
+                                <select name="service" class='form-control'>
+                                    <option value='-1' selected='true' disabled='disabled'>Izvēlies pakalpojumu</option>
+                                    <?php foreach($services as $service) { ?>
+                                    <option value="<?php echo $service->id; ?>"><?php echo $service->name . ' - ' . $service->description; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="object">Objekts</label>
+                                <select name="object" class='form-control'>
+                                    <option value='-1' selected='true' disabled='disabled'>Izvēlies objektu</option>
+                                    <?php foreach($objects as $object) { ?>
+                                    <option value="<?php echo $object->object_id; ?>"><?php echo $object->object_name . ' - ' . $object->object_addr; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <div class="date-pick form-group">
+                                <label for="date_from">Datums no</label>
+                                <div class="input-group date">
+                                  <input name='date_from' type="text" class="form-control" placeholder='dd.mm.gggg'><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                </div>
+                            </div>
+                            <div class="date-pick form-group">
+                                <label for="date_to">Datums līdz</label>
+                                <div class="input-group date">
+                                  <input name='date_to' type="text" class="form-control" placeholder='dd.mm.gggg'><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                </div>
+                            </div>    
+
+                            <div class="form-group">
+                                <label for="notes">Piezīmes</label>
+                                <textarea name="notes" class="form-control" id="notes" placeholder="Papildus komentāri"></textarea>
+                            </div>    
+
+                            <input type="hidden" name="<?php echo \Config::get('security.csrf_token_key');?>" value="<?php echo \Security::fetch_token();?>" />
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-block btn-primary">Pasūtīt</button>
+                            </div>
+                          </form>
+                      <?php } else { ?>
+                            <p>Diemžēl šobrīd sistēmā nav pievienots neviens pakalpojums, tādēļ nav iespējams pasūtīt pakalpojumus!</p>
+                            <p>Lūdzam šī jautājuma sakarā sazināties ar SIA "Liepājas ūdens" darbiniekiem</p>
+                      <?php } ?>
                     </div>
 
 <script>

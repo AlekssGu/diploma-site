@@ -46,6 +46,22 @@ class Controller_Main extends Controller_Template
                     //Aprēķina patērēto ūdens daudzumu
                     $last_reading[0] -> amount_since_last = round((int)$last_reading[0]->lead - (int)$pre_last_reading[0]->lead);    
                 }
+
+                //Iesniegtie pakalpojumi
+                $data['service'] = DB::select('*')
+                                    ->from('all_usr_requests')
+                                    ->where('client_number','=',Auth::get('username'))
+                                    ->order_by('request_id','DESC')
+                                    ->limit(1)
+                                    ->as_object()
+                                    ->execute()
+                                    ->as_array();
+                
+                $data['emergencies'] = DB::select()
+                                        ->from('emergencies')
+                                        ->as_object()
+                                        ->execute()
+                                        ->as_array();
                 
                 //Saglabā mainīgajā priekš skata
                 $data['last_reading'] = $last_reading;
@@ -74,6 +90,33 @@ class Controller_Main extends Controller_Template
 		$this -> template -> title = "Lapa nav atrasta - Pilsētas ūdens";
                 $this -> template -> content = View::forge('main/404');
 	}
+        
+        public function action_report_issue()
+        {
+            
+            if(Input::method() == 'POST' && Security::check_token())
+            {
+                $issue = new Model_Emergency();
+                $issue -> user_id = Auth::get('id');
+                $issue -> lat = Input::post('latitude');
+                $issue -> lon = Input::post('longitude');
+                $issue -> notes = Input::post('notes');
+                
+                if($issue -> save())
+                {
+                    Session::set_flash('success', 'Bojājums veiksmīgi paziņots! Paldies!');
+                    Response::redirect('/pazinot-par-bojajumu');
+                }
+                else 
+                {
+                    Session::set_flash('error', 'Neveiksme! Bojājums netika saglabāts.');
+                    Response::redirect('/pazinot-par-bojajumu');
+                }
+            }
+            
+            $this -> template -> title = "Paziņot par bojājumu - Pilsētas ūdens";
+            $this -> template -> content = View::forge('client/report_issue');
+        }
         
 	/**
 	 * Redmine

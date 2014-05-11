@@ -126,7 +126,7 @@
           <ul class="dropdown-menu">
             <li class='disabled'><a href="#">Pieslēgšanās sistēmai</a></li>
             <li class='disabled'><a href="#">Patēriņa datu ievade</a></li>
-            <li class='disabled'><a href="/palidziba/buj">Biežāk uzdotie jautājumi</a></li>
+            <li><a href="/palidziba/buj">Biežāk uzdotie jautājumi</a></li>
             <li class="divider"></li>
             <li><a href="/palidziba/sazinaties">Sazināties ar uzņēmumu</a></li>
           </ul>

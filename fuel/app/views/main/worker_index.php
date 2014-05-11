@@ -25,9 +25,9 @@
                   <div class="col-sm-4 col-md-4">
                     <div class="thumbnail">
                       <div class="caption text-center">
-                        <h3>Sistēmas pārvaldība</h3>
-                        <p>Jautājumi, atbildes, jaunumi</p>
-                        <p><a href="#" class="btn-default btn disabled" role="button">Ieiet</a></p>
+                        <h3>Jaunumu pārvaldība</h3>
+                        <p>melnraksti, publicētās ziņas u.c.</p>
+                        <p><a href="/darbinieks/jaunumi" class="btn-default btn" role="button">Ieiet</a></p>
                       </div>
                     </div>
                   </div>

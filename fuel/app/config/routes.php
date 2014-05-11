@@ -44,7 +44,7 @@ return array(
             'abonents/pakalpojumi/pasutit' => 'client/request_service',
             'abonents/pakalpojumi/atteikties' => 'client/dismiss_service',
             'abonents/ievadit-merijumus' => 'client/all_readings',
-            'abonents/pazinot-par-bojajumu' => 'client/report_issue',
+            'pazinot-par-bojajumu' => 'main/report_issue',
     
         // Darbinieka sadaļas: 
             'darbinieks' => 'worker/worker',
@@ -80,6 +80,13 @@ return array(
             'darbinieks/pakalpojumi/pievienot' => 'worker/create_service',
             'darbinieks/pakalpojumi/dzest/:service_id' => 'worker/delete_service/$1',
             'darbinieks/pakalpojumi/labot' => 'worker/edit_service',
+    
+            //Sadaļa: Jaunumu pārvaldība
+            'darbinieks/jaunumi' => 'worker/news',
+            'darbinieks/jaunumi/izveidot' => 'worker/create_news',
+            'darbinieks/jaunumi/skatit/:news_id' => 'worker/view_news/$1',
+            'darbinieks/jaunumi/labot/:news_id' => 'worker/edit_news/$1',
+            'darbinieks/jaunumi/dzest/:news_id' => 'worker/delete_news/$1',
     
             //ajax izsaukumiem
             'ieladet-datus/:id' => 'worker/load_client/$1',

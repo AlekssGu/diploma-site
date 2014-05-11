@@ -52,7 +52,7 @@ $(function () {
                         <a href="/abonents" class="btn btn-block btn-primary" title="Apskatīt klienta datus"><span class="glyphicon glyphicon-user"></span> Klienta informācija</a>
                     </div>
                     <div class="col-md-3">
-                        <a href="/abonents/pazinot-par-bojajumu" class="btn btn-block btn-primary" title="Paziņot par bojājumu"><span class="glyphicon glyphicon-earphone"></span> Paziņot par bojājumu</a>
+                        <a href="/pazinot-par-bojajumu" class="btn btn-block btn-primary" title="Paziņot par bojājumu"><span class="glyphicon glyphicon-earphone"></span> Paziņot par bojājumu</a>
                     </div>
                     <div class="col-md-3">
                         <a href="/abonents/pakalpojumi/pasutit" class="btn btn-block btn-primary" title="Pasūtīt pakalpojumu"><span class="glyphicon glyphicon-leaf"></span> Pasūtīt pakalpojumu</a>
@@ -69,12 +69,23 @@ $(function () {
                                 <div class='col-md-6'>
                                     <h3 class="text-center">Mana pēdējā aktivitāte</h3>
                                     <hr/>
-                                    <?php if(!empty($last_reading)) { ?>
-                                    <h4>Iesniegtais mērījums:</h4>
-                                    <p>Pēdējais mērījums: <?php echo $last_reading[0]->lead; ?> (<?php echo $last_reading[0]->amount_since_last; ?>m<span style="vertical-align:super; font-size:0.7em;">3</span>)</p>
+                                    <?php if(!empty($last_reading) || !empty($service)) { ?>
+                                        <?php if(!empty($last_reading)) { ?>
+                                        <h4>Iesniegtais mērījums:</h4>
+                                        <p>Pēdējais mērījums: <?php echo $last_reading[0]->lead; ?> (<?php echo $last_reading[0]->amount_since_last; ?>m<span style="vertical-align:super; font-size:0.7em;">3</span>)</p>
+                                        <?php } ?>
+                                        <?php if(!empty($service)) { ?>
+                                        <h4>Pēdējais pakalpojuma pieprasījums:</h4>
+                                        <p><?php if($service[0]->service_requested != '') 
+                                                      echo 'Aieslēgt pakalpojumu "' . $service[0] -> service_requested . '"'; 
+                                                 else echo 'Atslēgt pakalpojumu "' . $service[0] -> service_dismissed . '"'; ?> (Sākot ar <?php echo date_format(date_create($service[0] -> date_from),'d.m.Y'); ?>)
+                                        </p>
+                                        <br/>
+                                        <a href='/' class='btn btn-link'>Apskatīt visus pakalpojumu pieprasījumus</a>
+                                        <?php } ?>
+                                    <?php } else { ?>
+                                        <p>Pašlaik sistēmā nav reģistrēts nekas par tevi, bet drīzumā šeit parādīsies informācija par pēdējām tavām darbībām</p>
                                     <?php } ?>
-                                    <h4>Saņemtie pakalpojumi:</h4>
-                                    <p>Pēdējais pakalpojums: Nosēdbedres likvidācija</p>
                                 </div>
                                 <div class='col-md-6'>
                                     <h3 class='text-center'>Remontdarbi un avārijas</h3>
@@ -95,21 +106,42 @@ $(function () {
                     </div>
                 </div>
                 
-    <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-    <script>
-        $(document).ready(function(){
+<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script>
+$(document).ready(function(){
             
       var map;
+      var contentString;
+      var infoWindow = null;
+      
       function initialize() {
         var map_canvas = document.getElementById('map_canvas');
         var map_options = {
           center: new google.maps.LatLng(56.5369455, 21.0384852),
-          zoom: 12,
+          zoom: 10,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         map = new google.maps.Map(map_canvas, map_options);
+        
+        <?php foreach($emergencies as $emr) { ?>
+           marker = new google.maps.Marker({
+           map: map,
+           draggable: false,
+           position: new google.maps.LatLng(<?php echo $emr->lat; ?>, <?php echo $emr -> lon; ?>),
+           title: "Būvdarbi"
+           });
+           
+            marker.info = new google.maps.InfoWindow({
+              content: '<p><?php echo $emr -> notes; ?></p>'
+            });
+        
+            google.maps.event.addListener(marker, 'click', function() {
+              marker.info.open(map, marker);
+            });
+
+        <?php } ?>      
       }
-      google.maps.event.addDomListener(window, 'load', initialize);
       
-        });
-    </script>
+      google.maps.event.addDomListener(window, 'load', initialize);
+ });
+</script>

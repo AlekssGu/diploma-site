@@ -3,7 +3,7 @@
         <div class="col-md-5">
             <h1>Mainīt paroli</h1>
             <hr/>
-            <a href="/klients" alt="atpakaļ">Doties atpakaļ</a>
+            <a href="/abonents" alt="atpakaļ">Doties atpakaļ</a>
         </div>
     </div>
     <div class="row">

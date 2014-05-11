@@ -84,7 +84,7 @@
                                     <button type="button" data-toggle="modal" data-target="#reject_request" data-pk="<?php echo $service -> request_id; ?>" class="reject_request close" aria-hidden="true">&times;</button>
                                     <p><strong>Abonents:</strong> <?php echo $service -> fullname . ' (' . $service -> client_number . ')'; ?></p>
                                     <p><strong>Objekts:</strong> <?php echo $service -> object_address; ?></p>
-                                    <p><strong>Pieprasījums:</strong> <?php if($service->service_requested != '') echo 'pieslēgt pakalpojumu <b>' . $service -> service_requested . '</b>'; else echo 'atslēgt pakalpojumu <b>' . $service -> service_dismissed . '</b>'; ?> (<?php echo date_format(date_create($service -> date_from), 'd.m.Y'); ?> - <?php echo date_format(date_create($service -> date_to), 'd.m.Y'); ?>)</p>
+                                    <p><strong>Pieprasījums:</strong> <?php if($service->service_requested != '') echo 'pieslēgt pakalpojumu <b>' . $service -> service_requested . '</b>'; else echo 'atslēgt pakalpojumu <b>' . $service -> service_dismissed . '</b>'; ?> (Sākot ar <?php echo date_format(date_create($service -> date_from)); ?></p>
                                     <p><strong>Piezīmes:</strong> <?php echo $service -> request_notes; ?></p>
                                     <p><strong>Statuss:</strong> <?php echo $service -> status; ?></p>
                                     <a href='/darbinieks/pakalpojumi/pieprasijumi/apstiprinat/<?php echo $service -> request_id; ?>' class='btn btn-success btn-sm'>Apstiprināt pieprasījumu</a>
@@ -109,6 +109,23 @@
                           <?php if(!empty($emergencies)) { ?>
                           <?php } else { ?>
                           <p>Pašlaik nav iesniegta neviena avārija</p>
+                          <?php } ?>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+                          Iesniegtie jautājumi
+                        </a>
+                      </h4>
+                    </div>
+                    <div id="collapseFour" class="panel-collapse collapse">
+                      <div class="panel-body">
+                          <?php if(!empty($usr_questions)) { ?>
+                          <?php } else { ?>
+                          <p>Pašlaik nav iesniegts neviens jautājums</p>
                           <?php } ?>
                       </div>
                     </div>
