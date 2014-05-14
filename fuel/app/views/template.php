@@ -58,7 +58,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Aktuālā informācija">Jaunumi <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href="/aktuali/jaunumi">Ziņas</a></li>
-            <li class='disabled'><a href="/aktuali/darbi">Plānotie darbi</a></li>
+            <li><a href="/aktuali/darbi">Plānotie darbi</a></li>
             <li class='disabled'><a href="/aktuali/medijiem">Medijiem</a></li>
             <li class='disabled'><a href="/aktuali/fakti">Interesanti fakti</a></li>
           </ul>

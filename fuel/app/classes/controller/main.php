@@ -91,9 +91,15 @@ class Controller_Main extends Controller_Template
                 $this -> template -> content = View::forge('main/404');
 	}
         
+        /**
+	 * Funkcija: 3.3.5.10.	Bojājumu paziņošana (viesis, klients, darbinieks)
+         * Identifikators: IS_REPORT_ISSUE
+	 *
+         * Sistēmas lietotāji var ziņot par bojājumiem
+         * 
+	 */
         public function action_report_issue()
         {
-            
             if(Input::method() == 'POST' && Security::check_token())
             {
                 $issue = new Model_Emergency();

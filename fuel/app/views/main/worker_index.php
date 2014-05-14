@@ -27,7 +27,10 @@
                       <div class="caption text-center">
                         <h3>Jaunumu pārvaldība</h3>
                         <p>melnraksti, publicētās ziņas u.c.</p>
-                        <p><a href="/darbinieks/jaunumi" class="btn-default btn" role="button">Ieiet</a></p>
+                        <p>
+                            <a href="/darbinieks/jaunumi" class="btn-default btn" role="button">Ieiet</a> 
+                            <a href="/pazinot-par-bojajumu" class="btn-default btn" role="button">Paziņot par bojājumu</a>
+                        </p>
                       </div>
                     </div>
                   </div>

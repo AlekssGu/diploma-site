@@ -23,8 +23,8 @@
                         <?php } ?>
                         
                         <!-- galvenās lapas forma -->
-                        <form id="request_form" action="/pazinot-par-bojajumu" method="POST" role="form">
-                        <div class="date-pick form-group">
+                        <form id="report_form" action="/pazinot-par-bojajumu" method="POST" role="form">
+                        <div class="form-group">
                             <label for="address">Adrese, kur atrodas objekts</label>
                             <input name='address' id="address" class='form-control' type="text" placeholder='Kur konstatēta avārija?'/>
                         </div>
@@ -33,6 +33,13 @@
                             <label for="notes">Piezīmes</label>
                             <textarea name="notes" class="form-control" id="notes" placeholder="Papildus komentāri"></textarea>
                         </div>    
+                           
+                        <?php if(!Auth::check()) { ?>
+                            <div class="form-group">
+                                <label for="ha">Drošības kods</label>
+                                <input name="ha" class="form-control" id="ha" placeholder="Ievadi attēlā redzamo kodu"/>
+                            </div>   
+                        <?php } ?>
                             
                         <input type="hidden" name="<?php echo \Config::get('security.csrf_token_key');?>" value="<?php echo \Security::fetch_token();?>" />
                         <input id='latitude' type='hidden' name='latitude' />
@@ -51,15 +58,16 @@
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=places&sensor=false"></script>
 <script>
     $(document).ready(function(){
+        
       var geocoder;
       var map;
       var marker;
       
         function initialize() {
           geocoder = new google.maps.Geocoder();
-          var latlng = new google.maps.LatLng(-34.397, 150.644);
+          var latlng = new google.maps.LatLng(56.5369455, 21.0384852);
           var mapOptions = {
-            zoom: 8,
+            zoom: 9,
             center: latlng
           }
           map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
@@ -103,6 +111,29 @@
   initialize();
 
     $('#address, #notes').on('blur', codeAddress);
+    
+    $('#report_form').validate({
+        rules: {
+            address: {
+                required: true,
+            },
+            notes: {
+                required: true,
+            },
+        },
+        
+        messages: {
+            address: {
+                required: "Šis lauks ir obligāts!"
+            },
+            notes: {
+                required: "Šis lauks ir obligāts!"
+            },
+        },
+            submitHandler: function(form) {
+                form.submit();
+            }
+    });    
 
     });
 </script>

@@ -21,6 +21,7 @@ return array(
         // navigācijas lapas (ar statisko saturu):
         'aktuali' => 'static/recent', //Pāradresē uz root
         'aktuali/jaunumi' => 'static/recent_news', //Jaunumu lapa
+        'aktuali/darbi' => 'static/all_issues', //Visi bojājumi un darbi
         'pakalpojumi' => 'static/services', //Pakalpojumu lapa
 
         // Par mums sadaļas:
@@ -44,7 +45,6 @@ return array(
             'abonents/pakalpojumi/pasutit' => 'client/request_service',
             'abonents/pakalpojumi/atteikties' => 'client/dismiss_service',
             'abonents/ievadit-merijumus' => 'client/all_readings',
-            'pazinot-par-bojajumu' => 'main/report_issue',
     
         // Darbinieka sadaļas: 
             'darbinieks' => 'worker/worker',
@@ -87,6 +87,9 @@ return array(
             'darbinieks/jaunumi/skatit/:news_id' => 'worker/view_news/$1',
             'darbinieks/jaunumi/labot/:news_id' => 'worker/edit_news/$1',
             'darbinieks/jaunumi/dzest/:news_id' => 'worker/delete_news/$1',
+    
+            'pazinot-par-bojajumu' => 'main/report_issue',
+            'darbinieks/bojajumu-pazinojumi/dzest/:issue_id' => 'worker/delete_issue/$1',
     
             //ajax izsaukumiem
             'ieladet-datus/:id' => 'worker/load_client/$1',

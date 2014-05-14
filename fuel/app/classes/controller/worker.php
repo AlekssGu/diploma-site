@@ -625,14 +625,16 @@ class Controller_Worker extends Controller_Template
                             ->from('all_usr_requests')
                             ->where('status','!=','Atteikts')
                             ->and_where('status','!=','Apstiprināts');
-        $service_requests = $query_usr_srv_req -> as_object() -> execute() -> as_array();       
+        $service_requests = $query_usr_srv_req -> as_object() -> execute() -> as_array();      
+        
+        $emergencies = DB::select()->from('emergencies')->as_object()->execute()->as_array();
         
         //Iesniegtās avārijas
         
         //Sagatavo datus skatam
         $data['readings'] = $last_readings;
         $data['services'] = $service_requests;
-        $data['emergencies'] = NULL;
+        $data['emergencies'] = $emergencies;
         
         $this -> template -> title = 'Iesniegtie dati - IS Pilsētas ūdens';
         $this -> template -> content = View::forge('worker/all_entered_data', $data);
@@ -1257,7 +1259,7 @@ class Controller_Worker extends Controller_Template
                     $config = array(
                         'path' => DOCROOT.'/assets/img/news', //Kur saglabāt attēlu
                         'randomize' => true, //pārtaisa faila nosaukumu uz nejaušu simbolu virkni
-                        'ext_whitelist' => array('img', 'jpg', 'jpeg', 'gif', 'png'), //Pieļaujamais attēla formāts
+                        'ext_whitelist' => array('img', 'jpg', 'jpeg', 'gif', 'png') //Pieļaujamais attēla formāts
                     );
 
                     //Augšupielādē attēlu
@@ -1423,4 +1425,43 @@ class Controller_Worker extends Controller_Template
             }
 
 	}
+        
+         /**
+	 * Funkcija: 3.3.5.11.	Bojājuma paziņojuma dzēšana (darbinieks)
+         * Identifikators: IS_DELETE_ISSUE
+	 *
+         * Darbinieki var dzēst bojājumu paziņojumus
+	 */
+        public function action_delete_issue($issue_id = null)
+        {
+            //Vai ir autorizējies un ir darbinieks
+            if(Auth::check() && Auth::member(50))
+            {
+                //Atrod ierakstu, kuru dzēst
+                $delete = Model_Emergency::find($issue_id);
+                
+                //Ja nav atrasts, tad parāda kļūdas paziņojumu
+                if(!$delete)
+                {
+                    Session::set_flash('error','Sistēmā nav ievadītā bojājuma paziņojuma! Visticamāk, ka tas jau ir dzēsts.');
+                    Response::redirect('/darbinieks/iesniegtie/dati');
+                }
+                
+                //Ja izdevies dzēst
+                if($delete -> delete())
+                {
+                    Session::set_flash('success','Bojājuma paziņojums veiksmīgi dzēsts!');
+                    Response::redirect('/darbinieks/iesniegtie/dati');
+                }
+                //Ja nav izdevies dzēst
+                else 
+                {
+                    Session::set_flash('error','Bojājuma paziņojums netika dzēsts!');
+                }
+            }
+            else
+            {
+                Response::redirect('/pazinot-par-bojajumu');
+            }
+        }
 }

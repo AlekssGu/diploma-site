@@ -107,6 +107,14 @@
                     <div id="collapseThree" class="panel-collapse collapse">
                       <div class="panel-body">
                           <?php if(!empty($emergencies)) { ?>
+                            <?php foreach($emergencies as $emergency) { ?>
+                                <div class='well'>
+                                      <a href='/darbinieks/bojajumu-pazinojumi/dzest/<?php echo $emergency->id;?>' onclick='return confirm("Vai tiešām vēlaties dzēst?")' class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                                      <p>Platums: <?php echo $emergency->lat; ?>; Garums: <?php echo $emergency->lon;?></p>
+                                      <p>Piezīmes: <?php echo $emergency->notes; ?></p>
+                                      <p>Paziņots: <?php echo Date::forge($emergency->created_at)->format('%d.%m.%Y %H:%M:%S');?></p>
+                                </div>
+                            <?php } ?>
                           <?php } else { ?>
                           <p>Pašlaik nav iesniegta neviena avārija</p>
                           <?php } ?>

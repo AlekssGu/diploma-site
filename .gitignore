@@ -17,3 +17,4 @@ build
 nbproject/
 /fuel/app/config/email.php
 /fuel/app/config/development/db.php
+public/assets/img/news/*

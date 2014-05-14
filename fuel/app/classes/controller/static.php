@@ -115,4 +115,17 @@ class Controller_Static extends Controller_Template
                 $this -> template -> title = "Biežāk uzdotie jautājumi (BUJ) - Pilsētas ūdens";
                 $this -> template -> content = View::forge('static/help/faq');
         }
+        
+        public function action_all_issues()
+        {
+            $data['emergencies'] = DB::select()
+                        ->from('emergencies')
+                        ->as_object()
+                        ->execute()
+                        ->as_array();
+            
+                $this -> template -> title = "Bojājumi, plānotie un neplānotie darbi - Pilsētas ūdens";
+                $this -> template -> content = View::forge('static/all_issues',$data);
+            
+        }
 }
