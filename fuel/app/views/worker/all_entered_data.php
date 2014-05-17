@@ -132,6 +132,20 @@
                     <div id="collapseFour" class="panel-collapse collapse">
                       <div class="panel-body">
                           <?php if(!empty($usr_questions)) { ?>
+                              <?php foreach($usr_questions as $question) { ?>
+                                <div class='well'>
+                                    <a href='/darbinieks/iesniegtie-jautajumi/dzest/<?php echo $question->quest_id;?>' onclick='return confirm("Vai tiešām vēlaties dzēst?")' class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                                    <?php if($question->user_id) { ?>
+                                        <p><b>Tēma:</b> "<?php echo $question -> question; ?>"</p>
+                                        <p><b>Iesniedza:</b> <?php echo $question -> name . ' ' . $question -> surname; ?>, <em><a href='mailto:<?php echo $question -> email; ?>'><?php echo $question -> email; ?></a></em>, <?php echo Date::forge($question->quest_created)->format('%d.%m.%Y %H:%M'); ?></p>
+                                        <p><b>Jautājums:</b> <?php echo $question -> message; ?></p>
+                                    <?php } else { ?>
+                                        <p><b>Tēma:</b> "<?php echo $question -> question; ?>"</p>
+                                        <p><b>Iesniedza:</b> <?php echo $question -> fullname; ?>, <em><a href='mailto:<?php echo $question -> quest_email; ?>'><?php echo $question -> quest_email; ?></a></em>, <?php echo Date::forge($question->quest_created)->format('%d.%m.%Y %H:%M'); ?></p>
+                                        <p><b>Jautājums:</b> <?php echo $question -> message; ?></p>
+                                    <?php } ?>
+                                </div>
+                              <?php } ?>
                           <?php } else { ?>
                           <p>Pašlaik nav iesniegts neviens jautājums</p>
                           <?php } ?>

@@ -33,13 +33,6 @@
                             <label for="notes">Piezīmes</label>
                             <textarea name="notes" class="form-control" id="notes" placeholder="Papildus komentāri"></textarea>
                         </div>    
-                           
-                        <?php if(!Auth::check()) { ?>
-                            <div class="form-group">
-                                <label for="ha">Drošības kods</label>
-                                <input name="ha" class="form-control" id="ha" placeholder="Ievadi attēlā redzamo kodu"/>
-                            </div>   
-                        <?php } ?>
                             
                         <input type="hidden" name="<?php echo \Config::get('security.csrf_token_key');?>" value="<?php echo \Security::fetch_token();?>" />
                         <input id='latitude' type='hidden' name='latitude' />

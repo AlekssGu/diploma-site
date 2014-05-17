@@ -617,7 +617,9 @@ class Controller_Worker extends Controller_Template
         //Visi iesniegtie rādījumi izņemot sākotnējos
         $query_last_readings = DB::select('*')
                             ->from('last_readings')
-                            ->where('status','!=','Sākotnējais');
+                            ->where('status','!=','Sākotnējais')
+                            ->and_where('status','!=','Atgriezts')
+                            ->and_where('status','!=','Apstiprināts');
         $last_readings = $query_last_readings -> as_object() -> execute() -> as_array();
 
         //Iesniegtie pakalpojumi
@@ -627,17 +629,69 @@ class Controller_Worker extends Controller_Template
                             ->and_where('status','!=','Apstiprināts');
         $service_requests = $query_usr_srv_req -> as_object() -> execute() -> as_array();      
         
+        //Iesniegtās avārijas
         $emergencies = DB::select()->from('emergencies')->as_object()->execute()->as_array();
         
-        //Iesniegtās avārijas
+        //Iesniegtie jautājumi
+        $usr_questions = DB::select('questions.*',
+                                    'topics.*',
+                                    'users.*',
+                                    'persons.*',
+                                    array('questions.id','quest_id'),
+                                    array('questions.email','quest_email'),
+                                    array('questions.created_at','quest_created'))
+                        ->from('questions')
+                        ->join('topics')->on('topics.id','=','questions.topic_id')
+                        ->join('users','LEFT OUTER')->on('questions.user_id','=','users.id')
+                        ->join('persons','LEFT OUTER')->on('persons.id','=','users.person_id')
+                        ->order_by('quest_created','ASC')
+                        ->as_object()
+                        ->execute()
+                        ->as_array();
         
         //Sagatavo datus skatam
         $data['readings'] = $last_readings;
         $data['services'] = $service_requests;
         $data['emergencies'] = $emergencies;
+        $data['usr_questions'] = $usr_questions;
         
         $this -> template -> title = 'Iesniegtie dati - IS Pilsētas ūdens';
         $this -> template -> content = View::forge('worker/all_entered_data', $data);
+    }
+    
+    /**
+     * Nodaļa: 3.3.5.13.	Iesniegto jautājumu dzēšana (darbinieks)
+     * Identifikators: IS_STC_DEL_QUESTION
+     *
+     * Darbinieks var izdzēst iesniegtos jautājumus
+     * 
+     */
+    public function action_delete_question($quest_id = null)
+    {
+        //Ja ir autorizējies un darbinieka loma
+        if(Auth::check() && Auth::member(50))
+        {
+            is_null($quest_id) and Response::redirect('/');
+            
+            //Atrod jautājumu
+            $question = Model_Question::find($quest_id);
+            
+            //Izdzēš
+            if($question -> delete()) 
+            {
+                Session::set_flash('success','Jautājums izdzēsts!');
+                Response::redirect_back();
+            }
+            else
+            {
+                Session::set_flash('error','Jautājums netika izdzēsts!');
+                Response::redirect_back();
+            }
+        }
+        else
+        {
+            Response::redirect('/');
+        }
     }
     
     /**
@@ -1437,6 +1491,8 @@ class Controller_Worker extends Controller_Template
             //Vai ir autorizējies un ir darbinieks
             if(Auth::check() && Auth::member(50))
             {
+		is_null($issue_id) and Response::redirect('/darbinieks/iesniegtie/dati');
+                
                 //Atrod ierakstu, kuru dzēst
                 $delete = Model_Emergency::find($issue_id);
                 

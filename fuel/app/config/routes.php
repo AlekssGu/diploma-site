@@ -34,6 +34,10 @@ return array(
             'palidziba/sazinaties' => 'static/help_contact', //Sazināties ar uzņēmumu
         // --
     
+        // Visiem pieejamās sadaļas:
+            'pazinot-par-bojajumu' => 'main/report_issue',
+    
+    
         // Klientam pieejamās sadaļas:
             'abonents' => 'client/client',
             'abonents/mainit-datus' => 'client/change_data', // Lietotājs maina paroli,telefona numuru vai e-pastu
@@ -49,6 +53,7 @@ return array(
         // Darbinieka sadaļas: 
             'darbinieks' => 'worker/worker',
             'darbinieks/abonenti' => 'worker/clients',
+            'darbinieks/bojajumu-pazinojumi/dzest/:issue_id' => 'worker/delete_issue/$1',    
 
             'darbinieks/abonenti/labot-datus' => 'worker/change_client_data',
 
@@ -63,6 +68,8 @@ return array(
             'darbinieks/abonenti/skaititaji/nonemt/:service_id' => 'worker/remove_meter/$1',
 
             'darbinieks/iesniegtie/dati' => 'worker/all_entered_data',
+            'darbinieks/iesniegtie-jautajumi/dzest/:quest_id' => 'worker/delete_question/$1',
+    
             'darbinieks/abonenti/dzest-objektu/:object_id' => 'worker/delete_object/$1',
             'darbinieks/abonenti/skaititaji/labot' => 'worker/edit_meter',
 
@@ -87,9 +94,6 @@ return array(
             'darbinieks/jaunumi/skatit/:news_id' => 'worker/view_news/$1',
             'darbinieks/jaunumi/labot/:news_id' => 'worker/edit_news/$1',
             'darbinieks/jaunumi/dzest/:news_id' => 'worker/delete_news/$1',
-    
-            'pazinot-par-bojajumu' => 'main/report_issue',
-            'darbinieks/bojajumu-pazinojumi/dzest/:issue_id' => 'worker/delete_issue/$1',
     
             //ajax izsaukumiem
             'ieladet-datus/:id' => 'worker/load_client/$1',

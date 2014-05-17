@@ -9,7 +9,7 @@ class Create_readings
 		\DBUtil::create_table('readings', array(
 			'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true, 'unsigned' => true),
 			'meter_id' => array('constraint' => 11, 'type' => 'int'),
-			'lead' => array('constraint' => 11, 'type' => 'int'),
+			'lead' => array('constraint' => 50, 'type' => 'varchar'),
 			'date_taken' => array('type' => 'date'),
 			'period' => array('constraint' => 50, 'type' => 'varchar'),
                         'status' => array('constraint' => 50, 'type' => 'varchar'),

@@ -66,6 +66,19 @@ class Controller_Main extends Controller_Template
                 //Saglabā mainīgajā priekš skata
                 $data['last_reading'] = $last_reading;
                 
+                $data['all_readings'] = DB::select('readings.*')
+                                        ->from('readings')
+                                        ->join('meters')->on('meters.id','=','readings.meter_id')
+                                        ->join('user_services')->on('user_services.id','=','meters.service_id')
+                                        ->join('objects')->on('objects.id','=','user_services.obj_id')
+                                        ->where('objects.client_id','=',Auth::get('id'))
+                                        ->and_where('objects.is_deleted','=','N')
+                                        ->and_where('user_services.is_active','=','Y')
+                                        ->and_where('readings.status','=','Apstiprināts')
+                                        ->as_object()
+                                        ->execute()
+                                        ->as_array();
+
                 $this -> template -> content = View::forge('main/user_index', $data);
             }
             //Ja lietotājs ir darbinieks, rādīt viņam citu index lapu
@@ -99,9 +112,10 @@ class Controller_Main extends Controller_Template
          * 
 	 */
         public function action_report_issue()
-        {
+        {            
             if(Input::method() == 'POST' && Security::check_token())
             {
+                
                 $issue = new Model_Emergency();
                 $issue -> user_id = Auth::get('id');
                 $issue -> lat = Input::post('latitude');

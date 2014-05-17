@@ -119,7 +119,7 @@
                 <div class="row">
                     <div class="col-xs-4">
                         <div class="form-group">
-                            <input id="district" name="district" type="text" class="form-control" placeholder="Rajons">
+                            <input id="district" name="district" type="text" class="form-control" placeholder="Novads">
                         </div>
                     </div>
                     <div class="col-xs-4">
@@ -297,7 +297,7 @@
                         required: "Lūdzu, ievadiet objekta ēkas numuru!",
                     },
                     district: {
-                        required: "Lūdzu, ievadiet rajonu vai novadu!",
+                        required: "Lūdzu, ievadiet novadu!",
                     },
                     post_code: {
                         required: "Lūdzu, ievadiet pasta indeksu!",

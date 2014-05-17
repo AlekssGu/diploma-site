@@ -26,6 +26,8 @@ return array(
 				17 => '019_create_news',
 				18 => '020_add_cols_to_news',
 				19 => '021_create_emergencies',
+				20 => '022_create_questions',
+				21 => '023_create_topics',
 			),
 		),
 		'module' => 
