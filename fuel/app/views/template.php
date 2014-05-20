@@ -143,6 +143,7 @@
     <?php echo $content; ?>
     <!-- lapas ietvars -->
     
+    <!-- lapas kājene -->
     <div class="container">
         <hr> 
         <div class="text-right col-lg-12">
@@ -151,7 +152,7 @@
                 <li>Aleksandrs Gusevs &copy; <?php echo Date::time()->format('%Y'); ?></li>
             </ul>
         </div>
-    </div
-    
+    </div>
+    <!-- lapas kājene -->
 </body>
 </html>
