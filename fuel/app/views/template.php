@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Informācijas sistēma Pilsētas ūdens">
         <meta name="author" content="Aleksandrs Gusevs">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
 	<?php echo Asset::css('bootstrap.min.css'); ?>
         <?php echo Asset::css('style.css'); ?>
         <?php echo Asset::js('jquery.min.js'); ?>
@@ -141,7 +141,7 @@
     
     <!-- lapas ietvars -->
     <?php echo $content; ?>
-    <!-- /lapas ietvars -->
+    <!-- /.lapas ietvars -->
     
     <!-- lapas kājene -->
     <div class="container">
@@ -153,6 +153,6 @@
             </ul>
         </div>
     </div
-    <!-- /lapas kājene -->
+    <!-- /.lapas kājene -->
 </body>
 </html>

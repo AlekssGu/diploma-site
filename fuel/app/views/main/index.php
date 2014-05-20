@@ -143,7 +143,7 @@
                     <div class="page-header text-center">
                         <h1>Īsa pamācība <small><br/>parādīs tev svarīgākās sistēmas funkcijas</small></h1>
                     </div>
-                    <iframe width="560" height="315" src="//www.youtube.com/embed/gyA2L3Tl6h4" frameborder="0" allowfullscreen></iframe>
+                    <iframe style="border-width: 0px" width="560" height="315" src="//www.youtube.com/embed/gyA2L3Tl6h4" allowfullscreen></iframe>
                 </div>
               <!-- /galvenās lapas forma -->
             </div>
