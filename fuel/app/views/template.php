@@ -141,7 +141,7 @@
     
     <!-- lapas ietvars -->
     <?php echo $content; ?>
-    <!-- /.lapas ietvars -->
+    <!-- lapas ietvars -->
     
     <!-- lapas kājene -->
     <div class="container">
@@ -153,6 +153,6 @@
             </ul>
         </div>
     </div
-    <!-- /.lapas kājene -->
+    <!-- lapas kājene -->
 </body>
 </html>

@@ -129,7 +129,7 @@
                     </div>
                     <div class="checkbox">
                       <label>
-                        <input name="messages" checked="true" value='Y' type="checkbox"> Vēlos saņemt paziņojumus no sistēmas administrācijas
+                        <input name="messages" checked value='Y' type="checkbox"> Vēlos saņemt paziņojumus no sistēmas administrācijas
                       </label>
                     </div>
                     <div class="form-group">
