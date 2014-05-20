@@ -143,7 +143,6 @@
     <?php echo $content; ?>
     <!-- lapas ietvars -->
     
-    <!-- lapas kājene -->
     <div class="container">
         <hr> 
         <div class="text-right col-lg-12">
@@ -153,6 +152,6 @@
             </ul>
         </div>
     </div
-    <!-- lapas kājene -->
+    
 </body>
 </html>
