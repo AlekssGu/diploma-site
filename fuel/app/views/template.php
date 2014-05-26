@@ -79,21 +79,19 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Sadaļa uzņēmuma klientiem">Klientiem <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <?php if(!Auth::check()) { ?>
-            <li><a href="/klients/pieslegties" title="Uzņēmuma rekvizīti">Ieiet sistēmā</a></li>
-            <li><a href="/klients/registreties" title="Uzņēmuma rekvizīti">Reģistrēties</a></li>
+            <li><a href="/klients/pieslegties" title="Pieslēgties sistēmai">Ieiet sistēmā</a></li>
+            <li><a href="/klients/registreties" title="Reģistrēties sistēmā">Reģistrēties</a></li>
             <li class='divider'></li>
             <?php } ?>
-            <li class='disabled'><a href="/par-uznemumu/dokumenti" title="Uzņēmuma sertifikāti">Aktuālā informācija</a></li>
-            <li class='disabled'><a href="/par-uznemumu/parvalde" title="Organizatoriskā struktūra">Cenas un tarifi</a></li>
-            <li class='disabled'><a href="/par-uznemumu/projekti" title="Uzņēmuma nozares">Skaitītāju maiņa</a></li>
+            <li class='disabled'><a href="/" title="Uzņēmuma sertifikāti">Aktuālā informācija</a></li>
+            <li class='disabled'><a href="/" title="Organizatoriskā struktūra">Cenas un tarifi</a></li>
+            <li class='disabled'><a href="/" title="Uzņēmuma nozares">Skaitītāju maiņa</a></li>
           </ul>
         </li>
         
         <li <?php if(Uri::string()=='pakalpojumi') echo 'class="active"'; ?>><a href="/pakalpojumi" title="Doties uz pakalpojumu lapu">Pakalpojumi</a></li>
-        <li class='disabled'<?php if(Uri::string()=='projekti') echo 'class="active"'; ?>><a href="/projekti" title="Doties uz projektu lapu">Projekti</a></li>
+        <li <?php if(Uri::string()=='projekti') echo 'class="active"'; ?>><a href="/projekti" title="Doties uz projektu lapu">Projekti</a></li>
 
-        
-        
       </ul>
         
       <!-- mazais bloks -->
@@ -147,7 +145,7 @@
         <hr> 
         <div class="text-right col-lg-12">
             <ul class="list-inline">
-                <li><a href='#' class="text-muted">Ziņot par kļūdu</a></li>
+                <li><a href='/palidziba/sazinaties' class="text-muted">Ziņot par kļūdu</a></li>
                 <li>Aleksandrs Gusevs &copy; <?php echo Date::time()->format('%Y'); ?></li>
             </ul>
         </div>

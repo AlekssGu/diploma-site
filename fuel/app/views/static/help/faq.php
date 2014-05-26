@@ -52,7 +52,7 @@
                     </div>
                   </div>
                 </div>
-            <p>Neatradi atbildi uz savu jautājumu? <a href="#">Uzdot jautājumu!</a></p>
+            <p>Neatradi atbildi uz savu jautājumu? <a href="/palidziba/sazinaties">Uzdot jautājumu!</a></p>
         </div>
     </div>
 </div>

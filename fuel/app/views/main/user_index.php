@@ -1,11 +1,11 @@
 <?php echo Asset::js('highcharts.js'); ?>
 <?php echo Asset::js('exporting.js'); ?>
 <script>
-    <?php if(!empty($all_readings)) { ?>
+    <?php if(count($all_readings) >= 2) { ?>
     $(function () {
         $('#container').highcharts({
             title: {
-                text: 'Ūdens patēriņš',
+                text: 'Aukstā ūdens patēriņš',
                 x: -20 //center
             },
             subtitle: {
@@ -41,7 +41,7 @@
             },
             series: [{
                 name: 'Ūdens daudzums',
-                data: [<?php foreach ($all_readings as $reading) { echo $reading->lead . ','; } ?>]
+                data: [<?php foreach ($all_readings as $reading) { echo $reading->lead - $reading->last_lead . ','; } ?>]
             }]
         });
     });

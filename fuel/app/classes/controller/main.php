@@ -33,18 +33,14 @@ class Controller_Main extends Controller_Template
                                     ->where('client_id','=',Auth::get('id'))
                                     ->and_where('is_active','=','Y')
                                     ->order_by('rdn_id','DESC');
+                
                 $last_reading = $last_reading_query -> as_object() -> execute() -> as_array();
                 
                 //Ja tāds ir atrasts, tad atrod klienta pirmspēdējo rādījumu
                 if(!empty($last_reading))
                 {
-                    $pre_last_rdn_query = DB::select('*')
-                                        ->from('readings')
-                                        ->where('meter_id','=',$last_reading[0]->id);
-                    $pre_last_reading = $pre_last_rdn_query -> as_object() -> execute() -> as_array();
-
                     //Aprēķina patērēto ūdens daudzumu
-                    $last_reading[0] -> amount_since_last = round((int)$last_reading[0]->lead - (int)$pre_last_reading[0]->lead);    
+                    $last_reading[0] -> amount_since_last = round((int)$last_reading[0]->lead - (int)$last_reading[0]->last_lead);    
                 }
 
                 //Iesniegtie pakalpojumi
@@ -66,19 +62,15 @@ class Controller_Main extends Controller_Template
                 //Saglabā mainīgajā priekš skata
                 $data['last_reading'] = $last_reading;
                 
-                $data['all_readings'] = DB::select('readings.*')
-                                        ->from('readings')
-                                        ->join('meters')->on('meters.id','=','readings.meter_id')
-                                        ->join('user_services')->on('user_services.id','=','meters.service_id')
-                                        ->join('objects')->on('objects.id','=','user_services.obj_id')
-                                        ->where('objects.client_id','=',Auth::get('id'))
-                                        ->and_where('objects.is_deleted','=','N')
-                                        ->and_where('user_services.is_active','=','Y')
-                                        ->and_where('readings.status','=','Apstiprināts')
+                $data['all_readings'] = DB::select('all_readings.*')
+                                        ->from('all_readings')
+                                        ->where('client_id','=',Auth::get('id'))
+                                        ->order_by('id','ASC')
                                         ->as_object()
                                         ->execute()
                                         ->as_array();
 
+                
                 $this -> template -> content = View::forge('main/user_index', $data);
             }
             //Ja lietotājs ir darbinieks, rādīt viņam citu index lapu

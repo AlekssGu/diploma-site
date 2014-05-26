@@ -9,12 +9,12 @@
 </head>
  
 <body bgcolor="#FFFFFF">
-<h6>Šī ziņa jums tika nosūtīta, jo jūs reģistrējāties sistēmā "Pilsētas ūdens". Ja jūs to nedarījāt, ignorējiet šo e-pastu.</h6>
+<p>Šī ziņa jums tika nosūtīta, jo jūs reģistrējāties sistēmā "Pilsētas ūdens". Ja jūs to nedarījāt, ignorējiet šo e-pastu.</p>
 <h2>Paldies par reģistrāciju!</h2>
 <br>
 <h3><a style="margin-bottom:15px" target="_blank" href="https://udens.agusevs.com/apstiprinat/<?php echo $code; ?>" title="Apstiprināt reģistrāciju">Apstiprināt reģistrāciju &raquo;</a></h3>
 <br>
-<h6>Ja saite nestrādā, tad ievadiet adresi https://udens.agusevs.com/apstiprinat/<?php echo $code;?> jūsu interneta pārlūka adreses vietā</h6>
+<p>Ja saite nestrādā, tad ievadiet adresi https://udens.agusevs.com/apstiprinat/<?php echo $code;?> jūsu interneta pārlūka adreses vietā</p>
 <p style="margin:10px">Ar cieņu, <br>IS "Pilsētas ūdens" administrācija.</p>
 </body>
 </html>

@@ -68,7 +68,7 @@
         },
         success: function(response) {
             if(!response) {
-                return "E-pasts jau eksistē!";
+                return "E-pasts jau eksistē vai ir nepareizs formāts!";
             } 
         }  
     }); 

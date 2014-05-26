@@ -154,6 +154,14 @@ class Controller_Client extends Controller_Template
                             $user_object = Model_User::find(Auth::get('id'));
                             $person_object = Model_Person::find($user_object->person_id);
                             
+                            //Ja ievadīts garāks telefona numurs, nekā Latvijā iespējams, tad kļūda
+                            if(mb_strlen(Input::post('value'))> 13)
+                            {
+                                $response = new Response();
+                                $response -> set_status(304);
+                                return $response;
+                            }
+                            
                             //Mainam telefona numuru
                             $person_object -> mobile_phone = Input::post('value');
                             
@@ -790,6 +798,14 @@ class Controller_Client extends Controller_Template
         {
             $data = array();
             
+            //Funkcija datuma pārbaudei
+            function validateDate($date)
+            {
+                $d = DateTime::createFromFormat('d.m.Y', $date);
+                return $d && $d->format('d.m.Y') == $date;
+            }
+            
+            
             if(Auth::check())
             {
                 //Visi pakalpojumi
@@ -847,7 +863,13 @@ class Controller_Client extends Controller_Template
                             || Input::post('date_to') == ''
                       )
                     {
-                        Session::set_flash('error','Kļūda! Aizpildiet visus laukus!');
+                        Session::set_flash('error','Kļūda! Aizpildiet visus laukus (piezīmes nav obligātas)!');
+                        Response::redirect('/klients/pakalpojumi/pasutit');
+                    }
+                    
+                    if(!validateDate(Input::post('date_from')) || !validateDate(Input::post('date_to')))
+                    {
+                        Session::set_flash('error','Kļūda! Lūdzu ievadiet korektu datumu!');
                         Response::redirect('/klients/pakalpojumi/pasutit');
                     }
                         

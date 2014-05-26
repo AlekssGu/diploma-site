@@ -122,12 +122,14 @@ class Controller_Static extends Controller_Template
                 $t3 = new Model_Topic(array('question' => 'Esošs pieslēgums'));
                 $t4 = new Model_Topic(array('question' => 'Rēķinu apmaksa'));
                 $t5 = new Model_Topic(array('question' => 'Ūdeņu attīrīšana')); 
+                $t6 = new Model_Topic(array('question' => 'Problēma sistēmā')); 
                 
                 $t1 -> save();
                 $t2 -> save();
                 $t3 -> save();
                 $t4 -> save();
                 $t5 -> save();
+                $t6 -> save();
                 
                 $topics = Model_Topic::find('all');
             }

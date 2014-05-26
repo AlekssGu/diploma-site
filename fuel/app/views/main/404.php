@@ -16,6 +16,7 @@
                 </div>
             </div>
         </div>
+        <!-- pašlaik netiek izstrādāts 
         <div class='row main-block'>
             <div class='col-md-12 text-center'>
                 <form style="margin-bottom:40px;" class="form-inline">
@@ -27,4 +28,5 @@
                 </form>
             </div>
         </div>
+        -->
     <!-- /404 lapas saturs -->

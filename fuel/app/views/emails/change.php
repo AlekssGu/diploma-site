@@ -9,7 +9,7 @@
 </head>
  
 <body bgcolor="#FFFFFF">
-<h6>Šī ziņa jums tika nosūtīta, jo jūs mainījāt paroli sistēmā "Pilsētas ūdens". Ja jūs to nedarījāt, ignorējiet šo e-pastu.</h6>
+<p>Šī ziņa jums tika nosūtīta, jo jūs mainījāt paroli sistēmā "Pilsētas ūdens". Ja jūs to nedarījāt, ignorējiet šo e-pastu.</p>
 <h2>Jūsu kontam mainīta parole!</h2>
 <br>
     <p>Jaunā parole: <strong><?php echo $code; ?></strong> </p>

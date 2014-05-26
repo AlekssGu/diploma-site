@@ -45,7 +45,7 @@
         </div>
         <div class='col-md-6'>
             <div style="height:400px; width:100%" id="map_canvas"></div>
-        </div>
+        </div>  
     </div>
 
 <script type="text/javascript" src="https://maps.google.com/maps/api/js?libraries=places&sensor=false"></script>

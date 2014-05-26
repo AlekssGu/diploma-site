@@ -33,8 +33,8 @@
                             <form id="request_form" action="/klients/pakalpojumi/pasutit" method="POST" role="form">
                             <div class="form-group">
                                 <label for="service">Pakalpojums</label>
-                                <select name="service" class='form-control'>
-                                    <option value='-1' selected='true' disabled='disabled'>Izvēlies pakalpojumu</option>
+                                <select id='service' name="service" class='form-control'>
+                                    <option value='' selected='true' disabled='disabled'>Izvēlies pakalpojumu</option>
                                     <?php foreach($services as $service) { ?>
                                     <option value="<?php echo $service->id; ?>"><?php echo $service->name . ' - ' . $service->description; ?></option>
                                     <?php } ?>
@@ -42,8 +42,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="object">Objekts</label>
-                                <select name="object" class='form-control'>
-                                    <option value='-1' selected='true' disabled='disabled'>Izvēlies objektu</option>
+                                <select id='object' name="object" class='form-control'>
+                                    <option value='' selected='true' disabled='disabled'>Izvēlies objektu</option>
                                     <?php foreach($objects as $object) { ?>
                                     <option value="<?php echo $object->object_id; ?>"><?php echo $object->object_name . ' - ' . $object->object_addr; ?></option>
                                     <?php } ?>
@@ -52,13 +52,13 @@
                             <div class="date-pick form-group">
                                 <label for="date_from">Datums no</label>
                                 <div class="input-group date">
-                                  <input name='date_from' type="text" class="form-control" placeholder='dd.mm.gggg'><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                  <input id='date_from' name='date_from' type="text" class="form-control" placeholder='dd.mm.gggg'><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                                 </div>
                             </div>
                             <div class="date-pick form-group">
                                 <label for="date_to">Datums līdz</label>
                                 <div class="input-group date">
-                                  <input name='date_to' type="text" class="form-control" placeholder='dd.mm.gggg'><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                                  <input id='date_to' name='date_to' type="text" class="form-control" placeholder='dd.mm.gggg'><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                                 </div>
                             </div>    
 
@@ -94,40 +94,23 @@ $(document).ready(function() {
     
     $('#request_form').validate({
         rules: {
-            client_number: {
+            service: {
                 required: true,
-                minlength: 8,
-                maxlength:8
             },
-            email: {
+            object: {
                 required: true,
-                email: true
             },
-            password: {
-                required: true,
-                minlength: 5,
-                complex: true
-            },
-            secpassword: {
-                equalTo: "#password"
-            },
+
         },
         
         messages: {
-            client_number: {
-                required: "Lūdzu ievadiet savu klienta numuru!",
-                minlength: "Klienta numuram jāsastāv tieši no 8 simboliem!",
-                maxlength: "Klienta numuram jāsastāv tieši no 8 simboliem!"
+            service: {
+                required: "Jāizvēlas pakalpojums!",
             },
-            email: "Lūdzu ievadiet korektu e-pasta adresi!",
-            password: {
-                required: "Lūdzu ievadiet paroli!",
-                minlength: "Parolei ir jābūt vismaz 5 simbolu garai!",
-                complex: "Parolei jāsatur vismaz viens burts un viens cipars!"
+            object: {
+                required: "Jāizvēlas objekts, kuram pasūtīt pakalpojumu!",
             },
-            secpassword: {
-                equalTo: "Parolēm jābūt vienādām!"
-            },
+
         },
             submitHandler: function(form) {
                 form.submit();
