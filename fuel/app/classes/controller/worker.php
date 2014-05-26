@@ -634,9 +634,7 @@ class Controller_Worker extends Controller_Template
         //Izdzēš skaitītāja rādījumus pirms dzēst pašu skaitītāju
         $delete_readings = DB::delete('readings')->where('meter_id','=',$meter_id)->execute();
         
-        $not_deleted = DB::select()->from('meters')->where('meters.id','=',$meter_id);
-        
-        if(!$not_deleted)
+        if($meter -> delete())
         {
             //Ja skaitītājs ir dzēsts, tad saglabā to vēsturē un sūta darbinieku atpakaļ
             Controller_Client::cre_cln_history($object->client_id,'Noņemts skaitītājs nr.' . $meter->meter_number);
