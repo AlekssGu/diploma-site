@@ -867,8 +867,13 @@ class Controller_Worker extends Controller_Template
             if(Input::post('name') == 'cln_number')
             {
                 $client = Model_User::find(Input::post('pk'));
+                $person = Model_Person::find($client->person_id);
+                
+                $person -> client_number = Input::post('value');
                 $client -> username = Input::post('value');
-                $saved = $client -> save();
+                
+                $saved = $person -> save() && $client -> save();
+                
                 
                 Controller_Client::cre_cln_history(Input::post('pk'), 'Labots klienta numurs');
             }
