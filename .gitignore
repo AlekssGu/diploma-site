@@ -15,6 +15,4 @@ build
 /fuel/app/cache/*/*
 /fuel/app/config/crypt.php
 nbproject/
-/fuel/app/config/email.php
-/fuel/app/config/development/db.php
 public/assets/img/news/*

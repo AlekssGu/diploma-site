@@ -30,7 +30,7 @@
                             
                         <?php if(!empty($services)) { ?>
                             <!-- galvenās lapas forma -->
-                            <form id="request_form" action="/abonents/pakalpojumi/pasutit" method="POST" role="form">
+                            <form id="request_form" action="/klients/pakalpojumi/pasutit" method="POST" role="form">
                             <div class="form-group">
                                 <label for="service">Pakalpojums</label>
                                 <select name="service" class='form-control'>

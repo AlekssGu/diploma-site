@@ -1,14 +1,15 @@
 <?php echo Asset::js('highcharts.js'); ?>
 <?php echo Asset::js('exporting.js'); ?>
 <script>
-$(function () {
+    <?php if(!empty($all_readings)) { ?>
+    $(function () {
         $('#container').highcharts({
             title: {
                 text: 'Ūdens patēriņš',
                 x: -20 //center
             },
             subtitle: {
-                text: 'Klienta numurs: 00900299',
+                text: 'Klienta numurs: <?php echo Auth::get('username'); ?>',
                 x: -20
             },
             xAxis: {
@@ -44,18 +45,19 @@ $(function () {
             }]
         });
     });
+    <?php } ?>
     
 </script>
             <div class="container">
                 <div class="main-block row">
                     <div class="col-md-3">
-                        <a href="/abonents" class="btn btn-block btn-primary" title="Apskatīt klienta datus"><span class="glyphicon glyphicon-user"></span> Klienta informācija</a>
+                        <a href="/klients" class="btn btn-block btn-primary" title="Apskatīt klienta datus"><span class="glyphicon glyphicon-user"></span> Klienta informācija</a>
                     </div>
                     <div class="col-md-3">
                         <a href="/pazinot-par-bojajumu" class="btn btn-block btn-primary" title="Paziņot par bojājumu"><span class="glyphicon glyphicon-earphone"></span> Paziņot par bojājumu</a>
                     </div>
                     <div class="col-md-3">
-                        <a href="/abonents/pakalpojumi/pasutit" class="btn btn-block btn-primary" title="Pasūtīt pakalpojumu"><span class="glyphicon glyphicon-leaf"></span> Pasūtīt pakalpojumu</a>
+                        <a href="/klients/pakalpojumi/pasutit" class="btn btn-block btn-primary" title="Pasūtīt pakalpojumu"><span class="glyphicon glyphicon-leaf"></span> Pasūtīt pakalpojumu</a>
                     </div>
                     <div class="col-md-3">
                         <a href="/palidziba/sazinaties" class="btn btn-block btn-primary" title="Uzdot jautājumu"><span class="glyphicon glyphicon-question-sign"></span> Uzdot jautājumu</a>
@@ -77,11 +79,10 @@ $(function () {
                                         <?php if(!empty($service)) { ?>
                                         <h4>Pēdējais pakalpojuma pieprasījums:</h4>
                                         <p><?php if($service[0]->service_requested != '') 
-                                                      echo 'Aieslēgt pakalpojumu "' . $service[0] -> service_requested . '"'; 
+                                                      echo 'Pieslēgt pakalpojumu "' . $service[0] -> service_requested . '"'; 
                                                  else echo 'Atslēgt pakalpojumu "' . $service[0] -> service_dismissed . '"'; ?> (Sākot ar <?php echo date_format(date_create($service[0] -> date_from),'d.m.Y'); ?>)
                                         </p>
                                         <br/>
-                                        <a href='/' class='btn btn-link'>Apskatīt visus pakalpojumu pieprasījumus</a>
                                         <?php } ?>
                                     <?php } else { ?>
                                         <p>Pašlaik sistēmā nav reģistrēts nekas par tevi, bet drīzumā šeit parādīsies informācija par pēdējām tavām darbībām</p>
@@ -95,16 +96,18 @@ $(function () {
                             </div>
                         </div>
                         <div class='text-center'>
-                        <a href="/abonents/ievadit-merijumus" class="btn btn-success btn-lg btn-block">Ievadīt mērījumus</a>
+                        <a href="/klients/ievadit-merijumus" class="btn btn-success btn-lg btn-block">Ievadīt mērījumus</a>
                         </div>
                     </div>
                 </div>
                 
+                <?php if(!empty($all_readings)) { ?>
                 <div class='row main-block'>
                     <div class="col-md-12">
                         <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                     </div>
                 </div>
+                <?php } ?>
                 
 <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
 <script>

@@ -26,4 +26,13 @@ class Model_Reading extends \Orm\Model
 	);
 	protected static $_table_name = 'readings';
 
+        protected static $_has_one = array(
+            'meter' => array(
+                'key_from' => 'meter_id',
+                'model_to' => 'Model_Meter',
+                'key_to' => 'id',
+                'cascade_save' => false,
+                'cascade_delete' => false,
+            ),
+        );        
 }

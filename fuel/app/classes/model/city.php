@@ -21,5 +21,15 @@ class Model_City extends \Orm\Model
 		),
 	);
 	protected static $_table_name = 'cities';
+        
+        protected static $_belongs_to = array(
+            'address' => array(
+                'key_from' => 'id',
+                'model_to' => 'Model_Address',
+                'key_to' => 'city_id',
+                'cascade_save' => false,
+                'cascade_delete' => false,
+            ),
+        );
 
 }

@@ -6,7 +6,7 @@
             <ul class="nav nav-tabs" id="mytab">
               <li><a href="#klients" data-toggle="tab">Klients</a></li>
               <li><a href="#objekti" data-toggle="tab">Objekti</a></li>
-              <li><a href="#vesture" data-toggle="tab">Abonenta vēsture</a></li>
+              <li><a href="#vesture" data-toggle="tab">Klienta vēsture</a></li>
             </ul>
             <br/>
             <!-- Tab panes -->
@@ -54,11 +54,11 @@
                             <?php foreach ($client_objects as $nr => $object) { ?>
                             <li style="margin:5px"><?php echo $nr + 1 . '. ' . $object -> object_name . ' - ' . $object -> object_addr; ?> 
                                                    <a href='/ieladet-objekta-datus/<?php echo $object->object_id; ?>' class="btn btn-sm btn-default" data-toggle="modal" data-target="#obj_info">Pakalpojumi</a> 
-                                                   <a href='/darbinieks/abonenti/dzest-objektu/<?php echo $object->object_id; ?>' onclick="return confirm('Vai tiešām vēlaties dzēst objektu?')" class="btn-delete btn btn-sm btn-danger">Dzēst</a></li>
+                                                   <a href='/darbinieks/klienti/dzest-objektu/<?php echo $object->object_id; ?>' onclick="return confirm('Vai tiešām vēlaties dzēst objektu?')" class="btn-delete btn btn-sm btn-danger">Dzēst</a></li>
                             <?php } ?>
                         </ul>
                     <?php } else { ?>
-                        <p>Abonentam pašlaik nav piesaistīts neviens objekts</p>
+                        <p>Klientam pašlaik nav piesaistīts neviens objekts</p>
                     <?php } ?>
                 </div>
 
@@ -70,7 +70,7 @@
                             <?php } ?>
                         </ul>
                     <?php } else { ?>
-                        <p>Abonentam nav vēstures ierakstu</p>
+                        <p>Klientam nav vēstures ierakstu</p>
                     <?php } ?>
                 </div>
             </div>
@@ -88,7 +88,7 @@
         <h4 class="modal-title" id="myModalLabel">Pievienot objektu</h4>
       </div>
 
-    <form id="add_object" action="/darbinieks/abonenti/pievienot-objektu" method="POST" role="form">
+    <form id="add_object" action="/darbinieks/klienti/pievienot-objektu" method="POST" role="form">
       <input type="hidden" name="<?php echo \Config::get('security.csrf_token_key');?>" value="<?php echo \Security::fetch_token();?>" />
       <input type="hidden" name="client_id" value="<?php echo $data->user_id; ?>"/>
       <div class="modal-body">
@@ -163,7 +163,7 @@
     $('.client_number').editable({
         type: 'text',
         name: 'cln_number',
-        url: '/darbinieks/abonenti/labot-datus',
+        url: '/darbinieks/klienti/labot-datus',
         title: 'Labot klienta numuru',
         validate: function(value) {
            if($.trim(value) == '') return 'Šis ir obligāts lauks!';
@@ -173,7 +173,7 @@
     
     $('.person_type').editable({
         name:'person_type',
-        url: '/darbinieks/abonenti/labot-datus',
+        url: '/darbinieks/klienti/labot-datus',
         validate: function(value) {
            if($.trim(value) == '') return 'Šis ir obligāts lauks!';
         }
@@ -182,7 +182,7 @@
     $('.client_name').editable({
         name: 'cln_name',
         type: 'text',
-        url: '/darbinieks/abonenti/labot-datus',
+        url: '/darbinieks/klienti/labot-datus',
         title: 'Labot klienta vārdu',
         validate: function(value) {
            if($.trim(value) == '') return 'Šis ir obligāts lauks!';
@@ -192,7 +192,7 @@
     $('.client_surname').editable({
         name: 'cln_surname',
         type: 'text',
-        url: '/darbinieks/abonenti/labot-datus',
+        url: '/darbinieks/klienti/labot-datus',
         title: 'Labot klienta uzvārdu',
         validate: function(value) {
            if($.trim(value) == '') return 'Šis ir obligāts lauks!';
@@ -202,7 +202,7 @@
     $('.client_pk').editable({
         name: 'client_pk',
         type: 'text',
-        url: '/darbinieks/abonenti/labot-datus',
+        url: '/darbinieks/klienti/labot-datus',
         title: 'Labot klienta personas kodu',
         validate: function(value) {            
            if($.trim(value) == '') return 'Šis ir obligāts lauks!';
@@ -214,7 +214,7 @@
     $('.client_phone').editable({
         name: 'client_phone',
         type: 'text',
-        url: '/darbinieks/abonenti/labot-datus',
+        url: '/darbinieks/klienti/labot-datus',
         title: 'Labot klienta telefona numuru',
         validate: function(value) {            
            if($.trim(value) == '') return 'Šis ir obligāts lauks!';
@@ -224,7 +224,7 @@
     $('.client_email').editable({
         name: 'client_email',
         type: 'email',
-        url: '/darbinieks/abonenti/labot-datus',
+        url: '/darbinieks/klienti/labot-datus',
         title: 'Labot klienta e-pasta adresi',
         validate: function(value) {            
            if($.trim(value) == '') return 'Šis ir obligāts lauks!';
@@ -233,7 +233,7 @@
     
     $('.btn-activate').click(function(e) {
         e.preventDefault();
-        $.post( "/darbinieks/abonenti/labot-datus", { 
+        $.post( "/darbinieks/klienti/labot-datus", { 
             name: 'activate', 
             pk: $(this).attr('data-pk'),
             value: 'Y'
@@ -247,7 +247,7 @@
     
     $('.btn-deactivate').click(function(e) {
         e.preventDefault();
-        $.post( "/darbinieks/abonenti/labot-datus", { 
+        $.post( "/darbinieks/klienti/labot-datus", { 
             name: 'deactivate', 
             pk: $(this).attr('data-pk'),
             value: 'N'

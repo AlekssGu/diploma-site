@@ -48,7 +48,7 @@
               
               <div class="form-group">
                 <label for="comment">Ziņojums</label>
-                <textarea name='comment' id='comment' class="form-control" rows="3"></textarea>
+                <textarea autofocus name='comment' id='comment' class="form-control" rows="3"></textarea>
               </div>
               
               <div class="checkbox">

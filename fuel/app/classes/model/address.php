@@ -27,5 +27,22 @@ class Model_Address extends \Orm\Model
 		),
 	);
 	protected static $_table_name = 'addresses';
+        
+        protected static $_has_one = array(
+            'user' => array(
+                'key_from' => 'client_id',
+                'model_to' => 'Model_User',
+                'key_to' => 'id',
+                'cascade_save' => false,
+                'cascade_delete' => false,
+            ),
+            'city' => array(
+                'key_from' => 'city_id',
+                'model_to' => 'Model_City',
+                'key_to' => 'city_id',
+                'cascade_save' => false,
+                'cascade_delete' => false,
+            ),
+        );
 
 }

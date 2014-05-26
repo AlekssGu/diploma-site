@@ -4,7 +4,7 @@
         <div class="col-md-5">
             <h1>Mani objekti</h1>
             <hr/>
-            <a href="/abonents" alt="atpakaļ">Doties atpakaļ</a>
+            <a href="/klients" alt="atpakaļ">Doties atpakaļ</a>
         </div>
     </div>
     <div class="row main-block">
@@ -25,7 +25,7 @@
                                 <td><?php echo $key->name; ?></td>
                                 <td><?php echo $key->address; ?></td>
                                 <td><?php echo $key->notes; ?></td>
-                                <td><a href="/abonents/objekti/apskatit/<?php echo $key->object_id;?>">Apskatīt</a></td>
+                                <td><a href="/klients/objekti/apskatit/<?php echo $key->object_id;?>">Apskatīt</a></td>
 
                             </tr>
                           <?php } ?>

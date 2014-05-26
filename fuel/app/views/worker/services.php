@@ -5,7 +5,7 @@
         <div class="col-md-5">
             <h1>Pakalpojumu pārvaldība</h1>
             <hr/>
-            <a href="/darbinieks/abonenti" alt="atpakaļ">Doties atpakaļ</a>
+            <a href="/darbinieks/klienti" alt="atpakaļ">Doties atpakaļ</a>
         </div>
     </div>
     

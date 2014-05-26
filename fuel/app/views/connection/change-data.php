@@ -3,7 +3,7 @@
         <div class="col-md-5">
             <h1>Mainīt paroli</h1>
             <hr/>
-            <a href="/abonents" alt="atpakaļ">Doties atpakaļ</a>
+            <a href="/klients" alt="atpakaļ">Doties atpakaļ</a>
         </div>
     </div>
     <div class="row">
@@ -19,10 +19,10 @@
                     </div>
             <?php } ?>
             
-            <form id="pass-change-form" method="POST" action="/abonents/mainit-datus" role="form">
+            <form id="pass-change-form" method="POST" action="/klients/mainit-datus" role="form">
                 <div class="form-group">
                     <label for="old_password">Vecā parole</label>
-                    <input type="password" name="old_password" class="form-control" id="opassword" placeholder="">
+                    <input autofocus type="password" name="old_password" class="form-control" id="opassword" placeholder="">
                 </div>
                 <div class="form-group">
                     <label for="new_password">Jaunā parole</label>

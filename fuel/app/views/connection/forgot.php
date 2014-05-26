@@ -17,10 +17,10 @@
                         <?php } ?>
                         
                         <div class="col-md-offset-3 col-md-6">
-                            <form id="login-form" method="POST" action="/abonents/aizmirsta-parole" role="form">
+                            <form id="login-form" method="POST" action="/klients/aizmirsta-parole" role="form">
                                 <div class="form-group">
                                     <label for="email">Tavs lietotāja e-pasts</label>
-                                    <input type="email" name="email" class="form-control" id="email" placeholder="">
+                                    <input autofocus type="email" name="email" class="form-control" id="email" placeholder="">
                                 </div>
                                 
                                 <input type="hidden" name="<?php echo \Config::get('security.csrf_token_key');?>" value="<?php echo \Security::fetch_token();?>" />

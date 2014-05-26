@@ -22,5 +22,15 @@ class Model_Service extends \Orm\Model
 		),
 	);
 	protected static $_table_name = 'services';
+        
+        protected static $_belongs_to = array(
+            'user_service' => array(
+                'key_from' => 'id',
+                'model_to' => 'Model_User_Service',
+                'key_to' => 'srv_id',
+                'cascade_save' => false,
+                'cascade_delete' => false,
+            ),
+        );
 
 }

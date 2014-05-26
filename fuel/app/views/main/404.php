@@ -10,7 +10,7 @@
                     <ul class='list-inline'>
                         <li><a href='/' class='btn btn-primary'>Doties uz sākumu</a></li>
                         <?php if(Auth::check() && Auth::member(1)) { ?>
-                            <li><a href='/abonents' class='btn btn-primary'>Apskatīt abonenta informāciju</a></li>
+                            <li><a href='/klients' class='btn btn-primary'>Apskatīt klienta informāciju</a></li>
                         <?php } ?>
                     </ul>
                 </div>

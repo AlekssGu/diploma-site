@@ -45,11 +45,11 @@ class Controller_Worker extends Controller_Template
                                     'persons.*')
                         ->from('users')
                         ->join('persons')->on('persons.id','=','users.person_id')
-                        ->where('users.group','=',1); //Abonents
+                        ->where('users.group','=',1); //Klients
 
         $data['clients'] = $query_clients->as_object()->execute()->as_array();
 
-        $this -> template -> title = 'Abonentu pārvaldība - IS Pilsētas ūdens';
+        $this -> template -> title = 'Klientu pārvaldība - IS Pilsētas ūdens';
         $this -> template -> content = View::forge('worker/clients',$data);        
     }
     
@@ -83,18 +83,18 @@ class Controller_Worker extends Controller_Template
                                                 'persons.*')
                                 ->from('users')
                                 ->join('persons')->on('persons.id','=','users.person_id')
-                                ->where('users.id','=',$id); //Abonents
+                                ->where('users.id','=',$id); //Klients
                 
                 //Izmanto skatu, atrod klienta objektus
                 $query_objects = DB::select('*')
                                 ->from('client_objects')
                                 ->where('client_objects.client_id','=',$id)
-                                ->and_where('client_objects.is_deleted','=','N'); //Abonents
+                                ->and_where('client_objects.is_deleted','=','N'); //Klients
                 
                 //Atrod klienta vēsturi un sakārto dilstoši
                 $query_cln_history = DB::select('*')
                                     ->from('client_histories')
-                                    ->where('client_histories.client_id','=',$id) //Abonents
+                                    ->where('client_histories.client_id','=',$id) //Klients
                                     ->order_by('client_histories.created_at','DESC');
                 
                 $query_cities = DB::select('*')
@@ -143,7 +143,7 @@ class Controller_Worker extends Controller_Template
                 
                 $query_obj_meters = DB::select('*')
                                         ->from('meters')
-                                        ->where('meters.object_id','=',$id); //Abonents
+                                        ->where('meters.object_id','=',$id); //Klients
  
                 $query_services = DB::select('*')
                                         ->from('services');
@@ -187,18 +187,46 @@ class Controller_Worker extends Controller_Template
                                -> and_where('is_active','=','Y');
             $service_id = $query_service_id -> as_object() -> execute() -> as_array();
             
-            $service = Model_User_Service::find($service_id[0]);
-            $service -> is_active = 'N';
-            
-            Controller_Client::cre_cln_history($object->client_id, 'Dzēsts pakalpojums');
-            Controller_Client::cre_cln_history($object->client_id, 'Dzēsts objekts');
-            
-            $saved_srv = $service -> save();
-            $saved_obj = $object -> save();
-            
-            Session::set_flash('success','Objekts ir izdzēsts!');
-            
-            Response::redirect_back(); 
+            if($service_id)
+            {
+                $service = Model_User_Service::find($service_id[0]);
+                $service -> is_active = 'N';
+                
+                if($object->save() && $service -> save())
+                {
+                    Controller_Client::cre_cln_history($object->client_id, 'Dzēsts pakalpojums');
+                    Controller_Client::cre_cln_history($object->client_id, 'Dzēsts objekts');
+
+                    Session::set_flash('success','Objekts ir izdzēsts!');
+                    Response::redirect_back(); 
+                }   
+                else
+                {
+                    Session::set_flash('error','Objekts nav izdzēsts!');
+
+                    $header = new Response();
+                    $header -> set_status(301);
+                    Response::redirect_back();
+                }
+            }
+            else
+            {
+                if($object->save())
+                {
+                    Controller_Client::cre_cln_history($object->client_id, 'Dzēsts objekts');
+
+                    Session::set_flash('success','Objekts ir izdzēsts!');
+                    Response::redirect_back(); 
+                }
+                else
+                {
+                    Session::set_flash('error','Objekts nav izdzēsts!');
+
+                    $header = new Response();
+                    $header -> set_status(301);
+                    Response::redirect_back();
+                }
+            }
         }
         else
         {
@@ -247,11 +275,11 @@ class Controller_Worker extends Controller_Template
                         
                         if($new_object -> save())
                         {
-                            //Ja objekts izveidots, tad saglabā to abonenta vēsturē un paziņo par to lietotājam
+                            //Ja objekts izveidots, tad saglabā to klienta vēsturē un paziņo par to lietotājam
                             Controller_Client::cre_cln_history(Input::post('client_id'),'Piesaistīts objekts');
                             
                             Session::set_flash('success','Objekts pievienots!');
-                            Response::redirect('/darbinieks/abonenti');
+                            Response::redirect('/darbinieks/klienti');
                         }
                         else
                         {
@@ -260,13 +288,13 @@ class Controller_Worker extends Controller_Template
                             $rollback->delete();
                             
                             Session::set_flash('error','Neveiksme! Nebija iespējams izveidot jaunu objektu.');
-                            Response::redirect('/darbinieks/abonenti');
+                            Response::redirect('/darbinieks/klienti');
                         }
                     }
                     else
                     {
                         Session::set_flash('error','Neveiksme! Nebija iespējams izveidot jaunu adresi.');
-                        Response::redirect('/darbinieks/abonenti');
+                        Response::redirect('/darbinieks/klienti');
                     }
                     
                 }
@@ -305,7 +333,7 @@ class Controller_Worker extends Controller_Template
                 $service_object = Model_User_Service::find('all', array(
                     'where' => array(
                         array('obj_id', Input::post('object_id')),
-                        array('srv_id', Input::post('pk')),
+                        array('id', Input::post('pk')),
                         array('is_active','=','Y')
                     )
                 ));
@@ -326,7 +354,7 @@ class Controller_Worker extends Controller_Template
                 $service_object = Model_User_Service::find('all', array(
                     'where' => array(
                         array('obj_id', Input::post('object_id')),
-                        array('srv_id', Input::post('pk')),
+                        array('id', Input::post('pk')),
                         array('is_active','=','Y')
                     )
                 ));
@@ -370,7 +398,7 @@ class Controller_Worker extends Controller_Template
         $new_obj_srv -> date_to = Input::post('date_to');
         $new_obj_srv -> is_active = 'Y';
         
-        //Ja izdevies pievienot, tad saglabājam to abonenta vēsturē
+        //Ja izdevies pievienot, tad saglabājam to klienta vēsturē
         if($new_obj_srv->save())
         {
             $user_id = Model_Object::find(Input::post('object_id'))->client_id;
@@ -411,7 +439,7 @@ class Controller_Worker extends Controller_Template
                 $service = Model_User_Service::find($srv_obj_id);
                 $service -> is_active = 'N';
                 
-                //Ja izdevies atslēgt, tad saglabājam to abonenta vēsturē
+                //Ja izdevies atslēgt, tad saglabājam to klienta vēsturē
                 if($service->save())
                 {
                     $meter_object = Model_Meter::find_by('service_id',Input::post('service_id'));
@@ -453,14 +481,14 @@ class Controller_Worker extends Controller_Template
                     if(count($exists_qnumber) > 0)
                     {
                         Session::set_flash('error','Neveiksme! Skaitītājs ar šādu numuru jau eksistē!');
-                        Response::redirect('/darbinieks/abonenti/apskatit-pakalpojumu/'.Input::post('object_id').'/'.Input::post('service_id'));
+                        Response::redirect('/darbinieks/klienti/apskatit-pakalpojumu/'.Input::post('object_id').'/'.Input::post('service_id'));
                     }
                     
                     //Vai "datums no" ir lielāks par "datums līdz"
                     if(Date::forge(strtotime(Input::post('date_from')))->format('%Y-%m-%d') > Date::forge(strtotime(Input::post('date_to')))->format('%Y-%m-%d'))
                     {
                         Session::set_flash('error','Neveiksme! Laukam "Datums no" jābūt mazākam par lauku "Datums līdz"!');
-                        Response::redirect('/darbinieks/abonenti/apskatit-pakalpojumu/'.Input::post('object_id').'/'.Input::post('service_id'));
+                        Response::redirect('/darbinieks/klienti/apskatit-pakalpojumu/'.Input::post('object_id').'/'.Input::post('service_id'));
                     }
                     
                     $new_meter = new Model_Meter();
@@ -489,7 +517,7 @@ class Controller_Worker extends Controller_Template
                             Controller_Client::cre_cln_history($user_id, 'Pievienots jauns skaitītājs');
                             
                             Session::set_flash('success','Skaitītājs pievienots!');
-                            Response::redirect('/darbinieks/abonenti/apskatit-pakalpojumu/'.Input::post('object_id').'/'.Input::post('service_id'));   
+                            Response::redirect('/darbinieks/klienti/apskatit-pakalpojumu/'.Input::post('object_id').'/'.Input::post('service_id'));   
                         }
                         else
                         {
@@ -497,18 +525,18 @@ class Controller_Worker extends Controller_Template
                             $delete -> delete();
                             
                             Session::set_flash('error','Neizdevās pievienot skaitītāju!');
-                            Response::redirect('/darbinieks/abonenti/apskatit-pakalpojumu/'.Input::post('object_id').'/'.Input::post('service_id'));
+                            Response::redirect('/darbinieks/klienti/apskatit-pakalpojumu/'.Input::post('object_id').'/'.Input::post('service_id'));
                         }
                     }
                     else
                     {
                         Session::set_flash('error','Neveiksme! Neizdevās pievienot skaitītāju!');
-                        Response::redirect('/darbinieks/abonenti/apskatit-pakalpojumu/'.Input::post('object_id').'/'.Input::post('service_id'));
+                        Response::redirect('/darbinieks/klienti/apskatit-pakalpojumu/'.Input::post('object_id').'/'.Input::post('service_id'));
                     }
                 }
                 else
                 {
-                    Response::redirect('/darbinieks/abonenti/apskatit-pakalpojumu/'.Input::post('object_id').'/'.Input::post('service_id'));
+                    Response::redirect('/darbinieks/klienti/apskatit-pakalpojumu/'.Input::post('object_id').'/'.Input::post('service_id'));
                 }
             }
             else
@@ -537,17 +565,21 @@ class Controller_Worker extends Controller_Template
             $meter_id = Input::post('pk');
             $meter = Model_Meter::find($meter_id);
             
-            if(Input::post('action') == 'meter_number')
+            if(!empty($meter))
             {
-                $meter -> meter_number = Input::post('value');
-            }
-            else if(Input::post('action') == 'date_from')
-            {
-                $meter -> date_from = Input::post('value');
-            }
-            else if(Input::post('action') == 'date_to')
-            {
-                $meter -> date_to = Input::post('value');
+                if(Input::post('action') == 'meter_number')
+                {
+                    $meter -> meter_number = Input::post('value');
+                }
+                else if(Input::post('action') == 'date_from')
+                {
+                    $meter -> date_from = Input::post('value');
+                }
+                else if(Input::post('action') == 'date_to')
+                {
+                    $meter -> date_to = date_format(date_create(Input::post('value')),'Y-m-d');
+                }
+                else return false;
             }
             else return false;
             
@@ -779,7 +811,7 @@ class Controller_Worker extends Controller_Template
                 
                 $reading = Model_Reading::find($reading_id);
                 $reading -> status = 'Apstiprināts';
-                $reading -> notes = 'Apstiprināts abonentu daļā';
+                $reading -> notes = 'Apstiprināts klientu daļā';
                 
                 if($reading -> save())
                 {
@@ -991,7 +1023,7 @@ class Controller_Worker extends Controller_Template
             
             $new_code = new Model_Codificator();
             $new_code -> code = Input::post('code');
-            $new_code -> used_in = 'Abonentu daļa';
+            $new_code -> used_in = 'Klientu daļa';
             $new_code -> comments = Input::post('code_notes');
             
             $saved_code = $new_code -> save();
@@ -1139,7 +1171,7 @@ class Controller_Worker extends Controller_Template
      * Nodaļa: 3.3.4.12.	Pakalpojuma pieprasījuma atteikšana (darbinieks)
      * Identifikators: SRV_REJECT_REQUEST
      *
-     * Uzņēmuma darbinieks var atteikt pasūtīto abonenta pakalpojumu
+     * Uzņēmuma darbinieks var atteikt pasūtīto klienta pakalpojumu
      * 
      */
     public function action_reject_service_request()
@@ -1199,8 +1231,25 @@ class Controller_Worker extends Controller_Template
             $request -> status = 'Apstiprināts';
             $request -> status_notes = 'Darbinieks ir apstiprinājis pakalpojuma pieprasījumu';
             
+            if($request -> usr_srv_id) 
+            {
+                $usr_service = Model_User_Service::find($request -> usr_srv_id);
+                $usr_service -> is_active = 'N';
+                
+                Controller_Client::cre_cln_history($request -> client_id, 'Apstiprināts pakalpojuma pieprasījums atslēgt pakalpojumu!');
+            }
+            else
+            {
+                $usr_service = new Model_User_Service();
+                $usr_service -> obj_id = $request -> object_id;
+                $usr_service -> srv_id = $request -> service_id;
+                $usr_service -> date_from = $request -> date_from;
+                $usr_service -> date_to = $request -> date_to;
+                $usr_service -> is_active = 'Y';
+            }
+            
             //Ja izdevies atteikt, tad parāda paziņojumu par to
-            if($request -> save())
+            if($request -> save() && $usr_service -> save())
             {
                 Session::set_flash('success','Pakalpojuma pieprasījums apstiprināts!');
                 Response::redirect_back();

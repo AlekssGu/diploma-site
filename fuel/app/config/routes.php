@@ -8,14 +8,14 @@ return array(
         'redmine' => 'main/redmine',
     
         // Lietotāja pieslēgšanās/paroles atjaunošanas lapas:
-        'abonents/registreties' => 'connection/register',       // Reģistrācijas lapa
+        'klients/registreties' => 'connection/register',       // Reģistrācijas lapa
         'apstiprinat/:code' => 'connection/confirm/$1',     // Reģistrācijas apstiprināšanas lapa (GET)
         'apstiprinat/post' => 'connection/confirm',         // Reģistrācijas apstiprināšanas lapa (POST)
-        'abonents/pieslegties' => 'connection/login',             // Autorizācijas lapa
-        'abonents/atslegties' => 'connection/logout',           // Iziet no sistēmas
-        'abonents/aizmirsta-parole' => 'connection/forgot',           // Aizmirsta parole
-        'abonents/izsutit/:id' => 'connection/resend/$1',    // Paroles atjaunošana
-        'abonents/mainit/:code' => 'connection/change/$1',  // Paroles maiņa (GET)
+        'klients/pieslegties' => 'connection/login',             // Autorizācijas lapa
+        'klients/atslegties' => 'connection/logout',           // Iziet no sistēmas
+        'klients/aizmirsta-parole' => 'connection/forgot',           // Aizmirsta parole
+        'klients/izsutit/:id' => 'connection/resend/$1',    // Paroles atjaunošana
+        'klients/mainit/:code' => 'connection/change/$1',  // Paroles maiņa (GET)
         //--
 
         // navigācijas lapas (ar statisko saturu):
@@ -39,42 +39,42 @@ return array(
     
     
         // Klientam pieejamās sadaļas:
-            'abonents' => 'client/client',
-            'abonents/mainit-datus' => 'client/change_data', // Lietotājs maina paroli,telefona numuru vai e-pastu
-            'abonents/iesniegt-merijumu' => 'client/add_reading',
-            'abonents/objekti' => 'client/all_objects',
-            'abonents/objekti/apskatit/:id' => 'client/all_objects_show/$1',
-            'abonents/objekti/radijumi/:id' => 'client/readings_history/$1',
-            'abonents/pakalpojumi/apskatit/:object_id/:service_id' => 'client/show_service',
-            'abonents/pakalpojumi/pasutit' => 'client/request_service',
-            'abonents/pakalpojumi/atteikties' => 'client/dismiss_service',
-            'abonents/ievadit-merijumus' => 'client/all_readings',
+            'klients' => 'client/client',
+            'klients/mainit-datus' => 'client/change_data', // Lietotājs maina paroli,telefona numuru vai e-pastu
+            'klients/iesniegt-merijumu' => 'client/add_reading',
+            'klients/objekti' => 'client/all_objects',
+            'klients/objekti/apskatit/:id' => 'client/all_objects_show/$1',
+            'klients/objekti/radijumi/:id' => 'client/readings_history/$1',
+            'klients/pakalpojumi/apskatit/:object_id/:service_id' => 'client/show_service',
+            'klients/pakalpojumi/pasutit' => 'client/request_service',
+            'klients/pakalpojumi/atteikties' => 'client/dismiss_service',
+            'klients/ievadit-merijumus' => 'client/all_readings',
     
         // Darbinieka sadaļas: 
             'darbinieks' => 'worker/worker',
-            'darbinieks/abonenti' => 'worker/clients',
+            'darbinieks/klienti' => 'worker/clients',
             'darbinieks/bojajumu-pazinojumi/dzest/:issue_id' => 'worker/delete_issue/$1',    
 
-            'darbinieks/abonenti/labot-datus' => 'worker/change_client_data',
+            'darbinieks/klienti/labot-datus' => 'worker/change_client_data',
 
             //Sadaļa: Pakalpojumi
-            'darbinieks/abonenti/labot-pakalpojumu' => 'worker/modify_service',
-            'darbinieks/abonenti/pievienot-pakalpojumu' => 'worker/add_service',
-            'darbinieks/abonenti/atslegt-pakalpojumu' => 'worker/deactivate_service',
-            'darbinieks/abonenti/apskatit-pakalpojumu/:object_id/:service_id' => 'client/show_service',
+            'darbinieks/klienti/labot-pakalpojumu' => 'worker/modify_service',
+            'darbinieks/klienti/pievienot-pakalpojumu' => 'worker/add_service',
+            'darbinieks/klienti/atslegt-pakalpojumu' => 'worker/deactivate_service',
+            'darbinieks/klienti/apskatit-pakalpojumu/:object_id/:service_id' => 'client/show_service',
 
             //Sadaļa: Skaitītāji
-            'darbinieks/abonenti/skaititaji/pievienot' => 'worker/add_meter',
-            'darbinieks/abonenti/skaititaji/nonemt/:service_id' => 'worker/remove_meter/$1',
+            'darbinieks/klienti/skaititaji/pievienot' => 'worker/add_meter',
+            'darbinieks/klienti/skaititaji/nonemt/:service_id' => 'worker/remove_meter/$1',
 
             'darbinieks/iesniegtie/dati' => 'worker/all_entered_data',
             'darbinieks/iesniegtie-jautajumi/dzest/:quest_id' => 'worker/delete_question/$1',
     
-            'darbinieks/abonenti/dzest-objektu/:object_id' => 'worker/delete_object/$1',
-            'darbinieks/abonenti/skaititaji/labot' => 'worker/edit_meter',
+            'darbinieks/klienti/dzest-objektu/:object_id' => 'worker/delete_object/$1',
+            'darbinieks/klienti/skaititaji/labot' => 'worker/edit_meter',
 
             //Sadaļa: Klienta objekti
-            'darbinieks/abonenti/pievienot-objektu' => 'worker/add_object', 
+            'darbinieks/klienti/pievienot-objektu' => 'worker/add_object', 
 
             //Sadaļa: Skaitītāju dati (darbinieks)
             'darbinieks/skaititaji/radijumi/atgriezt' => 'worker/return_reading',

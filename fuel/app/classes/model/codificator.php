@@ -22,5 +22,15 @@ class Model_Codificator extends \Orm\Model
 		),
 	);
 	protected static $_table_name = 'codificators';
+        
+        protected static $_belongs_to = array(
+            'service' => array(
+                'key_from' => 'id',
+                'model_to' => 'Model_Service',
+                'key_to' => 'code_id',
+                'cascade_save' => false,
+                'cascade_delete' => false,
+            ),
+        );        
 
 }

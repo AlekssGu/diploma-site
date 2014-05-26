@@ -6,7 +6,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Informācijas sistēma Pilsētas ūdens">
         <meta name="author" content="Aleksandrs Gusevs">
-        <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
 	<?php echo Asset::css('bootstrap.min.css'); ?>
         <?php echo Asset::css('style.css'); ?>
         <?php echo Asset::js('jquery.min.js'); ?>
@@ -76,12 +75,12 @@
           </ul>
         </li>
         
-        <li class="<?php if(Uri::segment(1)=='abonents') echo "active"; ?> dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Sadaļa uzņēmuma abonentiem">Abonentiem <b class="caret"></b></a>
+        <li class="<?php if(Uri::segment(1)=='klients') echo "active"; ?> dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Sadaļa uzņēmuma klientiem">Klientiem <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <?php if(!Auth::check()) { ?>
-            <li><a href="/abonents/pieslegties" title="Uzņēmuma rekvizīti">Ieiet sistēmā</a></li>
-            <li><a href="/abonents/registreties" title="Uzņēmuma rekvizīti">Reģistrēties</a></li>
+            <li><a href="/klients/pieslegties" title="Uzņēmuma rekvizīti">Ieiet sistēmā</a></li>
+            <li><a href="/klients/registreties" title="Uzņēmuma rekvizīti">Reģistrēties</a></li>
             <li class='divider'></li>
             <?php } ?>
             <li class='disabled'><a href="/par-uznemumu/dokumenti" title="Uzņēmuma sertifikāti">Aktuālā informācija</a></li>
@@ -119,7 +118,7 @@
       <!-- lielais bloks -->  
       <ul class="hidden-md hidden-sm nav navbar-nav navbar-right">
         <?php if(Auth::check()) { ?>
-            <li><a href="/abonents/atslegties">Iziet</a></li>
+            <li><a href="/klients/atslegties">Iziet</a></li>
         <?php } ?>
         <li class="<?php if(Uri::segment(1)=='palidziba') echo "active"; ?> dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Palīdzība <b class="caret"></b></a>

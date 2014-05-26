@@ -48,7 +48,7 @@
         </div>
     </div>
 
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?libraries=places&sensor=false"></script>
+<script type="text/javascript" src="https://maps.google.com/maps/api/js?libraries=places&sensor=false"></script>
 <script>
     $(document).ready(function(){
         

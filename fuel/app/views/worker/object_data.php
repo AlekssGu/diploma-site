@@ -47,9 +47,9 @@
                 <?php $days = date_format(date_create($service->srv_to), 'd.m.Y') - date('d.m.Y'); ?>
             
                     <?php if(date_format(date_create($service->srv_to), 'd.m.Y') - $days > 0) { ?>
-            <p><?php echo $service -> service_name; ?> (<a class='rm-service' href="#" data-object='<?php echo $service->object_id; ?>' data-service='<?php echo $service->service_id; ?>'><span class="glyphicon glyphicon-remove"></span> Atslēgt</a>)</p>
+            <p><?php echo $service -> service_name; ?> (<a class='rm-service' href="#" onclick="return confirm('Vai tiešām atslēgt?')" data-object='<?php echo $service->object_id; ?>' data-service='<?php echo $service->service_id; ?>'><span class="glyphicon glyphicon-remove"></span> Atslēgt</a>)</p>
                         <p><strong>Termiņš:</strong> no <a href="#" data-name='service_from' data-params='{"object_id": "<?php echo $service->object_id; ?>"}' data-pk='<?php echo $service->usr_srv_id; ?>' class="service_from"><?php echo date_format(date_create($service->srv_from), 'd.m.Y'); ?></a> līdz <a href="#" data-name='service_to' data-params='{"object_id": "<?php echo $service->object_id; ?>"}' data-pk='<?php echo $service->usr_srv_id; ?>' class="service_to"><?php echo date_format(date_create($service->srv_to), 'd.m.Y'); ?></a></p>
-                        <p><a href='/darbinieks/abonenti/apskatit-pakalpojumu/<?php echo $service->object_id; ?>/<?php echo $service->usr_srv_id; ?>'>Apskatīt sīkāk</a></p>
+                        <p><a href='/darbinieks/klienti/apskatit-pakalpojumu/<?php echo $service->object_id; ?>/<?php echo $service->usr_srv_id; ?>'>Apskatīt sīkāk</a></p>
                         <hr/>
                     <?php } ?>
                         
@@ -68,7 +68,7 @@
         //Labo datumu "no" ar ajax un x-editable palīdzību
         $('.service_from').editable({
             type: 'text',
-            url: '/darbinieks/abonenti/labot-pakalpojumu',
+            url: '/darbinieks/klienti/labot-pakalpojumu',
             title: 'Izvēlies datumu',
             mode: 'inline'
         });     
@@ -76,7 +76,7 @@
         //Labo datumu "līdz" ar ajax un x-editable palīdzību
         $('.service_to').editable({
             type: 'text',
-            url: '/darbinieks/abonenti/labot-pakalpojumu',
+            url: '/darbinieks/klienti/labot-pakalpojumu',
             title: 'Izvēlies datumu',
             mode: 'inline'
         });      
@@ -110,7 +110,7 @@
         //Saglabāt pakalpojumu datubāzē
         $('#btn_save').click(function() {
            $('.myeditable').editable('submit', { 
-               url: '/darbinieks/abonenti/pievienot-pakalpojumu', 
+               url: '/darbinieks/klienti/pievienot-pakalpojumu', 
                ajaxOptions: {
                    dataType: 'json' //assuming json response
                },           
@@ -128,7 +128,7 @@
         //Atslēgt pakalpojumu
         $('.rm-service').click(function(e) {
             e.preventDefault();
-            $.post( "/darbinieks/abonenti/atslegt-pakalpojumu", { object_id: $(this).attr('data-object'), 
+            $.post( "/darbinieks/klienti/atslegt-pakalpojumu", { object_id: $(this).attr('data-object'), 
                                                                      service_id: $(this).attr('data-service') })
             .done(function( data ) {
                 $('#obj_info').modal('hide');

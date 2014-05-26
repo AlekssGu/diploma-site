@@ -82,9 +82,9 @@
                             <?php foreach($services as $service) { ?>
                                 <div class="well well-sm">
                                     <button type="button" data-toggle="modal" data-target="#reject_request" data-pk="<?php echo $service -> request_id; ?>" class="reject_request close" aria-hidden="true">&times;</button>
-                                    <p><strong>Abonents:</strong> <?php echo $service -> fullname . ' (' . $service -> client_number . ')'; ?></p>
+                                    <p><strong>Klients:</strong> <?php echo $service -> fullname . ' (' . $service -> client_number . ')'; ?></p>
                                     <p><strong>Objekts:</strong> <?php echo $service -> object_address; ?></p>
-                                    <p><strong>Pieprasījums:</strong> <?php if($service->service_requested != '') echo 'pieslēgt pakalpojumu <b>' . $service -> service_requested . '</b>'; else echo 'atslēgt pakalpojumu <b>' . $service -> service_dismissed . '</b>'; ?> (Sākot ar <?php echo date_format(date_create($service -> date_from)); ?></p>
+                                    <p><strong>Pieprasījums:</strong> <?php if($service->service_requested != '') echo 'pieslēgt pakalpojumu <b>' . $service -> service_requested . '</b>'; else echo 'atslēgt pakalpojumu <b>' . $service -> service_dismissed . '</b>'; ?> (Sākot ar <?php echo date_format(date_create($service -> date_from),'d.m.Y'); ?>)</p>
                                     <p><strong>Piezīmes:</strong> <?php echo $service -> request_notes; ?></p>
                                     <p><strong>Statuss:</strong> <?php echo $service -> status; ?></p>
                                     <a href='/darbinieks/pakalpojumi/pieprasijumi/apstiprinat/<?php echo $service -> request_id; ?>' class='btn btn-success btn-sm'>Apstiprināt pieprasījumu</a>
@@ -169,8 +169,8 @@
                 <input id="srv_pk" type="hidden" name="pk" /> 
                 <input type="hidden" name="<?php echo \Config::get('security.csrf_token_key');?>" value="<?php echo \Security::fetch_token();?>" />
                   <div class="form-group">
-                      <label for="number">Paskaidrojums abonentam:</label>       
-                      <textarea name="status_notes" class="form-control" placeholder="Īss un skaidrs paskaidrojums abonentam, kādēļ pieprasījums tiek atteikts"></textarea>
+                      <label for="number">Paskaidrojums klientam:</label>       
+                      <textarea name="status_notes" class="form-control" placeholder="Īss un skaidrs paskaidrojums klientam, kādēļ pieprasījums tiek atteikts"></textarea>
                   </div>
             </div>
             <div class="modal-footer">
@@ -199,8 +199,8 @@
        
        <div class="modal-body">
         <div class="form-group">
-            <label for="number">Paskaidrojums abonentam:</label>       
-            <textarea name="notes" class="form-control" placeholder="Īss un skaidrs paskaidrojums abonentam, kādēļ rādījums tiek atgriezts"></textarea>
+            <label for="number">Paskaidrojums klientam:</label>       
+            <textarea name="notes" class="form-control" placeholder="Īss un skaidrs paskaidrojums klientam, kādēļ rādījums tiek atgriezts"></textarea>
         </div>
           
         <div class="modal-footer">

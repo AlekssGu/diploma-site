@@ -34,7 +34,7 @@ class Model_Person extends \Orm\Model
                 'model_to' => 'Model_User',
                 'key_to' => 'person_id',
                 'cascade_save' => false,
-                'cascade_delete' => true,
+                'cascade_delete' => false,
             ),
         );
         
@@ -44,14 +44,14 @@ class Model_Person extends \Orm\Model
                 'model_to' => 'Model_Address',
                 'key_to' => 'id',
                 'cascade_save' => false,
-                'cascade_delete' => true,
+                'cascade_delete' => false,
             ),
             'address' => array(
                 'key_from' => 'secondary_addr_id',
                 'model_to' => 'Model_Address',
                 'key_to' => 'id',
                 'cascade_save' => false,
-                'cascade_delete' => true,
+                'cascade_delete' => false,
             ),
         );
 

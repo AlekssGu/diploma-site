@@ -25,4 +25,13 @@ class Model_Question extends \Orm\Model
 	);
 	protected static $_table_name = 'questions';
 
+        protected static $_has_one = array(
+            'topic' => array(
+                'key_from' => 'topic_id',
+                'model_to' => 'Model_Topic',
+                'key_to' => 'id',
+                'cascade_save' => false,
+                'cascade_delete' => false,
+            ),
+        );
 }

@@ -14,6 +14,13 @@
         <br/>
             <div class="col-md-12" id="skaititaji">
                 <?php if(!empty($meters)) { ?>
+                
+                        <div class='entered-reading hidden'>
+                            <hr/>
+                            <h3 class='text-center'></h3>
+                            <hr/>
+                        </div>
+                
                             <table class="table text-center">
                                 <thead>
                                     <th>Nr.p.k</th>
@@ -32,19 +39,19 @@
                                     <td><?php if($meter->water_type == 'A') echo 'Aukstais ūdens'; else echo 'Karstais ūdens'; ?></td>
                                     <td><?php echo $meter->meter_number;?></td>
                                     <td><?php echo date_format(date_create($meter->date_taken), 'd.m.Y') ;?></td>
-                                    <td><?php echo $meter->lead; ?></td>
+                                    <td class='previous-reading'><?php echo $meter->lead; ?></td>
                                     <td>
-                                        <form method="POST" action="/abonents/iesniegt-merijumu">
+                                        <form method="POST" action="/klients/iesniegt-merijumu">
                                             <input type="hidden" name="meter_id" value="<?php echo $meter->id;?>"/>
                                             <input type="hidden" name="<?php echo \Config::get('security.csrf_token_key');?>" value="<?php echo \Security::fetch_token();?>" />
-                                            <input name="reading" class="form-control" type="text"/>
+                                            <input autofocus name="reading" class="reading-input form-control" type="text"/>
                                             <input type='hidden' class='input-action' name="action" />
                                             
                                     </td>
                                     <td><button onclick='return confirm("Iesniegt bez iespējas vēlāk labot?")' type="submit" class="submit-rdn btn btn-default">Iesniegt</button></td>
                                     <td><button type="submit" class="save-rdn btn btn-primary">Saglabāt</button></td>
                                         </form>
-                                    <td><a href="/abonents/objekti/radijumi/<?php echo $meter->id; ?>" class="btn btn-link">Apskatīt</a></td>
+                                    <td><a href="/klients/objekti/radijumi/<?php echo $meter->id; ?>" class="btn btn-link">Apskatīt</a></td>
                                 </tr>
                                 <?php } ?>
                             </table>
@@ -59,6 +66,27 @@
     
     $('.dismiss_service').click(function(){
         $('#service').attr('value',$(this).attr('data-pk'));
+    });
+    
+        //Ja ievadīts rādījums, tad parādām lietotājam, cik daudz ir ievadīts kopš pagājušā mērījuma
+    $('.reading-input').keyup(function() {
+        //Ja nav skaitliska vērtība, tad paziņo
+        if(!parseInt($(this).val()))
+        {
+            $('.entered-reading h3').text('Ievadītajam rādījumam jābūt skaitliskai vērtībai!');
+            $('.entered-reading').removeClass('hidden');
+        }
+        else if ( (parseInt($(this).val()) - parseInt($('.previous-reading').text())) < 0 )
+        {
+            $('.entered-reading h3').text('Ievadītajam rādījumam jābūt lielākam par iepriekšējo rādījumu!');
+            $('.entered-reading').removeClass('hidden');
+        }
+        else
+        {
+            //Ja ir skaitliska vērtība, tad parāda, cik ir ievadīts
+            $('.entered-reading h3').text('Jūsu ievadītais patēriņš: ' + (parseInt($(this).val()) - parseInt($('.previous-reading').text()) ) + ' kubikmetri');
+            $('.entered-reading').removeClass('hidden');
+        }   
     });
     
     $('.date-pick .input-group.date').datepicker({

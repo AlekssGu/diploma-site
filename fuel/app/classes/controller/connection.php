@@ -42,6 +42,19 @@ class Controller_Connection extends Controller_Template
                 $result_status = ""; // Reģistrācijas statuss {success/error}
                 $result_message = ""; // Gala paziņojums lietotājam
             
+                $exists_client = DB::select('*')
+                                ->from('external_users')
+                                ->where('external_users.client_number','=',Input::post('client_number'))
+                                ->as_object()
+                                ->execute()
+                                ->as_array();
+                
+                if(!$exists_client)
+                {
+                    Session::set_flash('error','Reģistrācija neveiksmīga! Nepieciešams būt uzņēmuma klientam, lai reģistrētos.');
+                    Response::redirect('/klients/registreties');
+                }
+                
                 // Ja nav ievadīts klienta numurs
                 if (Input::post('client_number')==''){
                     $error_count++;
@@ -204,13 +217,13 @@ class Controller_Connection extends Controller_Template
                             if($new_user->save() && $email->send())
                             {
                                 Session::set_flash('success','Reģistrācija veiksmīga! Uz jūsu norādīto e-pastu tika nosūtīta reģistrācijas apstiprināšanas vēstule.');
-                                Response::redirect('/abonents/registreties');
+                                Response::redirect('/klients/registreties');
                             } 
                             // Paziņojam par neveiksmi
                             else
                             {
                                 Session::set_flash('error','Reģistrācija neveiksmīga! Notikusi sistēmas iekšēja kļūda. Lūdzu, ziņojiet par šo kļūdu sistēmas administrācijai.');
-                                Response::redirect('/abonents/registreties');
+                                Response::redirect('/klients/registreties');
                             }   
                             
                     // ķer kļūdu un paziņo par to lietotājam 
@@ -218,19 +231,19 @@ class Controller_Connection extends Controller_Template
                     } catch(\EmailSendingFailedException $e)
                       {
                             Session::set_flash('error','Notikusi sistēmas iekšēja kļūda! Nav iespējams nosūtīt e-pastu!');
-                            Response::redirect('/abonents/registreties');
+                            Response::redirect('/klients/registreties');
                       }
                     // Netika ievadīts pareizs e-pasts
                       catch(\EmailValidationFailedException $e)
                       {
                             Session::set_flash('error','E-pasts netika nosūtīts! Ievadīts nekorekts e-pasts.');
-                            Response::redirect('/abonents/registreties');
+                            Response::redirect('/klients/registreties');
                       }
                     // Cita kļūda
                       catch(Exception $exc)
                       {
                             Session::set_flash('error',"Notikusi sistēmas iekšēja kļūda! Lūdzu, ziņojiet par šo kļūdu administrācijai.");
-                            Response::redirect('/abonents/registreties');
+                            Response::redirect('/klients/registreties');
                       }
                 } // kļūdas paziņojumu bloks beidzas
             } // POST bloks beidzas
@@ -493,6 +506,13 @@ class Controller_Connection extends Controller_Template
             // Ja tiek saņemti POST dati un CSRF žetons (token)
             if(Input::method()=='POST' && Security::check_token())
             {
+                
+                if(Input::post('username') == '' || Input::post('password') == '' )
+                {
+                    Session::set_flash('error', 'Diemžēl autorizācija neveiksmīga! Ievadīta nepareiza ievades datu kombinācija.');
+                    Response::redirect('/klients/pieslegties');
+                }
+                
                 // var autorizēties gan ar klienta numuru, gan ar e-pastu
 
                 // meklē lietotāju pēc klienta numura
@@ -526,16 +546,16 @@ class Controller_Connection extends Controller_Template
                         Session::set_flash('error', 'Autorizācija neveiksmīga! '
                                 . 'Lietotājam ir jāapstiprina reģistrācija. '
                                 . 'Lūdzu, pārbaudi savu e-pastu, tur noteikti jābūt vēstulei par to. '
-                                . 'Spied <a href="/abonents/izsutit/'.$user_data->id.'">šeit</a>, lai izsūtītu apstiprināšanas kodu vēlreiz.');
+                                . 'Spied <a href="/klients/izsutit/'.$user_data->id.'">šeit</a>, lai izsūtītu apstiprināšanas kodu vēlreiz.');
                         
-                        Response::redirect('/abonents/pieslegties');
+                        Response::redirect('/klients/pieslegties');
                     }
                     
                     // Lietotājs bloķēts (administrators vai darbinieks bloķējis)
                     else if ($user_data->is_active == 'N')
                     {
                         Session::set_flash('error', 'Autorizācija neveiksmīga! Diemžēl tavs lietotāja konts ir bloķēts!');
-                        Response::redirect('/abonents/pieslegties');
+                        Response::redirect('/klients/pieslegties');
                     }
                     
                     // Viss kārtībā, var autorizēt lietotāju
@@ -558,7 +578,7 @@ class Controller_Connection extends Controller_Template
                 else
                 {
                     Session::set_flash('error', 'Autorizācija neveiksmīga! Šāds lietotājs sistēmā nepastāv.');
-                    Response::redirect('/abonents/pieslegties');
+                    Response::redirect('/klients/pieslegties');
                 }
             }
             
@@ -613,16 +633,16 @@ class Controller_Connection extends Controller_Template
                         {
                             Session::set_flash('error', 'Lietotājam ir jāapstiprina reģistrācija. '
                                     . 'Lūdzu, pārbaudi savu e-pastu, tur noteikti jābūt vēstulei par to. '
-                                    . 'Spied <a href="/abonents/izsutit/'.$user_data->id.'">šeit</a>, lai izsūtītu apstiprināšanas kodu vēlreiz.');
+                                    . 'Spied <a href="/klients/izsutit/'.$user_data->id.'">šeit</a>, lai izsūtītu apstiprināšanas kodu vēlreiz.');
 
-                            Response::redirect('/abonents/aizmirsta-parole');
+                            Response::redirect('/klients/aizmirsta-parole');
                         }
 
                         // Lietotājs bloķēts (administrators vai darbinieks bloķējis)
                         else if ($user_data->is_active == 'N')
                         {
                             Session::set_flash('error', 'Neveiksme! Diemžēl tavs lietotāja konts ir bloķēts!');
-                            Response::redirect('/abonents/aizmirsta-parole');
+                            Response::redirect('/klients/aizmirsta-parole');
                         }
 
                         // Viss kārtībā, var veikt darbības
@@ -653,12 +673,12 @@ class Controller_Connection extends Controller_Template
                             if($email->send())
                             {
                                 Session::set_flash('success', 'Uz tavu e-pastu tika nosūtīta ziņa. Seko norādēm un atjaunosi savu paroli!');
-                                Response::redirect('/abonents/aizmirsta-parole');
+                                Response::redirect('/klients/aizmirsta-parole');
                             }
                             else 
                             {
                                 Session::set_flash('error', 'Neveiksme! Neizdevās nosūtīt e-pastu.');
-                                Response::redirect('/abonents/aizmirsta-parole');
+                                Response::redirect('/klients/aizmirsta-parole');
                             }
                         }// 
                      }
@@ -666,13 +686,13 @@ class Controller_Connection extends Controller_Template
                      else 
                      {
                         Session::set_flash('error', 'Neveiksme! Šāds lietotājs sistēmā nepastāv.');
-                        Response::redirect('/abonents/aizmirsta-parole');
+                        Response::redirect('/klients/aizmirsta-parole');
                      }
                 }
                 else
                 {
                     Session::set_flash('error', 'Netika ievadīts korekts e-pasts!');
-                    Response::redirect('/abonents/aizmirsta-parole'); 
+                    Response::redirect('/klients/aizmirsta-parole'); 
                 }
             }
                 $this->template->title= "Paroles atjaunošana - Pilsētas ūdens";
@@ -811,12 +831,12 @@ class Controller_Connection extends Controller_Template
                         if($email -> send())
                         {
                             Session::set_flash('success', 'Parole nosūtīta jums uz e-pastu!');
-                            Response::redirect('/abonents/aizmirsta-parole');
+                            Response::redirect('/klients/aizmirsta-parole');
                         }
                         else
                         {
                             Session::set_flash('error', 'Sistēmas kļūda! Paroli nebija iespējams nosūtīt uz e-pastu, taču tā tika nomainīta. Lūdzam sazināties ar administrāciju!');
-                            Response::redirect('/abonents/aizmirsta-parole');
+                            Response::redirect('/klients/aizmirsta-parole');
                         }
                         
                     }
@@ -824,7 +844,7 @@ class Controller_Connection extends Controller_Template
                 else
                 {
                     Session::set_flash('error', 'Neveiksme! Šāds lietotājs sistēmā nepastāv.');
-                    Response::redirect('/abonents/aizmirsta-parole');
+                    Response::redirect('/klients/aizmirsta-parole');
                 }
             }
 

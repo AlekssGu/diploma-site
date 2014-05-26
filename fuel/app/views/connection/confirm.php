@@ -12,7 +12,7 @@
                         </div>
                         
                         <div class="col-md-offset-3 col-md-6">
-                            <form id="login-form" method="POST" action="/abonents/pieslegties" role="form">
+                            <form id="login-form" method="POST" action="/klients/pieslegties" role="form">
                                 <div class="form-group">
                                     <label for="login">E-pasts vai klienta numurs</label>
                                     <input type="text" name="username" class="form-control" id="login" placeholder="">
@@ -26,7 +26,7 @@
                                 
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-block btn-default">Ieiet</button>
-                                    <a href="/abonents/aizmirsta-parole" class="btn btn-link">Aizmirsu paroli</a> 
+                                    <a href="/klients/aizmirsta-parole" class="btn btn-link">Aizmirsu paroli</a> 
                                 </div>
                             </form>
                         </div>

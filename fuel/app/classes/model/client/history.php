@@ -22,4 +22,13 @@ class Model_Client_History extends \Orm\Model
 	);
 	protected static $_table_name = 'client_histories';
 
+        protected static $_has_one = array(
+            'user' => array(
+                'key_from' => 'client_id',
+                'model_to' => 'Model_User',
+                'key_to' => 'id',
+                'cascade_save' => false,
+                'cascade_delete' => true,
+            ),
+        );
 }

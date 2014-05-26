@@ -41,5 +41,15 @@ class Model_User extends \Orm\Model
                 'cascade_delete' => true,
             ),
         );
+        
+        protected static $_has_many = array(
+            'object' => array(
+                'key_from' => 'id',
+                'model_to' => 'Model_Object',
+                'key_to' => 'client_id',
+                'cascade_save' => false,
+                'cascade_delete' => false,
+            ),
+        );
 
 }

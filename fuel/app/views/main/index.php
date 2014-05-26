@@ -84,8 +84,8 @@
                   <div class="caption">
                         <h3>Mūsu klienti</h3>
                         <p>Mūsu klienti iegūst daudz vairāk brīvā laika, lietojot šo sistēmu. Pievienojies viņiem arī tu!</p>
-                        <a href="/abonents/pieslegties" class="hidden-xs hidden-sm btn btn-primary btn-block" role="button">Ieiet sistēmā</a>
-                        <a href="/abonents/pieslegties" class="hidden-lg hidden-md btn btn-primary" role="button">Ieiet sistēmā</a>
+                        <a href="/klients/pieslegties" class="hidden-xs hidden-sm btn btn-primary btn-block" role="button">Ieiet sistēmā</a>
+                        <a href="/klients/pieslegties" class="hidden-lg hidden-md btn btn-primary" role="button">Ieiet sistēmā</a>
                   </div>
                 </div>
               </div>
@@ -110,7 +110,7 @@
                     </div>
 
                     <!-- galvenās lapas forma -->
-                    <form id="registration_form" action="/abonents/registreties" method="POST" role="form">
+                    <form id="registration_form" action="/klients/registreties" method="POST" role="form">
                     <div class="form-group">
                         <label for="client_number">Klienta numurs</label>
                         <input type="text" name="client_number" class="form-control" id="client_number" placeholder="Ieraksti savu klienta numuru">

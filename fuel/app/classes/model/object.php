@@ -25,4 +25,20 @@ class Model_Object extends \Orm\Model
 	);
 	protected static $_table_name = 'objects';
 
+        protected static $_has_one = array(
+            'user' => array(
+                'key_from' => 'client_id',
+                'model_to' => 'Model_User',
+                'key_to' => 'id',
+                'cascade_save' => false,
+                'cascade_delete' => true,
+            ),
+            'address' => array(
+                'key_from' => 'address_id',
+                'model_to' => 'Model_Address',
+                'key_to' => 'id',
+                'cascade_save' => false,
+                'cascade_delete' => true,
+            ),
+        );        
 }

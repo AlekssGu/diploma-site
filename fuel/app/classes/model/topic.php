@@ -20,5 +20,15 @@ class Model_Topic extends \Orm\Model
 		),
 	);
 	protected static $_table_name = 'topics';
+        
+        protected static $_belongs_to = array(
+            'question' => array(
+                'key_from' => 'id',
+                'model_to' => 'Model_Question',
+                'key_to' => 'topic_id',
+                'cascade_save' => false,
+                'cascade_delete' => false,
+            ),
+        );
 
 }

@@ -28,5 +28,15 @@ class Model_Meter extends \Orm\Model
 		),
 	);
 	protected static $_table_name = 'meters';
+        
+        protected static $_has_one = array(
+            'user_service' => array(
+                'key_from' => 'service_id',
+                'model_to' => 'Model_User_Service',
+                'key_to' => 'id',
+                'cascade_save' => false,
+                'cascade_delete' => false,
+            ),
+        );
 
 }

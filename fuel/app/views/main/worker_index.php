@@ -5,9 +5,9 @@
                   <div class="col-sm-4 col-md-4">
                     <div class="thumbnail">
                       <div class="caption text-center">
-                        <h3>Abonentu pārvaldība</h3>
-                        <p>Abonentu saraksts un to dati</p>
-                        <p><a href="/darbinieks/abonenti" class="btn btn-default" role="button">Ieiet</a></p>
+                        <h3>Klientu pārvaldība</h3>
+                        <p>Klientu saraksts un to dati</p>
+                        <p><a href="/darbinieks/klienti" class="btn btn-default" role="button">Ieiet</a></p>
                       </div>
                     </div>
                   </div>
@@ -16,7 +16,7 @@
                     <div class="thumbnail">
                       <div class="caption text-center">
                         <h3>Iesniegtie dati</h3>
-                        <p>Abonentu jaunie, iesniegtie dati</p>
+                        <p>Klientu jaunie, iesniegtie dati</p>
                         <p><a href="/darbinieks/iesniegtie/dati" class="btn btn-default" role="button">Ieiet</a></p>
                       </div>
                     </div>
