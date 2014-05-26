@@ -82,8 +82,11 @@
 <script>
 $(document).ready(function() {
     
+    var dateToday = new Date();
+    
     $('.date-pick .input-group.date').datepicker({
         weekStart: 1,
+        minDate: dateToday,
         format: "dd.mm.yyyy",
         autoclose: true,
         todayBtn: "linked",

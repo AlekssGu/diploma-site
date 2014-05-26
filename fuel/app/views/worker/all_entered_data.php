@@ -88,7 +88,7 @@
                                     <p><strong>Piezīmes:</strong> <?php echo $service -> request_notes; ?></p>
                                     <p><strong>Statuss:</strong> <?php echo $service -> status; ?></p>
                                     <a href='/darbinieks/pakalpojumi/pieprasijumi/apstiprinat/<?php echo $service -> request_id; ?>' onclick='Vai tiešām apstiprināt?' class='btn btn-success btn-sm'>Apstiprināt pieprasījumu</a>
-                                    <a href='#' class='btn btn-default' data-toggle="modal" data-target="#reject_request" data-pk="<?php echo $service -> request_id; ?>" class="reject_request">Atteikt pieprasījumu</a>
+                                    <a href='#' class='reject_request btn btn-default' data-toggle="modal" data-target="#reject_request" data-pk="<?php echo $service -> request_id; ?>" class="reject_request">Atteikt pieprasījumu</a>
                                 </div>
                             <?php } ?>
                           <?php } else { ?>
