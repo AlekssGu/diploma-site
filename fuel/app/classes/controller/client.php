@@ -508,7 +508,13 @@ class Controller_Client extends Controller_Template
                                 {
                                     //Ir pievienots un uzreiz iesniegts jauns rādījums
                                     //tāpēc pārbauda, vai ir kāds neiesniegts
-                                    $last_rdn = Model_Reading::find('last');
+                                    //Pārbauda iepriekšējo rādījumu, lai jaunais rādījums ir lielāks
+                                    $last_rdn_query = DB::select(DB::expr('MAX(id)'))
+                                                ->from('readings')
+                                                ->where('readings.meter_id','=',Input::post('meter_id'));
+                                    $last_rdn_id = $last_rdn_query -> as_object() -> execute() -> as_array();
+                                    
+                                    $last_rdn = Model_Reading::find($last_rdn_id[0]);
 
                                     if($last_rdn->status == 'Labošanā') 
                                     {

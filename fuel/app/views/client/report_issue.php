@@ -29,7 +29,7 @@
                             <input name='address' id="address" class='form-control' type="text" placeholder='Kur konstatēta avārija?'/>
                         </div>
                             
-                        <div class="form-group">
+                        <div class="notes form-group">
                             <label for="notes">Piezīmes</label>
                             <textarea name="notes" class="form-control" id="notes" placeholder="Papildus komentāri"></textarea>
                         </div>    
