@@ -2,8 +2,9 @@
 <div class="container">
     <div class="row">
         <div class="col-md-5">
-            <h1>Sazināties ar uzņēmumu</h1>
+            <h1>Sazināties ar uzņēmumu</h1>           
             <hr/>
+            <a href="/" alt="atpakaļ">Doties atpakaļ</a>
         </div>
     </div>
     <div class="row">

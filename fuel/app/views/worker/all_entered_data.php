@@ -58,7 +58,7 @@
                                     <td><?php echo date_format(date_create($reading -> date_taken),'d.m.Y'); ?></td>
                                     <td><?php echo $reading -> status; ?></td>
                                     <td><a class="return_trigger <?php if(in_array($reading->status, array('Apstiprināts','Atgriezts'))) echo 'hidden'; ?>" data-cln="<?php echo $reading -> client_id; ?>" data-rdn="<?php echo $reading -> rdn_id; ?>" href="#" data-toggle="modal" data-target="#atgriezt_radijumu"><span class="glyphicon glyphicon-remove"></span></a></td>
-                                    <td><a class="<?php if(in_array($reading->status, array('Apstiprināts','Atgriezts'))) echo 'hidden'; ?>" href='/darbinieks/skaititaji/radijumi/apstiprinat/<?php echo $reading->rdn_id; ?>/<?php echo $reading->client_id; ?>'><span class="glyphicon glyphicon-ok"></span></a></td>
+                                    <td><a class="<?php if(in_array($reading->status, array('Apstiprināts','Atgriezts'))) echo 'hidden'; ?>" onclick='Vai tiešām apstiprināt?' href='/darbinieks/skaititaji/radijumi/apstiprinat/<?php echo $reading->rdn_id; ?>/<?php echo $reading->client_id; ?>'><span class="glyphicon glyphicon-ok"></span></a></td>
                                 </tr>
                                 <?php } ?>
                             </table>
@@ -87,7 +87,8 @@
                                     <p><strong>Pieprasījums:</strong> <?php if($service->service_requested != '') echo 'pieslēgt pakalpojumu <b>' . $service -> service_requested . '</b>'; else echo 'atslēgt pakalpojumu <b>' . $service -> service_dismissed . '</b>'; ?> (Sākot ar <?php echo date_format(date_create($service -> date_from),'d.m.Y'); ?>)</p>
                                     <p><strong>Piezīmes:</strong> <?php echo $service -> request_notes; ?></p>
                                     <p><strong>Statuss:</strong> <?php echo $service -> status; ?></p>
-                                    <a href='/darbinieks/pakalpojumi/pieprasijumi/apstiprinat/<?php echo $service -> request_id; ?>' class='btn btn-success btn-sm'>Apstiprināt pieprasījumu</a>
+                                    <a href='/darbinieks/pakalpojumi/pieprasijumi/apstiprinat/<?php echo $service -> request_id; ?>' onclick='Vai tiešām apstiprināt?' class='btn btn-success btn-sm'>Apstiprināt pieprasījumu</a>
+                                    <a href='#' class='btn btn-default' data-toggle="modal" data-target="#reject_request" data-pk="<?php echo $service -> request_id; ?>" class="reject_request">Atteikt pieprasījumu</a>
                                 </div>
                             <?php } ?>
                           <?php } else { ?>

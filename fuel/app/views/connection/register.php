@@ -24,7 +24,7 @@
                         <form id="registration_form" action="/klients/registreties" method="POST" role="form">
                         <div class="form-group">
                             <label for="client_number">Klienta numurs</label>
-                            <input type="text" name="client_number" class="form-control" id="client_number" placeholder="Ieraksti savu klienta numuru">
+                            <input autofocus type="text" name="client_number" class="form-control" id="client_number" placeholder="Ieraksti savu klienta numuru">
                         </div>
                         <div class="form-group">
                             <label for="email">E-pasts</label>

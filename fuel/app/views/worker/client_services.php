@@ -207,6 +207,7 @@
                     },
                     lead: {
                         required: true,
+                        number: true,
                     },
                     date_from: {
                         required: true,
@@ -225,6 +226,7 @@
                     },
                     lead: {
                         required: "Lūdzu, ievadiet skaitītāja rādījumu!",
+                        number: "Rādījumam ir jābūt skaitliskai vērtībai!"
                     },
                     date_from: {
                         required: "Lūdzu, ievadiet uzstādīšanas datumu!",

@@ -15,7 +15,7 @@
                             <form id="login-form" method="POST" action="/klients/pieslegties" role="form">
                                 <div class="form-group">
                                     <label for="login">E-pasts vai klienta numurs</label>
-                                    <input type="text" name="username" class="form-control" id="login" placeholder="">
+                                    <input autofocus type="text" name="username" class="form-control" id="login" placeholder="">
                                 </div>
                                 <div class="form-group">
                                     <label for="password">Parole</label>

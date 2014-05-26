@@ -25,9 +25,9 @@
                             <p><strong>Izveidots:</strong> <?php echo Date::forge($client->created_at)->format('%d.%m.%Y %H:%M'); ?></p>
                             <p><strong>Pēdējoreiz pieslēdzies:</strong> <?php echo Date::forge($client->last_login)->format('%d.%m.%Y %H:%M'); ?></p>
                             <?php if($client->is_active == 'Y') { ?>
-                                <p><a href="#" data-pk='<?php echo $client->user_id;?>' class="btn btn-sm btn-danger btn-deactivate" title="Slēgt lietotāja kontu">Slēgt lietotāja kontu</a></p>
+                                <p><a href="#" data-pk='<?php echo $client->user_id;?>' class="btn btn-sm btn-danger btn-deactivate" onclick='return confirm("Vai tiešām slēgt kontu?")' title="Slēgt lietotāja kontu">Slēgt lietotāja kontu</a></p>
                             <?php } else { ?>
-                                <p><a href="#" data-pk='<?php echo $client->user_id;?>' class="btn btn-sm btn-success btn-activate" title="Atvērt lietotāja kontu">Atvērt lietotāja kontu</a></p>
+                                <p><a href="#" data-pk='<?php echo $client->user_id;?>' class="btn btn-sm btn-success btn-activate" onclick='return confirm("Vai tiešām atvērt kontu?")' title="Atvērt lietotāja kontu">Atvērt lietotāja kontu</a></p>
                             <?php } ?>
                         <?php } ?>
                     <?php } else { ?>

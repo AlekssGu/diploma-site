@@ -27,7 +27,7 @@
                             <form id="login-form" method="POST" action="/klients/mainit/post" role="form">
                                 <div class="form-group">
                                     <label for="password">Parole</label>
-                                    <input type="password" name="password" class="form-control" id="password" placeholder="">
+                                    <input autofocus type="password" name="password" class="form-control" id="password" placeholder="">
                                 </div>
                                 <div class="form-group">
                                     <label for="secpassword">Parole atkārtoti</label>

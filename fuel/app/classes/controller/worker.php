@@ -344,7 +344,15 @@ class Controller_Worker extends Controller_Template
                 }
                 
                 $service = Model_User_Service::find($srv_obj_id);
-                $service -> date_from = date_format(date_create(Input::post('value')),'Y-m-d');
+                $new_date = date_format(date_create(Input::post('value')),'Y-m-d');
+                
+                // Ja jaunais datums ir mazāks vai vienāds par date_to, tad atgriežam 
+                if($new_date > $service -> date_to)
+                {
+                    return false;
+                }
+                        
+                $service -> date_from = $new_date;
                 
                 return $service -> save();
             }
@@ -365,7 +373,14 @@ class Controller_Worker extends Controller_Template
                 }
                 
                 $service = Model_User_Service::find($srv_obj_id);
-                $service -> date_to = date_format(date_create(Input::post('value')),'Y-m-d');
+                $new_date = date_format(date_create(Input::post('value')),'Y-m-d');
+                
+                if($new_date < $service -> date_from)
+                {
+                    return false;
+                }
+                    
+                $service -> date_to = $new_date;
                 
                 return $service -> save();
             }
@@ -1157,7 +1172,7 @@ class Controller_Worker extends Controller_Template
             else if(Input::post('action') == 'srv_desc')
             {
                 $service = Model_Service::find(Input::post('pk'));
-                $service -> name = Input::post('value');
+                $service -> description = Input::post('value');
                 
                 if($service->save()) return true;
                 else return false;

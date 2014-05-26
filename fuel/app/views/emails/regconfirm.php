@@ -13,8 +13,9 @@
 <h2>Paldies par reģistrāciju!</h2>
 <br>
 <h3><a style="margin-bottom:15px" target="_blank" href="https://udens.agusevs.com/apstiprinat/<?php echo $code; ?>" title="Apstiprināt reģistrāciju">Apstiprināt reģistrāciju &raquo;</a></h3>
+<h2>Reģistrācijas apstiprināšanas kods: <?php echo $code; ?></h2>
 <br>
-<p>Ja saite nestrādā, tad ievadiet adresi https://udens.agusevs.com/apstiprinat/<?php echo $code;?> jūsu interneta pārlūka adreses vietā</p>
+<p>Ja saite nestrādā, tad ievadiet adresi https://udens.agusevs.com/apstiprinat/<?php echo $code;?> jūsu interneta pārlūka adreses vietā.</p>
 <p style="margin:10px">Ar cieņu, <br>IS "Pilsētas ūdens" administrācija.</p>
 </body>
 </html>

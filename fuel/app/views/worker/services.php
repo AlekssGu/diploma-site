@@ -83,6 +83,10 @@
 <script>
     $(document).ready(function() {
         
+   $('#code').keyup(function() {
+        this.value = this.value.toLocaleUpperCase();
+    });        
+        
     //Labo pakalpojuma kodu ar ajax un x-editable palīdzību
     $('.code').editable({
         type: 'text',
