@@ -32,7 +32,7 @@ class Model_User_Service extends \Orm\Model
                 'model_to' => 'Model_Service',
                 'key_to' => 'id',
                 'cascade_save' => false,
-                'cascade_delete' => true,
+                'cascade_delete' => false,
             ),
             'object' => array(
                 'key_from' => 'obj_id',
