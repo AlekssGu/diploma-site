@@ -151,7 +151,7 @@
             $('.entered-reading h3').text('Ievadītajam rādījumam jābūt skaitliskai vērtībai!');
             $('.entered-reading').removeClass('hidden');
         }
-        else if ( (parseInt($(this).val()) - parseInt($('.previous-reading').text())) < 0 )
+        else if ( (parseInt($(this).val()) - parseInt($(this).parent().parent().parent().find('.previous-reading').text())) < 0 )
         {
             $('.entered-reading h3').text('Ievadītajam rādījumam jābūt lielākam par iepriekšējo rādījumu!');
             $('.entered-reading').removeClass('hidden');
@@ -159,7 +159,7 @@
         else
         {
             //Ja ir skaitliska vērtība, tad parāda, cik ir ievadīts
-            $('.entered-reading h3').text('Jūsu ievadītais patēriņš: ' + (parseInt($(this).val()) - parseInt($('.previous-reading').text()) ) + ' kubikmetri');
+            $('.entered-reading h3').text('Jūsu ievadītais patēriņš: ' + (parseInt($(this).val()) - parseInt($(this).parent().parent().parent().find('.previous-reading').text()) ) + ' kubikmetri');
             $('.entered-reading').removeClass('hidden');
         }   
     });
