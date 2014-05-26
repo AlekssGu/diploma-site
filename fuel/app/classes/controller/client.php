@@ -405,7 +405,7 @@ class Controller_Client extends Controller_Template
                                                 ->and_where('readings.meter_id','=',Input::post('meter_id'));
                                     $last_rdn_id = $last_rdn_query -> as_object() -> execute() -> as_array();
                                     
-                                    $last_rdn = Model_Reading::find($last_rdn_id[0]->id);
+                                    $last_rdn = Model_Reading::find($last_rdn_id[0]);
                                     
                                     if(Input::post('reading') > $last_rdn->lead)
                                     {
@@ -432,14 +432,14 @@ class Controller_Client extends Controller_Template
                                                 ->where('readings.meter_id','=',Input::post('meter_id'));
                                     $last_rdn_id = $last_rdn_query -> as_object() -> execute() -> as_array();
                                     
-                                    $last_rdn = Model_Reading::find($last_rdn_id[0]->id);
+                                    $last_rdn = Model_Reading::find($last_rdn_id[0]);
 
                                     if($last_rdn->status == 'Labošanā') 
                                     {
                                         Session::set_flash('error','Skaitītaja rādījums nav iesniegts, jo jums ir neiesniegti rādījumi!');
                                         Response::redirect('/klients/objekti/radijumi/' . Input::post('meter_id'));
                                     }
-                                    elseif($last_rdn->status != 'Iesniegts')
+                                    elseif($last_rdn->status != 'Iesniegts' || $last_rdn->status != 'Apstiprināts')
                                     {
                                         Session::set_flash('error','Skaitītaja rādījums nav iesniegts, jo iepriekšējais rādījums vēl nav akceptēts!');
                                         Response::redirect('/klients/objekti/radijumi/' . Input::post('meter_id'));
@@ -515,7 +515,7 @@ class Controller_Client extends Controller_Template
                                         Session::set_flash('error','Skaitītaja rādījums nav pievienots, jo jums ir neiesniegti rādījumi!');
                                         Response::redirect('/klients/objekti/radijumi/' . Input::post('meter_id'));
                                     }
-                                    elseif($last_rdn->status != 'Iesniegts')
+                                    elseif($last_rdn->status != 'Iesniegts' || $last_rdn->status != 'Apstiprināts')
                                     {
                                         Session::set_flash('error','Skaitītaja rādījums nav pievienots, jo iepriekšējais rādījums vēl nav akceptēts!');
                                         Response::redirect('/klients/objekti/radijumi/' . Input::post('meter_id'));
