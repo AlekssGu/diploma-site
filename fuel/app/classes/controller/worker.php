@@ -187,14 +187,50 @@ class Controller_Worker extends Controller_Template
                                -> and_where('is_active','=','Y');
             $service_id = $query_service_id -> as_object() -> execute() -> as_array();
             
+            //Ja ir atrasts pakalpojums
             if($service_id)
             {
-                $service = Model_User_Service::find($service_id[0]);
-                $service -> is_active = 'N';
+                $count_services = 0;
+                $count_meters = 0;
                 
-                if($object->save() && $service -> save())
+                //Katram pakalpojumam atrod skaitītāju
+                foreach($service_id as $id)
                 {
-                    Controller_Client::cre_cln_history($object->client_id, 'Dzēsts pakalpojums');
+                    $service = Model_User_Service::find($id);
+                    $service -> is_active = 'N';
+                    
+                    $meters = DB::select('id')
+                                ->from('meters')
+                                ->where('meters.service_id','=',$id)
+                                ->as_object()
+                                ->execute()
+                                ->as_array();
+                    
+                    //Ja ir atrasts skaitītājs, tad dzēšam rādījumus
+                    if($meters)
+                    {
+                        //Katram skaitītājam
+                        foreach($meters as $meter_id) 
+                        {
+                            $count_meters = $count_meters + 1;
+                            
+                            $meter = Model_Meter::find($meter_id);
+
+                            $readings = DB::delete()
+                                        ->from('readings')
+                                        ->where('readings.meter_id','=',$meter -> id)
+                                        ->execute();
+
+                            $meter -> delete();
+                        }
+                    }
+                    
+                    if($service -> save()) $count_services = $count_services + 1;
+                }
+
+                
+                if($object->save())
+                {
                     Controller_Client::cre_cln_history($object->client_id, 'Dzēsts objekts');
 
                     Session::set_flash('success','Objekts ir izdzēsts!');
