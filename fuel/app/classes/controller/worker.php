@@ -188,7 +188,7 @@ class Controller_Worker extends Controller_Template
             $service_id = $query_service_id -> as_object() -> execute() -> as_array();
             
             //Ja ir atrasts pakalpojums
-            if(!empty(array_filter($service_id)))
+            if(!(array_filter($service_id)))
             {
                 $count_services = 0;
                 $count_meters = 0;
@@ -207,7 +207,7 @@ class Controller_Worker extends Controller_Template
                                 ->as_array();
                     
                     //Ja ir atrasts skaitītājs, tad dzēšam rādījumus
-                    if(!empty(array_filter($meters)))
+                    if(!(array_filter($meters)))
                     {
                         //Katram skaitītājam
                         foreach($meters as $meter_id) 
@@ -379,17 +379,21 @@ class Controller_Worker extends Controller_Template
                 }
                 
                 $service = Model_User_Service::find($srv_obj_id);
-                $new_date = date_format(date_create(Input::post('value')),'Y-m-d');
-                
-                // Ja jaunais datums ir mazāks vai vienāds par date_to, tad atgriežam 
-                if($new_date > $service -> date_to)
+                if(date_create(Input::post('value')))
                 {
-                    return false;
+                    $new_date = date_format(date_create(Input::post('value')),'Y-m-d');
+
+                    // Ja jaunais datums ir mazāks vai vienāds par date_to, tad atgriežam 
+                    if($new_date > $service -> date_to)
+                    {
+                        return false;
+                    }
+
+                    $service -> date_from = $new_date;
+
+                    return $service -> save();
                 }
-                        
-                $service -> date_from = $new_date;
-                
-                return $service -> save();
+                else return false;
             }
             // Ja labo pakalpojuma datumu "līdz"
             else if (Input::post('name') == 'service_to')
@@ -408,16 +412,23 @@ class Controller_Worker extends Controller_Template
                 }
                 
                 $service = Model_User_Service::find($srv_obj_id);
-                $new_date = date_format(date_create(Input::post('value')),'Y-m-d');
-                
-                if($new_date < $service -> date_from)
+                if(date_create(Input::post('value')))
+                {
+                    $new_date = date_format(date_create(Input::post('value')),'Y-m-d');
+
+                    if($new_date < $service -> date_from)
+                    {
+                        return false;
+                    }
+
+                    $service -> date_to = $new_date;
+
+                    return $service -> save();
+                }
+                else
                 {
                     return false;
                 }
-                    
-                $service -> date_to = $new_date;
-                
-                return $service -> save();
             }
             else return false;
             
@@ -439,6 +450,17 @@ class Controller_Worker extends Controller_Template
         {
             Response::redirect('/');
         }
+        
+        $exists = DB::select()
+                    ->from('user_services')
+                    ->where('user_services.obj_id','=',Input::post('object_id'))
+                    ->and_where('user_services.srv_id','=',Input::post('service'))
+                    ->and_where('user_services.is_active','=','Y')
+                    ->as_object()
+                    ->execute()
+                    ->as_array();
+        
+        if(array_filter($exists)) return false;
         
         $new_obj_srv = new Model_User_Service();
         
@@ -489,17 +511,23 @@ class Controller_Worker extends Controller_Template
                 $service = Model_User_Service::find($srv_obj_id);
                 $service -> is_active = 'N';
                 
+                $meter_q = DB::select('id')
+                        ->from('meters')
+                        ->where('meters.service_id','=',$service -> id)
+                        ->as_object()
+                        ->execute()
+                        ->as_array();
+                
+                if(array_filter($meter_q))
+                {
+                    $meter = Model_Meter::find($meter_q[0]->id);
+                    $readings = DB::delete('readings')->where('readings.meter_id','=',$meter -> id)->execute();
+                    $meter -> delete();
+                }
+                
                 //Ja izdevies atslēgt, tad saglabājam to klienta vēsturē
                 if($service->save())
                 {
-                    $meter_object = Model_Meter::find_by('service_id',Input::post('service_id'));
-                    foreach($meter_object as $meter)
-                    {
-                        $meter_id = $meter -> id;
-                        $delete_this = Model_Meter::find($meter_id);
-                        $delete_this -> delete();
-                    }
-                    
                     $user_id = Model_Object::find(Input::post('object_id'))->client_id;
                     Controller_Client::cre_cln_history($user_id,'Atslēgts pakalpojums');
                     return true;
@@ -1172,6 +1200,13 @@ class Controller_Worker extends Controller_Template
         if($service_id != '')
         {
             $delete_service = Model_Service::find($service_id);
+            
+            if(!$delete_service)
+            {
+                Session::set_flash('error','Pakalpojums vairs neeksistē!');
+                Response::redirect('/darbinieks/pakalpojumi');
+            }
+            
             $delete_code = Model_Codificator::find($delete_service->code_id);
             
             //Pārbauda, vai pakalpojums ir piesaistīts un aktīvs kādam klientam

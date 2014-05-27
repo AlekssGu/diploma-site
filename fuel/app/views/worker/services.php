@@ -50,7 +50,7 @@
         <h4 class="modal-title">Pievienot jaunu pakalpojumu</h4>
       </div>
       <div class="modal-body">
-            <form method='POST' action='/darbinieks/pakalpojumi/pievienot' role="form">
+            <form id='add_service' method='POST' action='/darbinieks/pakalpojumi/pievienot' role="form">
             <input type="hidden" name="<?php echo \Config::get('security.csrf_token_key');?>" value="<?php echo \Security::fetch_token();?>" />
               <div class="form-group">
                 <label for="code">Pakalpojuma kods</label>
@@ -82,6 +82,41 @@
 
 <script>
     $(document).ready(function() {
+
+        $('#add_service').validate({
+            rules: {
+                code: {
+                    required: true,
+                },
+                code_notes: {
+                    required: true,
+                },
+                service_name: {
+                    required: true,
+                },
+                service_notes: {
+                    required: true,
+                },
+            },
+
+            messages: {
+                code: {
+                    required: "Šis lauks ir obligāts!"
+                },
+                code_notes: {
+                    required: "Šis lauks ir obligāts!"
+                },
+                service_name: {
+                    required: "Šis lauks ir obligāts!"
+                },
+                service_notes: {
+                    required: "Šis lauks ir obligāts!"
+                },
+            },
+                submitHandler: function(form) {
+                    form.submit();
+                }
+        });   
         
    $('#code').keyup(function() {
         this.value = this.value.toLocaleUpperCase();
@@ -128,6 +163,18 @@
             } 
         }  
     }); 
+    
+        $('.code').editable('option', 'validate', function(v) {
+            if(!v) return 'Obligāts lauks!';
+        });
+    
+        $('.srv_name').editable('option', 'validate', function(v) {
+            if(!v) return 'Obligāts lauks!';
+        });
+    
+        $('.srv_desc').editable('option', 'validate', function(v) {
+            if(!v) return 'Obligāts lauks!';
+        });
         
         $('[data-dismiss=modal]').on('click', function (e) {
             var $t = $(this),

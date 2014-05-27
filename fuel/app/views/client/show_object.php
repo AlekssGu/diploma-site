@@ -108,7 +108,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Atteikties no pakalpojuma</h4>
       </div>
-        <form method="POST" action="/klients/pakalpojumi/atteikties">
+        <form id='dismiss_form' method="POST" action="/klients/pakalpojumi/atteikties">
             <input id='object' type='hidden' name='object' value='<?php echo $objects[0]->object_id; ?>' />
             <input id='service' type='hidden' name='service' />
             
@@ -116,7 +116,7 @@
                 <div class="date-pick form-group">
                    <label for="date_from">Datums, kurā vēlaties beigt saistības</label>       
                     <div class="input-group date">
-                      <input name='date_from' type="text" class="form-control" placeholder='dd.mm.gggg'><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                      <input name='date_from' id='date_from' type="text" class="form-control" placeholder='dd.mm.gggg'><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                     </div>
                 </div>
                 <div class="form-group">
@@ -142,6 +142,29 @@
     $('.dismiss_service').click(function(){
         $('#service').attr('value',$(this).attr('data-pk'));
     });
+    
+    $('#dismiss_form').validate({
+                rules: {
+                    date_from: {
+                        required: true,
+                    },
+                    notes: {
+                        required: true,
+                    },
+                },
+
+                messages: {
+                    date_from: {
+                        required: 'Lūdzu, ievadiet datumu, no kura beigt saistības!',
+                    },
+                    notes: {
+                        required: "Lūdzu, ievadiet paskaidrojumu, kādēļ vēlaties atteikties!",
+                    },
+                },
+                    submitHandler: function(form) {
+                        form.submit();
+                    }
+            });    
     
     //Ja ievadīts rādījums, tad parādām lietotājam, cik daudz ir ievadīts kopš pagājušā mērījuma
     $('.reading-input').keyup(function() {

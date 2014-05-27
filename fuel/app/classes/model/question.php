@@ -25,7 +25,7 @@ class Model_Question extends \Orm\Model
 	);
 	protected static $_table_name = 'questions';
 
-        protected static $_has_one = array(
+        protected static $_belongs_to = array(
             'topic' => array(
                 'key_from' => 'topic_id',
                 'model_to' => 'Model_Topic',

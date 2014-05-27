@@ -70,7 +70,12 @@
             type: 'text',
             url: '/darbinieks/klienti/labot-pakalpojumu',
             title: 'Izvēlies datumu',
-            mode: 'inline'
+            mode: 'inline',
+            success: function(response) {
+                if(!response) {
+                    return "Kļūda! Lūdzu, ievadiet korektu datumu!";
+                } 
+            }  
         });     
         
         //Labo datumu "līdz" ar ajax un x-editable palīdzību
@@ -78,7 +83,12 @@
             type: 'text',
             url: '/darbinieks/klienti/labot-pakalpojumu',
             title: 'Izvēlies datumu',
-            mode: 'inline'
+            mode: 'inline',
+            success: function(response) {
+                if(!response) {
+                    return "Kļūda! Lūdzu, ievadiet korektu datumu!";
+                } 
+            }  
         });      
         
         //Ļauj labot visas nepieciešamās lietas (palaiž instanci)
@@ -96,6 +106,14 @@
         });
         
         $('#srv_date_to').editable('option', 'validate', function(v) {
+            if(!v) return 'Obligāts lauks!';
+        });
+        
+        $('.service_from').editable('option', 'validate', function(v) {
+            if(!v) return 'Obligāts lauks!';
+        });
+        
+        $('.service_to').editable('option', 'validate', function(v) {
             if(!v) return 'Obligāts lauks!';
         });
 

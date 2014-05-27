@@ -347,7 +347,7 @@ class Controller_Client extends Controller_Template
                         
                         $result_srv = $query_srv -> as_object() -> execute() -> as_array();
                         
-                        if(empty(array_filter($result_objects)))
+                        if(!(array_filter($result_objects)))
                         {
                             Session::set_flash('error','Neveiksme! Nav iespējams apskatīt objektu.');
                             Response::redirect('/klients');
@@ -952,6 +952,12 @@ class Controller_Client extends Controller_Template
                 if($exists > 0)
                 {
                     Session::set_flash('error','Šāds pakalpojuma pieprasījums jau datubāzē pastāv!');
+                    Response::redirect_back();
+                }
+                
+                if(!date_create(Input::post('date_from')))
+                {
+                    Session::set_flash('error','Netika ievadīts korekts datums!');
                     Response::redirect_back();
                 }
                 
