@@ -146,7 +146,7 @@
         <div class="text-right col-lg-12">
             <ul class="list-inline">
                 <li><a href='/palidziba/sazinaties' class="text-muted">Ziņot par kļūdu</a></li>
-                <li>Aleksandrs Gusevs &copy; <?php echo Date::time()->format('%Y'); ?></li>
+                <li><a href="//lv.linkedin.com/in/alekssgu/" title="Izstrādātājs">Aleksandrs Gusevs</a> &copy; <?php echo Date::time()->format('%Y'); ?></li>
             </ul>
         </div>
     </div>
