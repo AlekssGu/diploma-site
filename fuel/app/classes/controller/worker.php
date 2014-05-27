@@ -216,8 +216,7 @@ class Controller_Worker extends Controller_Template
                             
                             $meter = Model_Meter::find($meter_id -> id);
                             
-                            $readings = DB::delete()
-                                        ->from('readings')
+                            $readings = DB::delete('readings')
                                         ->where('readings.meter_id','=',$meter -> id)
                                         ->execute();
 
