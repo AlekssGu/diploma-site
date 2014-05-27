@@ -1014,7 +1014,7 @@ class Controller_Worker extends Controller_Template
         else return false;
         
         if($saved) return true;
-        else return true;
+        else return false;
     }
     
     /**
