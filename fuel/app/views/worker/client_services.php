@@ -155,7 +155,7 @@
         },
         success: function(response) {
             if(!response) {
-                return "Notikusi kļūda! Datums nav nomainīts.";
+                return 'Datumam "no" ir jābūt mazākam par datumu "līdz"!';
             } 
         }  
     }); 
@@ -169,7 +169,7 @@
         },
         success: function(response) {
             if(!response) {
-                return "Notikusi kļūda! Datums nav nomainīts.";
+                return 'Datumam "līdz" ir jābūt lielākam par datumu "no"!';
             } 
         }  
     }); 

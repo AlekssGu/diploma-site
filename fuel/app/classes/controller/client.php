@@ -723,7 +723,12 @@ class Controller_Client extends Controller_Template
                                 $data['meters'] = $query_meters -> as_object() -> execute() -> as_array();
 
                                 //Ja kāds grib apskatīties cita klienta datus, tad būs skaits 0
-                                if((count($query_object)==0) || (count($query_services)==0))
+                                if(count(array_filter($data['object']))==0)
+                                {
+                                    Session::set_flash('error','Nav iespējams apskatīties šī objekta datus!');
+                                    Response::redirect('/klients');   
+                                }
+                                elseif(count(array_filter($data['service']))==0)
                                 {
                                     Session::set_flash('error','Nav iespējams apskatīties šī objekta datus!');
                                     Response::redirect('/klients');   

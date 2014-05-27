@@ -584,14 +584,26 @@ class Controller_Worker extends Controller_Template
             {
                 if(Input::post('action') == 'meter_number')
                 {
+                    $exists = DB::select()
+                                ->from('meters')
+                                ->where('meters.meter_number','=',Input::post('value'))
+                                ->as_object()
+                                ->execute()
+                                ->as_array();
+                    
+                    if($exists) return false;
                     $meter -> meter_number = Input::post('value');
                 }
                 else if(Input::post('action') == 'date_from')
                 {
-                    $meter -> date_from = Input::post('value');
+                    // Datumu pārbaude
+                    if($meter -> date_to < date_format(date_create(Input::post('value')),'Y-m-d')) return false;
+                    $meter -> date_from = date_format(date_create(Input::post('value')),'Y-m-d');
                 }
                 else if(Input::post('action') == 'date_to')
                 {
+                    // Datumu pārbaude
+                    if($meter -> date_from > date_format(date_create(Input::post('value')),'Y-m-d')) return false;
                     $meter -> date_to = date_format(date_create(Input::post('value')),'Y-m-d');
                 }
                 else return false;

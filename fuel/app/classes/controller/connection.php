@@ -502,33 +502,41 @@ class Controller_Connection extends Controller_Template {
 
             // ja ir atrasts lietotājs
             if ($user_data) {
-                // Lietotājs būs neaktīvs, ja nav vēl apstiprināts
-                if ($user_data->is_active == 'N' && $user_data->is_confirmed == 'N') {
-                    Session::set_flash('error', 'Autorizācija neveiksmīga! '
-                            . 'Lietotājam ir jāapstiprina reģistrācija. '
-                            . 'Lūdzu, pārbaudi savu e-pastu, tur noteikti jābūt vēstulei par to. '
-                            . 'Spied <a href="/klients/izsutit/' . $user_data->id . '">šeit</a>, lai izsūtītu apstiprināšanas kodu vēlreiz.');
+                
+                if(Auth::validate_user(Input::post('username'), Input::post('password')))
+                {
+                    // Lietotājs būs neaktīvs, ja nav vēl apstiprināts
+                    if ($user_data->is_active == 'N' && $user_data->is_confirmed == 'N') {
+                        Session::set_flash('error', 'Autorizācija neveiksmīga! '
+                                . 'Lietotājam ir jāapstiprina reģistrācija. '
+                                . 'Lūdzu, pārbaudi savu e-pastu, tur noteikti jābūt vēstulei par to. '
+                                . 'Spied <a href="/klients/izsutit/' . $user_data->id . '">šeit</a>, lai izsūtītu apstiprināšanas kodu vēlreiz.');
 
-                    Response::redirect('/klients/pieslegties');
-                }
-
-                // Lietotājs bloķēts (administrators vai darbinieks bloķējis)
-                else if ($user_data->is_active == 'N') {
-                    Session::set_flash('error', 'Autorizācija neveiksmīga! Diemžēl tavs lietotāja konts ir bloķēts!');
-                    Response::redirect('/klients/pieslegties');
-                }
-
-                // Viss kārtībā, var autorizēt lietotāju
-                else {
-                    // Ir iziets cauri pārbaudēm un var veikt autorizāciju
-                    if (Auth::login(Input::post('username'), Input::post('password'))) {
-                        //Session::set_flash('success', 'Autorizācija veiksmīga!');
-                        Response::redirect('/');
+                        Response::redirect('/klients/pieslegties');
                     }
-                    // Autorizēt nevarēja - nepareizi dati
+
+                    // Lietotājs bloķēts (administrators vai darbinieks bloķējis)
+                    else if ($user_data->is_active == 'N') {
+                        Session::set_flash('error', 'Autorizācija neveiksmīga! Diemžēl tavs lietotāja konts ir bloķēts!');
+                        Response::redirect('/klients/pieslegties');
+                    }
+
+                    // Viss kārtībā, var autorizēt lietotāju
                     else {
-                        Session::set_flash('error', 'Diemžēl autorizācija neveiksmīga! Ievadīta nepareiza ievades datu kombinācija.');
-                    }
+                            // Ir iziets cauri pārbaudēm un var veikt autorizāciju
+                            if (Auth::login(Input::post('username'), Input::post('password'))) {
+                                //Session::set_flash('success', 'Autorizācija veiksmīga!');
+                                Response::redirect('/');
+                            }
+                            // Autorizēt nevarēja - nepareizi dati
+                            else {
+                                Session::set_flash('error', 'Diemžēl autorizācija neveiksmīga! Ievadīta nepareiza ievades datu kombinācija.');
+                            }
+                        }
+                }
+                else
+                {
+                    Session::set_flash('error', 'Diemžēl autorizācija neveiksmīga! Ievadīta nepareiza ievades datu kombinācija.');
                 }
             }
             // ja nav atrasts lietotājs
