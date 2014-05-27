@@ -181,14 +181,14 @@ class Controller_Worker extends Controller_Template
             $object = Model_Object::find($object_id);
             $object -> is_deleted = 'Y';
             
-            $query_service_id = DB::select('user_services.id')
+            $query_service_id = DB::select()
                                -> from ('user_services')
                                -> where('obj_id','=',$object_id)
                                -> and_where('is_active','=','Y');
             $service_id = $query_service_id -> as_object() -> execute() -> as_array();
             
             //Ja ir atrasts pakalpojums
-            if($service_id)
+            if(!empty(array_filter($service_id)))
             {
                 $count_services = 0;
                 $count_meters = 0;
@@ -196,12 +196,12 @@ class Controller_Worker extends Controller_Template
                 //Katram pakalpojumam atrod skaitītāju
                 foreach($service_id as $id)
                 {
-                    $service = Model_User_Service::find($id);
+                    $service = Model_User_Service::find($id -> id);
                     $service -> is_active = 'N';
                     
                     $meters = DB::select()
                                 ->from('meters')
-                                ->where('meters.service_id','=',$id)
+                                ->where('meters.service_id','=',$id -> id)
                                 ->as_object()
                                 ->execute()
                                 ->as_array();
@@ -214,9 +214,11 @@ class Controller_Worker extends Controller_Template
                         {
                             $count_meters = $count_meters + 1;
                             
+                            $meter = Model_Meter::find($meter_id -> id);
+                            
                             $readings = DB::delete()
                                         ->from('readings')
-                                        ->where('readings.meter_id','=',$meter_id -> id)
+                                        ->where('readings.meter_id','=',$meter -> id)
                                         ->execute();
 
                             $meter -> delete();
