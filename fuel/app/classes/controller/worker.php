@@ -199,7 +199,7 @@ class Controller_Worker extends Controller_Template
                     $service = Model_User_Service::find($id);
                     $service -> is_active = 'N';
                     
-                    $meters = DB::select('id')
+                    $meters = DB::select()
                                 ->from('meters')
                                 ->where('meters.service_id','=',$id)
                                 ->as_object()
@@ -207,18 +207,16 @@ class Controller_Worker extends Controller_Template
                                 ->as_array();
                     
                     //Ja ir atrasts skaitītājs, tad dzēšam rādījumus
-                    if($meters)
+                    if(!empty(array_filter($meters)))
                     {
                         //Katram skaitītājam
                         foreach($meters as $meter_id) 
                         {
                             $count_meters = $count_meters + 1;
                             
-                            $meter = Model_Meter::find($meter_id);
-
                             $readings = DB::delete()
                                         ->from('readings')
-                                        ->where('readings.meter_id','=',$meter -> id)
+                                        ->where('readings.meter_id','=',$meter_id -> id)
                                         ->execute();
 
                             $meter -> delete();
