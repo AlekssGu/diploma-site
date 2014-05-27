@@ -155,7 +155,13 @@ class Controller_Client extends Controller_Template
                             $person_object = Model_Person::find($user_object->person_id);
                             
                             //Ja ievadīts garāks telefona numurs, nekā Latvijā iespējams, tad kļūda
-                            if(mb_strlen(Input::post('value'))> 13)
+                            if(mb_strlen(Input::post('value')) > 13)
+                            {
+                                $response = new Response();
+                                $response -> set_status(304);
+                                return $response;
+                            }
+                            elseif(mb_strlen(Input::post('value')) < 8)
                             {
                                 $response = new Response();
                                 $response -> set_status(304);

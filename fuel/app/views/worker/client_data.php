@@ -168,7 +168,12 @@
         validate: function(value) {
            if($.trim(value) == '') return 'Šis ir obligāts lauks!';
            else if(value.length != 8) return 'Klienta numurs sastāv no 8 simboliem!';
-        }
+        },
+        success: function(response) {
+            if(!response) {
+                return "Klienta numurs jau pastāv datubāzē!";
+            } 
+        }  
     });    
     
     $('.person_type').editable({
@@ -176,7 +181,12 @@
         url: '/darbinieks/klienti/labot-datus',
         validate: function(value) {
            if($.trim(value) == '') return 'Šis ir obligāts lauks!';
-        }
+        },
+        success: function(response) {
+            if(!response) {
+                return "Kļūda! Personas tips netika mainīts!";
+            } 
+        }  
     });    
     
     $('.client_name').editable({
@@ -186,7 +196,12 @@
         title: 'Labot klienta vārdu',
         validate: function(value) {
            if($.trim(value) == '') return 'Šis ir obligāts lauks!';
-        }
+        },
+        success: function(response) {
+            if(!response) {
+                return "Kļūda! Klienta vārds netika mainīts!";
+            } 
+        }  
     }); 
     
     $('.client_surname').editable({
@@ -196,7 +211,12 @@
         title: 'Labot klienta uzvārdu',
         validate: function(value) {
            if($.trim(value) == '') return 'Šis ir obligāts lauks!';
-        }
+        },
+        success: function(response) {
+            if(!response) {
+                return "Kļūda! Klienta uzvārds netika mainīts!";
+            } 
+        }  
     }); 
     
     $('.client_pk').editable({
@@ -208,7 +228,12 @@
            if($.trim(value) == '') return 'Šis ir obligāts lauks!';
            else if(value.length != 12) return 'Personas kodam jāsatur 12 simboli!';
            //else if(!value.match('\d{6}-\d{5}')) return 'Nepareizs personas koda formāts!';
-        }
+        },
+        success: function(response) {
+            if(!response) {
+                return "Kļūda! Klienta personas kods netika mainīts!";
+            } 
+        }  
     }); 
     
     $('.client_phone').editable({
@@ -218,7 +243,12 @@
         title: 'Labot klienta telefona numuru',
         validate: function(value) {            
            if($.trim(value) == '') return 'Šis ir obligāts lauks!';
-        }
+        },
+        success: function(response) {
+            if(!response) {
+                return "Kļūda! Klienta telefona numurs netika mainīts!";
+            } 
+        }  
     }); 
     
     $('.client_email').editable({
@@ -228,7 +258,12 @@
         title: 'Labot klienta e-pasta adresi',
         validate: function(value) {            
            if($.trim(value) == '') return 'Šis ir obligāts lauks!';
-        }
+        },
+        success: function(response) {
+            if(!response) {
+                return "Kļūda! Šāda e-pasta adrese jau ir reģistrēta sistēmā vai ievadīta nekorekta vērtība!";
+            } 
+        }  
     }); 
     
     $('.btn-activate').click(function(e) {

@@ -881,13 +881,24 @@ class Controller_Worker extends Controller_Template
                 $client = Model_User::find(Input::post('pk'));
                 $person = Model_Person::find($client->person_id);
                 
-                $person -> client_number = Input::post('value');
-                $client -> username = Input::post('value');
+                $exists = DB::select()
+                        ->from('users')
+                        ->where('users.username','=',Input::post('value'))
+                        ->as_object()
+                        ->execute()
+                        ->as_array();
                 
-                $saved = $person -> save() && $client -> save();
+                if($exists) $saved = false;
+                else 
+                {
+
+                    $person -> client_number = Input::post('value');
+                    $client -> username = Input::post('value');
+
+                    $saved = $person -> save() && $client -> save();
                 
-                
-                Controller_Client::cre_cln_history(Input::post('pk'), 'Labots klienta numurs');
+                    Controller_Client::cre_cln_history(Input::post('pk'), 'Labots klienta numurs');
+                }
             }
             //Ja maina personas tipu
             else if(Input::post('name') == 'person_type')
@@ -922,12 +933,24 @@ class Controller_Worker extends Controller_Template
             //Ja maina klienta personas kodu
             else if(Input::post('name') == 'client_pk')
             {
-                $client = Model_User::find(Input::post('pk'));
-                $person = Model_Person::find($client -> person_id);
-                $person -> person_code = Input::post('value');
-                $saved = $person -> save();
+                $exists = DB::select()
+                        ->from('persons')
+                        ->where('persons.person_code','=',Input::post('value'))
+                        ->as_object()
+                        ->execute()
+                        ->as_array();
                 
-                Controller_Client::cre_cln_history(Input::post('pk'), 'Labots klienta personas kods');
+                if($exists) $saved = false;
+                else 
+                {
+
+                    $client = Model_User::find(Input::post('pk'));
+                    $person = Model_Person::find($client -> person_id);
+                    $person -> person_code = Input::post('value');
+                    $saved = $person -> save();
+
+                    Controller_Client::cre_cln_history(Input::post('pk'), 'Labots klienta personas kods');
+                }
             }
             //Ja maina klienta telefona numuru
             else if(Input::post('name') == 'client_phone')
@@ -944,11 +967,13 @@ class Controller_Worker extends Controller_Template
             {
                 //E-pastam jābūt unikālam
                 $check_existing = Model_User::find_by_email(Input::post('value'));
-                if(!empty($check_existing)) return false;
-                
-                $client = Model_User::find(Input::post('pk'));
-                $client -> email = Input::post('value');
-                $saved = $client -> save();
+                if(!empty($check_existing)) $saved = false;
+                else 
+                {
+                    $client = Model_User::find(Input::post('pk'));
+                    $client -> email = Input::post('value');
+                    $saved = $client -> save();
+                }
             }
             //Ja atver klienta kontu
             else if(Input::post('name') == 'activate')
