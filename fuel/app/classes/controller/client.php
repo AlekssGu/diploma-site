@@ -341,6 +341,12 @@ class Controller_Client extends Controller_Template
                         
                         $result_srv = $query_srv -> as_object() -> execute() -> as_array();
                         
+                        if(empty(array_filter($result_objects)))
+                        {
+                            Session::set_flash('error','Neveiksme! Nav iespējams apskatīt objektu.');
+                            Response::redirect('/klients');
+                        }
+                        
                         $data['objects'] = $result_objects;
                         $data['services'] = $result_srv;
                         $data['meters'] = $result_meters;
