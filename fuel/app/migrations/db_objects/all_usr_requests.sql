@@ -32,3 +32,4 @@ SELECT  sre.id                                                  AS request_id
   JOIN cities cty ON cty.id = adr.city_id
   LEFT OUTER JOIN services srv ON srv.id = sre.service_id
   LEFT OUTER JOIN user_services uvc ON uvc.id = sre.usr_srv_id;
+

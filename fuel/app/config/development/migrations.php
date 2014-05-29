@@ -28,6 +28,9 @@ return array(
 				19 => '021_create_emergencies',
 				20 => '022_create_questions',
 				21 => '023_create_topics',
+				22 => '024_create_external_users',
+				23 => '025_create_external_users',
+				24 => '025_create_external_users_2',
 			),
 		),
 		'module' => 
