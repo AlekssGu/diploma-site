@@ -16,6 +16,7 @@
             <div id="rekviziti" class="page">
                 <h2>Rekvizīti</h2>
                 <hr/>
+                <p>Pašvaldība SIA „Liepājas ūdens” ir Liepājas pašvaldības kapitālsabiedrība, kas nodrošina liepājniekus un pilsētas uzņēmumus ar centralizētiem ūdensapgādes un kanalizācijas pakalpojumiem.</p>
                 <div class='col-md-offset-1 col-md-10 text-center'>
                     <ul class="list-group">
                         <li class='list-group-item'>
@@ -30,69 +31,51 @@
                     </ul>
                 </div>
                 <div class='clearfix'></div>
-
+                <div class='text-center'>
+                    <p>A/S „DnB Banka” Liepājas filiāle, kods RIKO LV 2X, konta Nr. LV15RIKO0002010306502</p>
+                    <p>"Nordea Bank Finland Plc" Latvijas filiāle, kods NDEA LV 2X, konta Nr. LV44NDEA0000082352954</p>
+                    <p>A/S „Swedbank” filiāle „Kurzeme”, kods HABA LV 22, konta Nr. LV64HABA0001408046222</p>
+                    <p>A/S "SEB Banka" Liepājas filiāle, kods UNLALV2X, konta Nr. LV82UNLA0012010467064</p>
+                </div>
             </div>
             <div id="sertifikati" class="page">
                 <h2>Sertifikāti</h2>
                 <hr/>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ut mauris et ipsum auctor dictum in nec mauris. Donec imperdiet et lectus ac bibendum. Proin id purus ultricies, laoreet metus vitae, laoreet arcu. Phasellus convallis urna non quam laoreet ullamcorper quis nec felis. In lobortis arcu quis libero sollicitudin, ornare auctor nibh tempor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean massa tellus, tristique rhoncus tristique non, sagittis sed felis. In eu tortor at urna pharetra congue a nec nibh.
-
-In hendrerit, nibh in facilisis bibendum, nunc purus consequat orci, ut pellentesque ipsum purus vehicula ante. Curabitur viverra pellentesque risus, id pharetra quam vestibulum quis. Nunc et elementum nisl. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer viverra turpis erat, non pulvinar ligula tincidunt id. Pellentesque ipsum lectus, dignissim ac placerat et, luctus sit amet nibh. Vivamus faucibus rhoncus leo sit amet dapibus.
-
-Proin fermentum erat quis risus blandit, nec pretium arcu pulvinar. Vivamus non tempus odio, quis bibendum nunc. Fusce nec quam quis nulla egestas tincidunt. Sed a leo quam. Etiam lacinia diam nec tellus ornare ultricies. Vestibulum nec vestibulum metus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis quis felis commodo, venenatis eros vitae, condimentum augue. Vivamus eget massa feugiat, sollicitudin enim vitae, pulvinar enim.
-
-Vivamus at ligula eget quam scelerisque sodales. Donec sit amet consectetur lorem, vitae condimentum turpis. Aliquam porta consequat urna, nec rhoncus enim viverra ut. Donec consequat faucibus mattis. Suspendisse nibh metus, pulvinar et pulvinar vitae, cursus nec libero. Phasellus faucibus, diam eu consequat ornare, ipsum velit fermentum elit, sed ornare magna ante eget elit. Fusce condimentum suscipit dui eget accumsan. Cras cursus, metus tristique venenatis mollis, felis elit aliquam nisl, facilisis rutrum mauris turpis in diam.
-
-Maecenas varius ipsum sed sagittis aliquam. Donec faucibus eros sit amet tortor volutpat sagittis. Nulla porta id sem lobortis ornare. In rutrum, arcu a varius dapibus, ligula nisl porttitor libero, ac aliquet sem nunc vitae nibh. Aenean eleifend augue volutpat, elementum velit eu, feugiat ipsum. Morbi non lacinia nulla. Vestibulum metus risus, pharetra vitae commodo quis, blandit et est. Donec sed est eget lorem laoreet placerat eu quis sem. Suspendisse non velit vitae dui gravida molestie in quis eros. Vivamus vestibulum, augue vel molestie ullamcorper, arcu odio posuere massa, a semper purus nunc eget ante. Vestibulum eu justo ut dui facilisis commodo. Vivamus quis auctor felis, et condimentum lacus. Duis in eros quis odio pharetra pulvinar sit amet a orci. Mauris condimentum tellus ipsum, ut sodales leo hendrerit nec. Proin sit amet odio erat. Vestibulum urna turpis, cursus vel arcu non, elementum aliquam mi.</p>
-
+                
+                <p>2012. gadā ir saņēmusi Licenci Nr. U10070 ūdensapgādes un kanalizācijas sabiedrisko pakalpojumu sniegšanai. Pamatdarbība notiek saskaņā ar Atļauju B kategorijas piesārņojošai darbībai Nr. LI-10-IB-0022/712.</p>
+                <p>Uzņēmumā ir ieviesta Kvalitātes vadības sistēma atbilstoši standartam ISO 9001:2008.</p>
             </div>
             <div id="struktura" class="page">
                 <h2>Organizatoriskā struktūra</h2>
                 <hr/>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ut mauris et ipsum auctor dictum in nec mauris. Donec imperdiet et lectus ac bibendum. Proin id purus ultricies, laoreet metus vitae, laoreet arcu. Phasellus convallis urna non quam laoreet ullamcorper quis nec felis. In lobortis arcu quis libero sollicitudin, ornare auctor nibh tempor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean massa tellus, tristique rhoncus tristique non, sagittis sed felis. In eu tortor at urna pharetra congue a nec nibh.
-
-In hendrerit, nibh in facilisis bibendum, nunc purus consequat orci, ut pellentesque ipsum purus vehicula ante. Curabitur viverra pellentesque risus, id pharetra quam vestibulum quis. Nunc et elementum nisl. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer viverra turpis erat, non pulvinar ligula tincidunt id. Pellentesque ipsum lectus, dignissim ac placerat et, luctus sit amet nibh. Vivamus faucibus rhoncus leo sit amet dapibus.
-
-Proin fermentum erat quis risus blandit, nec pretium arcu pulvinar. Vivamus non tempus odio, quis bibendum nunc. Fusce nec quam quis nulla egestas tincidunt. Sed a leo quam. Etiam lacinia diam nec tellus ornare ultricies. Vestibulum nec vestibulum metus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis quis felis commodo, venenatis eros vitae, condimentum augue. Vivamus eget massa feugiat, sollicitudin enim vitae, pulvinar enim.
-
-Vivamus at ligula eget quam scelerisque sodales. Donec sit amet consectetur lorem, vitae condimentum turpis. Aliquam porta consequat urna, nec rhoncus enim viverra ut. Donec consequat faucibus mattis. Suspendisse nibh metus, pulvinar et pulvinar vitae, cursus nec libero. Phasellus faucibus, diam eu consequat ornare, ipsum velit fermentum elit, sed ornare magna ante eget elit. Fusce condimentum suscipit dui eget accumsan. Cras cursus, metus tristique venenatis mollis, felis elit aliquam nisl, facilisis rutrum mauris turpis in diam.
-
-Maecenas varius ipsum sed sagittis aliquam. Donec faucibus eros sit amet tortor volutpat sagittis. Nulla porta id sem lobortis ornare. In rutrum, arcu a varius dapibus, ligula nisl porttitor libero, ac aliquet sem nunc vitae nibh. Aenean eleifend augue volutpat, elementum velit eu, feugiat ipsum. Morbi non lacinia nulla. Vestibulum metus risus, pharetra vitae commodo quis, blandit et est. Donec sed est eget lorem laoreet placerat eu quis sem. Suspendisse non velit vitae dui gravida molestie in quis eros. Vivamus vestibulum, augue vel molestie ullamcorper, arcu odio posuere massa, a semper purus nunc eget ante. Vestibulum eu justo ut dui facilisis commodo. Vivamus quis auctor felis, et condimentum lacus. Duis in eros quis odio pharetra pulvinar sit amet a orci. Mauris condimentum tellus ipsum, ut sodales leo hendrerit nec. Proin sit amet odio erat. Vestibulum urna turpis, cursus vel arcu non, elementum aliquam mi.</p>
-
+                <p></p>
+                <p class="text-center"><img style="margin: 0 auto" class='img img-responsive' src="/assets/img/struktura.jpg" title="Organizatoriskā struktūra" /></p>
             </div>
             <div id="nozare" class="page">
                 <h2>Nozare</h2>
                 <hr/>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ut mauris et ipsum auctor dictum in nec mauris. Donec imperdiet et lectus ac bibendum. Proin id purus ultricies, laoreet metus vitae, laoreet arcu. Phasellus convallis urna non quam laoreet ullamcorper quis nec felis. In lobortis arcu quis libero sollicitudin, ornare auctor nibh tempor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean massa tellus, tristique rhoncus tristique non, sagittis sed felis. In eu tortor at urna pharetra congue a nec nibh.
-
-In hendrerit, nibh in facilisis bibendum, nunc purus consequat orci, ut pellentesque ipsum purus vehicula ante. Curabitur viverra pellentesque risus, id pharetra quam vestibulum quis. Nunc et elementum nisl. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer viverra turpis erat, non pulvinar ligula tincidunt id. Pellentesque ipsum lectus, dignissim ac placerat et, luctus sit amet nibh. Vivamus faucibus rhoncus leo sit amet dapibus.
-
-Proin fermentum erat quis risus blandit, nec pretium arcu pulvinar. Vivamus non tempus odio, quis bibendum nunc. Fusce nec quam quis nulla egestas tincidunt. Sed a leo quam. Etiam lacinia diam nec tellus ornare ultricies. Vestibulum nec vestibulum metus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis quis felis commodo, venenatis eros vitae, condimentum augue. Vivamus eget massa feugiat, sollicitudin enim vitae, pulvinar enim.
-
-Vivamus at ligula eget quam scelerisque sodales. Donec sit amet consectetur lorem, vitae condimentum turpis. Aliquam porta consequat urna, nec rhoncus enim viverra ut. Donec consequat faucibus mattis. Suspendisse nibh metus, pulvinar et pulvinar vitae, cursus nec libero. Phasellus faucibus, diam eu consequat ornare, ipsum velit fermentum elit, sed ornare magna ante eget elit. Fusce condimentum suscipit dui eget accumsan. Cras cursus, metus tristique venenatis mollis, felis elit aliquam nisl, facilisis rutrum mauris turpis in diam.
-
-Maecenas varius ipsum sed sagittis aliquam. Donec faucibus eros sit amet tortor volutpat sagittis. Nulla porta id sem lobortis ornare. In rutrum, arcu a varius dapibus, ligula nisl porttitor libero, ac aliquet sem nunc vitae nibh. Aenean eleifend augue volutpat, elementum velit eu, feugiat ipsum. Morbi non lacinia nulla. Vestibulum metus risus, pharetra vitae commodo quis, blandit et est. Donec sed est eget lorem laoreet placerat eu quis sem. Suspendisse non velit vitae dui gravida molestie in quis eros. Vivamus vestibulum, augue vel molestie ullamcorper, arcu odio posuere massa, a semper purus nunc eget ante. Vestibulum eu justo ut dui facilisis commodo. Vivamus quis auctor felis, et condimentum lacus. Duis in eros quis odio pharetra pulvinar sit amet a orci. Mauris condimentum tellus ipsum, ut sodales leo hendrerit nec. Proin sit amet odio erat. Vestibulum urna turpis, cursus vel arcu non, elementum aliquam mi.</p>
-
+                <p>Saskaņā ar līgumu par ūdenssaimniecības sabiedrisko pakalpojumu sniegšanu, Liepājas ūdens nodrošina šādus pakalpojumus Liepājas pilsētas administratīvajā teritorijā:</p>
+                <ul>
+                    <li>ūdens ieguve, ražošana (atdzelzošana, attīrīšana) un novadīšana ūdensvada tīklā;</li>
+                    <li>dzeramā ūdens padeve no ūdens ražošanas (sagatavošanas) vietas līdz pakalpojuma lietotājam;</li>
+                    <li>notekūdeņu savākšana no pakalpojuma lietotāja un novadīšana kanalizācijas tīklā līdz attīrīšanas iekārtām;</li>
+                    <li>notekūdeņu bioloģiskā attīrīšana un novadīšana līdz izvadīšanas vietai ūdenstilpnē.</li>
+                </ul>
+                <p>SIA "Liepājas ūdens” ūdenssaimniecības sabiedrisko pakalpojumu tarifus apstiprina Sabiedrisko pakalpojumu regulēšanas komisija.</p>
+                <p>SIA "Liepājas ūdens” sniedz pakalpojumus arī ārpus Liepājas pilsētas administratīvās teritorijas, nodrošinot dzeramā ūdens padevi un notekūdeņu attīrīšanu atsevišķām Liepājas pilsētas tuvumā esošām pašvaldību teritorijām.
+                   Papildu pamatdarbības pakalpojumiem ūdenssaimniecības jomā SIA "Liepājas ūdens” sniedz nekustamā īpašuma nomas pakalpojumus, nodrošina komunālos pakalpojumus nomniekiem, kā arī veic ūdens un notekūdeņu laboratorijas analīzes. Šo pakalpojumu īpatsvars SIA "Liepājas ūdens” komercdarbības apjomos ir nebūtisks un stratēģiskās attīstības plānā detalizēti nav apskatīts.</p>
             </div>
             <div id="vesture" class="page">
                 <h2>Uzņēmuma vēsture</h2>
                 <hr/>
-<iframe src='http://cdn.knightlab.com/libs/timeline/latest/embed/index.html?source=0Aljmflj2re21dGRsTTlPMllRZ0dsX0NhVGVOR1F6cVE&font=Bevan-PotanoSans&maptype=toner&lang=lv&height=650' width='100%' height='650' frameborder='0'></iframe>
+                <iframe src='http://cdn.knightlab.com/libs/timeline/latest/embed/index.html?source=0Aljmflj2re21dGRsTTlPMllRZ0dsX0NhVGVOR1F6cVE&font=Bevan-PotanoSans&maptype=toner&lang=lv&height=650' width='100%' height='650' frameborder='0'></iframe>
 
             </div>
             <div id="ekskursijas" class="page">
                 <h2>Ekskursiju iespējas</h2>
                 <hr/>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ut mauris et ipsum auctor dictum in nec mauris. Donec imperdiet et lectus ac bibendum. Proin id purus ultricies, laoreet metus vitae, laoreet arcu. Phasellus convallis urna non quam laoreet ullamcorper quis nec felis. In lobortis arcu quis libero sollicitudin, ornare auctor nibh tempor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean massa tellus, tristique rhoncus tristique non, sagittis sed felis. In eu tortor at urna pharetra congue a nec nibh.
-
-In hendrerit, nibh in facilisis bibendum, nunc purus consequat orci, ut pellentesque ipsum purus vehicula ante. Curabitur viverra pellentesque risus, id pharetra quam vestibulum quis. Nunc et elementum nisl. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer viverra turpis erat, non pulvinar ligula tincidunt id. Pellentesque ipsum lectus, dignissim ac placerat et, luctus sit amet nibh. Vivamus faucibus rhoncus leo sit amet dapibus.
-
-Proin fermentum erat quis risus blandit, nec pretium arcu pulvinar. Vivamus non tempus odio, quis bibendum nunc. Fusce nec quam quis nulla egestas tincidunt. Sed a leo quam. Etiam lacinia diam nec tellus ornare ultricies. Vestibulum nec vestibulum metus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis quis felis commodo, venenatis eros vitae, condimentum augue. Vivamus eget massa feugiat, sollicitudin enim vitae, pulvinar enim.
-
-Vivamus at ligula eget quam scelerisque sodales. Donec sit amet consectetur lorem, vitae condimentum turpis. Aliquam porta consequat urna, nec rhoncus enim viverra ut. Donec consequat faucibus mattis. Suspendisse nibh metus, pulvinar et pulvinar vitae, cursus nec libero. Phasellus faucibus, diam eu consequat ornare, ipsum velit fermentum elit, sed ornare magna ante eget elit. Fusce condimentum suscipit dui eget accumsan. Cras cursus, metus tristique venenatis mollis, felis elit aliquam nisl, facilisis rutrum mauris turpis in diam.
-
-Maecenas varius ipsum sed sagittis aliquam. Donec faucibus eros sit amet tortor volutpat sagittis. Nulla porta id sem lobortis ornare. In rutrum, arcu a varius dapibus, ligula nisl porttitor libero, ac aliquet sem nunc vitae nibh. Aenean eleifend augue volutpat, elementum velit eu, feugiat ipsum. Morbi non lacinia nulla. Vestibulum metus risus, pharetra vitae commodo quis, blandit et est. Donec sed est eget lorem laoreet placerat eu quis sem. Suspendisse non velit vitae dui gravida molestie in quis eros. Vivamus vestibulum, augue vel molestie ullamcorper, arcu odio posuere massa, a semper purus nunc eget ante. Vestibulum eu justo ut dui facilisis commodo. Vivamus quis auctor felis, et condimentum lacus. Duis in eros quis odio pharetra pulvinar sit amet a orci. Mauris condimentum tellus ipsum, ut sodales leo hendrerit nec. Proin sit amet odio erat. Vestibulum urna turpis, cursus vel arcu non, elementum aliquam mi.</p>
-
+                <p>SIA "Liepājas ūdens" visiem interesentiem piedāvā vadīt ekskursijas, kuru laikā kopā ar nozares speciālistiem apskata visas uzņēmuma galvenās struktūrvienības.</p>
+                <p>Sīkāk var uzzināt zvanot pa tālruni +371 63623417 vai <a href="/palidziba/sazinaties">uzrakstot ziņu</a>.</p>
             </div>
         </div>
     </div> 

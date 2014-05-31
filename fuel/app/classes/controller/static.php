@@ -121,8 +121,10 @@ class Controller_Static extends Controller_Template
                 $t2 = new Model_Topic(array('question' => 'Jauns pieslēgums'));
                 $t3 = new Model_Topic(array('question' => 'Esošs pieslēgums'));
                 $t4 = new Model_Topic(array('question' => 'Rēķinu apmaksa'));
-                $t5 = new Model_Topic(array('question' => 'Ūdeņu attīrīšana')); 
-                $t6 = new Model_Topic(array('question' => 'Problēma sistēmā')); 
+                $t5 = new Model_Topic(array('question' => 'Ūdeņu attīrīšana'));   
+                $t6 = new Model_Topic(array('question' => 'Cenas un tarifi')); 
+                $t7 = new Model_Topic(array('question' => 'Problēma sistēmā'));
+                $t8 = new Model_Topic(array('question' => 'Citi jautājumi'));
                 
                 $t1 -> save();
                 $t2 -> save();
@@ -130,6 +132,9 @@ class Controller_Static extends Controller_Template
                 $t4 -> save();
                 $t5 -> save();
                 $t6 -> save();
+                $t7 -> save();
+                $t8 -> save();
+                
                 
                 $topics = Model_Topic::find('all');
             }
@@ -183,4 +188,54 @@ class Controller_Static extends Controller_Template
                 $this -> template -> content = View::forge('static/all_issues',$data);
             
         }
+        
+	public function action_recent_facts()
+	{       
+                $data = array();
+            
+                $this -> template -> title = "Interesanti fakti - Pilsētas ūdens";
+                $this -> template -> content = View::forge('static/recent/facts',$data);
+	}
+        
+	public function action_projects()
+	{       
+                $data = array();
+            
+                $this -> template -> title = "Projekti - Pilsētas ūdens";
+                $this -> template -> content = View::forge('static/projects',$data);
+	}
+        
+	public function action_prices()
+	{       
+                $data = array();
+            
+                $this -> template -> title = "Cenas un tarifi - Pilsētas ūdens";
+                $this -> template -> content = View::forge('static/prices',$data);
+	}
+        
+	public function action_worktime()
+	{       
+                $data = array();
+            
+                $this -> template -> title = "Uzņēmuma darba laiks - Pilsētas ūdens";
+                $this -> template -> content = View::forge('static/worktime',$data);
+	}
+        
+	public function action_help_connect()
+	{       
+                $data = array();
+            
+                $this -> template -> title = "Palīdzība pieslēgties - Pilsētas ūdens";
+                $this -> template -> content = View::forge('static/help/connect',$data);
+	}
+        
+	public function action_help_consumption()
+	{       
+                $data = array();
+            
+                $this -> template -> title = "Palīdzība ievadīt rādījumu - Pilsētas ūdens";
+                $this -> template -> content = View::forge('static/help/consumption',$data);
+	}
+        
+        
 }

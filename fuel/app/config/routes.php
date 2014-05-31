@@ -22,7 +22,11 @@ return array(
         'aktuali' => 'static/recent', //Pāradresē uz root
         'aktuali/jaunumi' => 'static/recent_news', //Jaunumu lapa
         'aktuali/darbi' => 'static/all_issues', //Visi bojājumi un darbi
+        'aktuali/fakti' => 'static/recent_facts',
+        'projekti' => 'static/projects',
         'pakalpojumi' => 'static/services', //Pakalpojumu lapa
+        'klients/tarifi' => 'static/prices',
+        'klients/darba-laiks' => 'static/worktime',
 
         // Par mums sadaļas:
         'par-uznemumu/:page_name' => 'static/about/$1', //Par mums sadaļas
@@ -32,6 +36,8 @@ return array(
             'palidziba' => 'static/help', //Pāradresē uz root
             'palidziba/buj' => 'static/help_faq', //Biežāk uzdotie jautājumi
             'palidziba/sazinaties' => 'static/help_contact', //Sazināties ar uzņēmumu
+            'palidziba/paterins' => 'static/help_consumption',
+            'palidziba/pieslegsanas' => 'static/help_connect',
         // --
     
         // Visiem pieejamās sadaļas:

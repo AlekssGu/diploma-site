@@ -20,18 +20,7 @@ class Creviews
             
             foreach($views as $view)
             {
-                //$query = \DB::query(\Fuel::load($view_folder . $view)) -> execute();
-                echo \Fuel::load($view_folder . $view);
-                echo "\n";
-                echo "\n";
-                var_dump($view_folder);
-                echo "\n";
-                var_dump($view);
-                echo "\n";
-                echo "\n";
-                echo "\n";
-                echo "\n";
-                echo "\n";
+                \DB::query(\Fuel::load($view_folder . $view), \DB::UPDATE)->execute();
             }
 
         }

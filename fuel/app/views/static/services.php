@@ -15,72 +15,99 @@
             <div id="water" class="page">
                 <h2>Ūdensapgādes nozare</h2>
                 <hr/>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ut mauris et ipsum auctor dictum in nec mauris. Donec imperdiet et lectus ac bibendum. Proin id purus ultricies, laoreet metus vitae, laoreet arcu. Phasellus convallis urna non quam laoreet ullamcorper quis nec felis. In lobortis arcu quis libero sollicitudin, ornare auctor nibh tempor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean massa tellus, tristique rhoncus tristique non, sagittis sed felis. In eu tortor at urna pharetra congue a nec nibh.
-
-In hendrerit, nibh in facilisis bibendum, nunc purus consequat orci, ut pellentesque ipsum purus vehicula ante. Curabitur viverra pellentesque risus, id pharetra quam vestibulum quis. Nunc et elementum nisl. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer viverra turpis erat, non pulvinar ligula tincidunt id. Pellentesque ipsum lectus, dignissim ac placerat et, luctus sit amet nibh. Vivamus faucibus rhoncus leo sit amet dapibus.
-
-Proin fermentum erat quis risus blandit, nec pretium arcu pulvinar. Vivamus non tempus odio, quis bibendum nunc. Fusce nec quam quis nulla egestas tincidunt. Sed a leo quam. Etiam lacinia diam nec tellus ornare ultricies. Vestibulum nec vestibulum metus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis quis felis commodo, venenatis eros vitae, condimentum augue. Vivamus eget massa feugiat, sollicitudin enim vitae, pulvinar enim.
-
-Vivamus at ligula eget quam scelerisque sodales. Donec sit amet consectetur lorem, vitae condimentum turpis. Aliquam porta consequat urna, nec rhoncus enim viverra ut. Donec consequat faucibus mattis. Suspendisse nibh metus, pulvinar et pulvinar vitae, cursus nec libero. Phasellus faucibus, diam eu consequat ornare, ipsum velit fermentum elit, sed ornare magna ante eget elit. Fusce condimentum suscipit dui eget accumsan. Cras cursus, metus tristique venenatis mollis, felis elit aliquam nisl, facilisis rutrum mauris turpis in diam.
-
-Maecenas varius ipsum sed sagittis aliquam. Donec faucibus eros sit amet tortor volutpat sagittis. Nulla porta id sem lobortis ornare. In rutrum, arcu a varius dapibus, ligula nisl porttitor libero, ac aliquet sem nunc vitae nibh. Aenean eleifend augue volutpat, elementum velit eu, feugiat ipsum. Morbi non lacinia nulla. Vestibulum metus risus, pharetra vitae commodo quis, blandit et est. Donec sed est eget lorem laoreet placerat eu quis sem. Suspendisse non velit vitae dui gravida molestie in quis eros. Vivamus vestibulum, augue vel molestie ullamcorper, arcu odio posuere massa, a semper purus nunc eget ante. Vestibulum eu justo ut dui facilisis commodo. Vivamus quis auctor felis, et condimentum lacus. Duis in eros quis odio pharetra pulvinar sit amet a orci. Mauris condimentum tellus ipsum, ut sodales leo hendrerit nec. Proin sit amet odio erat. Vestibulum urna turpis, cursus vel arcu non, elementum aliquam mi.</p>
-
+                <p class='lead'>Dzeramo ūdeni iegūst no 100m - 450m dziļiem artēziskiem urbumiem ūdensgūtnēs „Otaņķi” un „Aistere”.</p>
+                <p>No ūdensgūtnes Otaņķos 2012. gadā iegūti 2,32 miljoni m3 ūdens, no ūdensgūtnes Aisterē – 1,19 miljoni m3 ūdens.
+                   Divas bioloģiskās atdzelžošanas iekārtas, kas atrodas Ventas ielā 11/17 un ūdensgūtnē „Aistere”, samazina dzelzs saturu ūdenī no 2,0 mg/l līdz 0,014 mg/l. 
+                   Attiecīgi Eiropas Padomes Direktīvas prasība ir ne vairāk par 0,2 mg/l.</p>
+                <p>Padotais dzeramā ūdens apjoms 2012. gadā bija 3,5 miljoni m3.
+                   Kopējais ūdensapgādes tīklu garums ir 192 km.
+                   Liepājas pilsētā 2012. gadā viens cilvēks vidēji patērēja 75 litrus dienā.</p>
+                <p class='lead'>Ūdens padeves sistēma</p>
+                <ol>
+                    <li>6 tīrā ūdens rezervuāri</li>
+                    <li>2 otrā pacēluma sūkņu stacijas</li>
+                    <li>192 km cauruļvadu</li>
+                </ol>
+                <p>Maģistrālie cauruļvadi ir – <b>9,9 km</b> - no Otaņķu ūdensgūtnes, <b>19,3 km</b> -  no Aisteres ūdensgūtnes.
+                <p>No 2001. - 2012. gadam ūdensapgādes tīklu kopējais garums Liepājas pilsētā ir palielinājies par <b>32,6 km</b></p>
+                <p class='lead'>Ūdens kvalitāte</p>
+                <p>Liepājas pilsētas centralizētās ūdensapgādes tīklos padotā dzeramā ūdens kvalitāte ir atbilstoša LR MK noteikumiem 
+                   Nr. 235 ‘’Dzeramā ūdens obligātās nekaitīguma un kvalitātes prasības, monitoringa un kontroles kārtība’’, un ir saskaņā ar Eiropas Kopienas Padomes 1998.gada 3. novembra Direktīvu 98/83/EC ‘’Par dzeramā ūdens kvalitāti’’. </p>
+                <p class='lead'>Kvalitātes kontroli</p>
+                <ol>
+                    <li>Nodrošina SIA “Liepājas ūdens’’ akreditēta  Centrālā testēšanas laboratorija (CTL)</li>
+                    <li>Veic pēc 38 kvalitātes rādītājiem</li>
+                    <li>Kontrole notiek regulāri, katru dienu</li>
+                </ol>
             </div>
             <div id="sewage" class="page">
                 <h2>Kanalizācijas nozare</h2>
                 <hr/>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ut mauris et ipsum auctor dictum in nec mauris. Donec imperdiet et lectus ac bibendum. Proin id purus ultricies, laoreet metus vitae, laoreet arcu. Phasellus convallis urna non quam laoreet ullamcorper quis nec felis. In lobortis arcu quis libero sollicitudin, ornare auctor nibh tempor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean massa tellus, tristique rhoncus tristique non, sagittis sed felis. In eu tortor at urna pharetra congue a nec nibh.
+                <p>Uzņēmums nodrošina sadzīves un ražošanas notekūdeņu savākšanu un novadīšanu līdz notekūdeņu attīrīšanas iekārtām Lībiešu ielā 33, to attīrīšanu un attīrīto notekūdeņu novadīšanu Baltijas jūrā.</p>
+                <p>Kopējais notekūdeņu tīklu garums ir <b>200 km</b>.</p>
+                <p>Notekūdeņu pārsūknēšanu nodrošina <b>18</b> sūkņu stacijas.</p>
+                
+                <p class='lead'>Notekūdeņu savākšanas sistēma</p>
+                <ul>
+                    <li><b>200 km cauruļvadu</b>
+                        <ul>
+                            <li>no tiem pašteces kanalizācijas tīkli - 172km</li>
+                            <li>spiedvadi - 28km</li>
+                        </ul>
+                    </li>
+                    <li><b>18 kanalizācijas pārsūknēšanas sūkņu stacijas</b>,  tās  nodrošina, ka visi savāktie notekūdeņi tiek pārsūknēti uz NAI</li>
+                </ul>  
+                
+                <p>No 2000. - 2012. gadam kanalizācijas cauruļvadu garums Liepājas pilsētā  palielinājies par <b>17,1km</b>.</p>
 
-In hendrerit, nibh in facilisis bibendum, nunc purus consequat orci, ut pellentesque ipsum purus vehicula ante. Curabitur viverra pellentesque risus, id pharetra quam vestibulum quis. Nunc et elementum nisl. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer viverra turpis erat, non pulvinar ligula tincidunt id. Pellentesque ipsum lectus, dignissim ac placerat et, luctus sit amet nibh. Vivamus faucibus rhoncus leo sit amet dapibus.
+                <p class='lead'>Liepājas pilsētas notekūdeņu attīrīšanas iekārtas</p>
+                <ul>
+                    <li>Atrodas Baltijas jūras krastā, Šķēdē, teritorija - <b>18 ha</b></li>
+                    <li><b>1972.</b> gadā uzsāk darbību, nodrošinot tikai mehānisko attīrīšanu</li>
+                    <li><b>1980.</b> gadā ievieš daļēju bioloģisko attīrīšanu</li>
+                    <li><b>1998.</b> gadā pēc rekonstrukcijas, palielinās iekārtu jauda līdz <b>55 000</b> m3/dnn</li>
+                    <li><b>1998.</b> gadā veic tehnoloģiskos uzlabojumus - <b>pilnu bioloģisko attīrīšanu</b></li>
+                    <li>Attīrītais notekūdens tiek izvadīts Baltijas jūrā <b>1,4 km</b> attālumā</li>
+                    <li><b>2012.</b> gadā uzsākta jauna attīrītā notekūdeņu izvada Baltijas jūrā izbūve</li>
+                </ul>
 
-Proin fermentum erat quis risus blandit, nec pretium arcu pulvinar. Vivamus non tempus odio, quis bibendum nunc. Fusce nec quam quis nulla egestas tincidunt. Sed a leo quam. Etiam lacinia diam nec tellus ornare ultricies. Vestibulum nec vestibulum metus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis quis felis commodo, venenatis eros vitae, condimentum augue. Vivamus eget massa feugiat, sollicitudin enim vitae, pulvinar enim.
+                <p class='lead'>Attīrīto notekūdeņu kvalitāte</p>
+                <ul>
+                    <li>Kontroli nodrošina SIA “Liepājas ūdens’’ akreditēta  Centrālā testēšanas laboratorija (CTL)</li>
+                    <li>Pārbaudes veic pēc 20 fizikāli - ķīmiskiem parametriem</li>
+                    <li>Kontrole notiek regulāri, katru dienu</li>
+                </ul>
 
-Vivamus at ligula eget quam scelerisque sodales. Donec sit amet consectetur lorem, vitae condimentum turpis. Aliquam porta consequat urna, nec rhoncus enim viverra ut. Donec consequat faucibus mattis. Suspendisse nibh metus, pulvinar et pulvinar vitae, cursus nec libero. Phasellus faucibus, diam eu consequat ornare, ipsum velit fermentum elit, sed ornare magna ante eget elit. Fusce condimentum suscipit dui eget accumsan. Cras cursus, metus tristique venenatis mollis, felis elit aliquam nisl, facilisis rutrum mauris turpis in diam.
-
-Maecenas varius ipsum sed sagittis aliquam. Donec faucibus eros sit amet tortor volutpat sagittis. Nulla porta id sem lobortis ornare. In rutrum, arcu a varius dapibus, ligula nisl porttitor libero, ac aliquet sem nunc vitae nibh. Aenean eleifend augue volutpat, elementum velit eu, feugiat ipsum. Morbi non lacinia nulla. Vestibulum metus risus, pharetra vitae commodo quis, blandit et est. Donec sed est eget lorem laoreet placerat eu quis sem. Suspendisse non velit vitae dui gravida molestie in quis eros. Vivamus vestibulum, augue vel molestie ullamcorper, arcu odio posuere massa, a semper purus nunc eget ante. Vestibulum eu justo ut dui facilisis commodo. Vivamus quis auctor felis, et condimentum lacus. Duis in eros quis odio pharetra pulvinar sit amet a orci. Mauris condimentum tellus ipsum, ut sodales leo hendrerit nec. Proin sit amet odio erat. Vestibulum urna turpis, cursus vel arcu non, elementum aliquam mi.</p>
-
+                <p class='lead'>Notekūdeņu attīrīšanas iekārtu tehnoloģiskais process nodrošina notekūdeņu attīrīšanu atbilstoši LR normatīvo aktu prasībām:</p>
+                <img style='margin:0 auto' class='img img-responsive' src='/assets/img/kanaliz-prasibas.jpg' />
             </div>
             <div id="tech" class="page">
                 <h2>Tehniskā daļa</h2>
+                <p>Tehniskā daļa veic jaunu projektu analīzi, projektēšanu un saskaņo visus nepieciešamos dokumentus, lai realizētu Jūsu projektu.</p>
+                <p>Tehniskā daļa veic arī projektu uzraudzību</p>
+                <p>Ja nepieciešama konsultācija vai Tev ir padomā kādas izmaiņas saistībā ar ūdensapgādes vai kanalizācijas tīkliem, tad zvani pa tālruni 63484962 vai <a href='/palidziba/sazinaties' title='Sazināties ar uzņēmumu'>sazinies ar mums</a>.</p>
                 <hr/>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ut mauris et ipsum auctor dictum in nec mauris. Donec imperdiet et lectus ac bibendum. Proin id purus ultricies, laoreet metus vitae, laoreet arcu. Phasellus convallis urna non quam laoreet ullamcorper quis nec felis. In lobortis arcu quis libero sollicitudin, ornare auctor nibh tempor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean massa tellus, tristique rhoncus tristique non, sagittis sed felis. In eu tortor at urna pharetra congue a nec nibh.
-
-In hendrerit, nibh in facilisis bibendum, nunc purus consequat orci, ut pellentesque ipsum purus vehicula ante. Curabitur viverra pellentesque risus, id pharetra quam vestibulum quis. Nunc et elementum nisl. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer viverra turpis erat, non pulvinar ligula tincidunt id. Pellentesque ipsum lectus, dignissim ac placerat et, luctus sit amet nibh. Vivamus faucibus rhoncus leo sit amet dapibus.
-
-Proin fermentum erat quis risus blandit, nec pretium arcu pulvinar. Vivamus non tempus odio, quis bibendum nunc. Fusce nec quam quis nulla egestas tincidunt. Sed a leo quam. Etiam lacinia diam nec tellus ornare ultricies. Vestibulum nec vestibulum metus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis quis felis commodo, venenatis eros vitae, condimentum augue. Vivamus eget massa feugiat, sollicitudin enim vitae, pulvinar enim.
-
-Vivamus at ligula eget quam scelerisque sodales. Donec sit amet consectetur lorem, vitae condimentum turpis. Aliquam porta consequat urna, nec rhoncus enim viverra ut. Donec consequat faucibus mattis. Suspendisse nibh metus, pulvinar et pulvinar vitae, cursus nec libero. Phasellus faucibus, diam eu consequat ornare, ipsum velit fermentum elit, sed ornare magna ante eget elit. Fusce condimentum suscipit dui eget accumsan. Cras cursus, metus tristique venenatis mollis, felis elit aliquam nisl, facilisis rutrum mauris turpis in diam.
-
-Maecenas varius ipsum sed sagittis aliquam. Donec faucibus eros sit amet tortor volutpat sagittis. Nulla porta id sem lobortis ornare. In rutrum, arcu a varius dapibus, ligula nisl porttitor libero, ac aliquet sem nunc vitae nibh. Aenean eleifend augue volutpat, elementum velit eu, feugiat ipsum. Morbi non lacinia nulla. Vestibulum metus risus, pharetra vitae commodo quis, blandit et est. Donec sed est eget lorem laoreet placerat eu quis sem. Suspendisse non velit vitae dui gravida molestie in quis eros. Vivamus vestibulum, augue vel molestie ullamcorper, arcu odio posuere massa, a semper purus nunc eget ante. Vestibulum eu justo ut dui facilisis commodo. Vivamus quis auctor felis, et condimentum lacus. Duis in eros quis odio pharetra pulvinar sit amet a orci. Mauris condimentum tellus ipsum, ut sodales leo hendrerit nec. Proin sit amet odio erat. Vestibulum urna turpis, cursus vel arcu non, elementum aliquam mi.</p>
 
             </div>
             <div id="nai" class="page">
                 <h2>Notekūdeņu attīrīšanas iekārtas (NAI)</h2>
                 <hr/>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ut mauris et ipsum auctor dictum in nec mauris. Donec imperdiet et lectus ac bibendum. Proin id purus ultricies, laoreet metus vitae, laoreet arcu. Phasellus convallis urna non quam laoreet ullamcorper quis nec felis. In lobortis arcu quis libero sollicitudin, ornare auctor nibh tempor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean massa tellus, tristique rhoncus tristique non, sagittis sed felis. In eu tortor at urna pharetra congue a nec nibh.
-
-In hendrerit, nibh in facilisis bibendum, nunc purus consequat orci, ut pellentesque ipsum purus vehicula ante. Curabitur viverra pellentesque risus, id pharetra quam vestibulum quis. Nunc et elementum nisl. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer viverra turpis erat, non pulvinar ligula tincidunt id. Pellentesque ipsum lectus, dignissim ac placerat et, luctus sit amet nibh. Vivamus faucibus rhoncus leo sit amet dapibus.
-
-Proin fermentum erat quis risus blandit, nec pretium arcu pulvinar. Vivamus non tempus odio, quis bibendum nunc. Fusce nec quam quis nulla egestas tincidunt. Sed a leo quam. Etiam lacinia diam nec tellus ornare ultricies. Vestibulum nec vestibulum metus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis quis felis commodo, venenatis eros vitae, condimentum augue. Vivamus eget massa feugiat, sollicitudin enim vitae, pulvinar enim.
-
-Vivamus at ligula eget quam scelerisque sodales. Donec sit amet consectetur lorem, vitae condimentum turpis. Aliquam porta consequat urna, nec rhoncus enim viverra ut. Donec consequat faucibus mattis. Suspendisse nibh metus, pulvinar et pulvinar vitae, cursus nec libero. Phasellus faucibus, diam eu consequat ornare, ipsum velit fermentum elit, sed ornare magna ante eget elit. Fusce condimentum suscipit dui eget accumsan. Cras cursus, metus tristique venenatis mollis, felis elit aliquam nisl, facilisis rutrum mauris turpis in diam.
-
-Maecenas varius ipsum sed sagittis aliquam. Donec faucibus eros sit amet tortor volutpat sagittis. Nulla porta id sem lobortis ornare. In rutrum, arcu a varius dapibus, ligula nisl porttitor libero, ac aliquet sem nunc vitae nibh. Aenean eleifend augue volutpat, elementum velit eu, feugiat ipsum. Morbi non lacinia nulla. Vestibulum metus risus, pharetra vitae commodo quis, blandit et est. Donec sed est eget lorem laoreet placerat eu quis sem. Suspendisse non velit vitae dui gravida molestie in quis eros. Vivamus vestibulum, augue vel molestie ullamcorper, arcu odio posuere massa, a semper purus nunc eget ante. Vestibulum eu justo ut dui facilisis commodo. Vivamus quis auctor felis, et condimentum lacus. Duis in eros quis odio pharetra pulvinar sit amet a orci. Mauris condimentum tellus ipsum, ut sodales leo hendrerit nec. Proin sit amet odio erat. Vestibulum urna turpis, cursus vel arcu non, elementum aliquam mi.</p>
-
+                <div class='col-md-8'>
+                <p>Notekūdeņu attīrīšanas procesā kā blakus produkts veidojas notekūdeņu dūņas, kas tiek pārstrādātas kompostā, izmantojot pildvielas, piemēram, kūdru, skaidas, u.c.</p>
+                <p>Komposta var izmantot apzaļumošanā, jo tas jau ir gatavs lietošanai un tam vairs nav vajadzīgas nekādas piedevas. Pateicoties dūņās esošajiem biogēniem - slāpeklim un fosforam, iesētais zāliens attīstās ātrāk.</p>
+                <p>Kompostu var iegādāties gan juridiskas personas, gan privātpersonas, iepriekš zvanot uzņēmuma sekretārei pa telefonu 63423417 vai <a href='/palidziba/sazinaties' title='Sazināties ar uzņēmumu'>sazinoties ar mums</a>.</p>
+                </div>
+                <div class='col-md-4'>
+                    <img src='/assets/img/komposts.jpg' class='img img-responsive' />
+                </div>
+                <div class='clearfix'></div>
             </div>
             <div id="lab" class="page">
                 <h2>Laboratorija</h2>
                 <hr/>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ut mauris et ipsum auctor dictum in nec mauris. Donec imperdiet et lectus ac bibendum. Proin id purus ultricies, laoreet metus vitae, laoreet arcu. Phasellus convallis urna non quam laoreet ullamcorper quis nec felis. In lobortis arcu quis libero sollicitudin, ornare auctor nibh tempor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean massa tellus, tristique rhoncus tristique non, sagittis sed felis. In eu tortor at urna pharetra congue a nec nibh.
-
-In hendrerit, nibh in facilisis bibendum, nunc purus consequat orci, ut pellentesque ipsum purus vehicula ante. Curabitur viverra pellentesque risus, id pharetra quam vestibulum quis. Nunc et elementum nisl. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer viverra turpis erat, non pulvinar ligula tincidunt id. Pellentesque ipsum lectus, dignissim ac placerat et, luctus sit amet nibh. Vivamus faucibus rhoncus leo sit amet dapibus.
-
-Proin fermentum erat quis risus blandit, nec pretium arcu pulvinar. Vivamus non tempus odio, quis bibendum nunc. Fusce nec quam quis nulla egestas tincidunt. Sed a leo quam. Etiam lacinia diam nec tellus ornare ultricies. Vestibulum nec vestibulum metus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis quis felis commodo, venenatis eros vitae, condimentum augue. Vivamus eget massa feugiat, sollicitudin enim vitae, pulvinar enim.
-
-Vivamus at ligula eget quam scelerisque sodales. Donec sit amet consectetur lorem, vitae condimentum turpis. Aliquam porta consequat urna, nec rhoncus enim viverra ut. Donec consequat faucibus mattis. Suspendisse nibh metus, pulvinar et pulvinar vitae, cursus nec libero. Phasellus faucibus, diam eu consequat ornare, ipsum velit fermentum elit, sed ornare magna ante eget elit. Fusce condimentum suscipit dui eget accumsan. Cras cursus, metus tristique venenatis mollis, felis elit aliquam nisl, facilisis rutrum mauris turpis in diam.
-
-Maecenas varius ipsum sed sagittis aliquam. Donec faucibus eros sit amet tortor volutpat sagittis. Nulla porta id sem lobortis ornare. In rutrum, arcu a varius dapibus, ligula nisl porttitor libero, ac aliquet sem nunc vitae nibh. Aenean eleifend augue volutpat, elementum velit eu, feugiat ipsum. Morbi non lacinia nulla. Vestibulum metus risus, pharetra vitae commodo quis, blandit et est. Donec sed est eget lorem laoreet placerat eu quis sem. Suspendisse non velit vitae dui gravida molestie in quis eros. Vivamus vestibulum, augue vel molestie ullamcorper, arcu odio posuere massa, a semper purus nunc eget ante. Vestibulum eu justo ut dui facilisis commodo. Vivamus quis auctor felis, et condimentum lacus. Duis in eros quis odio pharetra pulvinar sit amet a orci. Mauris condimentum tellus ipsum, ut sodales leo hendrerit nec. Proin sit amet odio erat. Vestibulum urna turpis, cursus vel arcu non, elementum aliquam mi.</p>
-
+                <p>Liepājnieku dzeramā ūdens kvalitāte Liepājas pilsētas centralizētajā ūdensvada sadales tīklā tiek regulāri kontrolēta. Kontroles tiek veiktas katru dienu.</p>
+                <p>Laboratorijas darbinieki rūpējas par dzeramā ūdens kvalitātes stāvokli, kā arī veic ūdens kvalitātes kontroles Liepājas tuvākajās ūdenstilpnēs.</p>
+                <p>Ja vēlies veikt ūdens pārbaudi savā mājā vai kur citur, tad sazinies ar laboratorijas pārstāvjiem, zvanot pa tālruni 63423911 vai <a href='/palidziba/sazinaties' title='Sazināties ar uzņēmumu'>sazinoties ar mums</a>.</p>
             </div>
         </div>
     </div> 
