@@ -33,6 +33,7 @@ class Controller_Static extends Controller_Template
                 $data['news'] = DB::select()
                                 ->from('news')
                                 ->where('status','=','Publisks')
+                                ->order_by('created_at','DESC')
                                 ->as_object()
                                 ->execute()
                                 ->as_array();
