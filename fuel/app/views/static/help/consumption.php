@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col-md-4 text-center">
             <h1>1. solis</h1>
-            <p>Pieslēdzieties sistēmai (tas aprakstīts <a href="/palidziba/pieslegsanas">šeit</a>), spiediet pogu "Ievadīt rādījumus".</p>
+            <p>Pieslēdzieties sistēmai (tas aprakstīts <a href="/palidziba/pieslegsanas">palīdzības sadaļā</a>), spiediet pogu "Ievadīt rādījumus".</p>
             <img style="margin:0 auto" class="img img-responsive" src="/assets/img/help/step1-rdn.png" />
         </div>
         <div class="col-md-4 text-center">
