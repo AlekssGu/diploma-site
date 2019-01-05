@@ -1,16 +1,12 @@
 #Informācijas Sistēma Pilsētas ūdens
 
-* Versija: 0.5 BETA
-* Statuss: Sistēma tiek testēta
-* [WWW](https://udens.agusevs.com) http://udens.agusevs.com
-
 ## Apraksts
 
 IS Pilsētas ūdens ir paredzēta uzņēmumiem, kuru pakalpojumu klāstā ietilpst 
 kanalizācijas un ūdensapgādes tīklu projektēšana, būvēšana un uzturēšana. 
 Šī sistēma ir orientēta uz klientu un viņa ērtību. Klientam ir iespēja ievadīt ūdens skaitītāja mērījumus, sazināties ar uzņēmuma pārstāvjiem, kā arī uzdot dažādus viņam interesējošus jautājumus, uz kuriem atbildēs uzņēmuma darbinieki.
 
-##Izstrādātāji
+##Izstrādātājs
 
 * Aleksandrs Gusevs, Latvijas Universitātes Datorikas fakultātes 2. kursa students.
 
